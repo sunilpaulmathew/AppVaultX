@@ -1,0 +1,60 @@
+plugins {
+    alias(libs.plugins.androidApplication)
+}
+
+def keystoreFile = rootProject.file("app/sp.jks")
+
+android {
+    if (keystoreFile.exists()) {
+        signingConfigs {
+            release {
+                storeFile file("sp.jks")
+                storePassword "smartpack"
+                keyAlias "sp_key1"
+                keyPassword "smartpack"
+            }
+        }
+    }
+
+    dependenciesInfo {
+        includeInApk = false
+        includeInBundle = false
+    }
+
+    namespace 'in.sunilpaulmathew.appvaultx'
+    compileSdk 36
+
+    defaultConfig {
+        applicationId "in.sunilpaulmathew.appvaultx"
+        minSdk 24
+        targetSdk 35
+        versionCode 1
+        versionName "beta-v0.1"
+    }
+
+    buildTypes {
+        debug {
+            applicationIdSuffix '.debug'
+        }
+        release {
+            if (keystoreFile.exists()) {
+                signingConfig signingConfigs.release
+            }
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    buildFeatures {
+        viewBinding = true
+        buildConfig = true
+        aidl true
+    }
+}
+
+dependencies {
+    implementation libs.material
+    implementation libs.preference
+    implementation libs.shizukuApi
+    implementation libs.shizukuProvider
+}

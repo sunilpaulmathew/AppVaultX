@@ -1,0 +1,162 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingHorizontal="2dp"
+    android:paddingVertical="2dp" >
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/progress_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="?android:attr/windowBackground"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@mipmap/ic_launcher_round"
+            android:contentDescription="@string/app_name"
+            android:importantForAccessibility="no" />
+
+        <androidx.core.widget.ContentLoadingProgressBar
+            android:id="@+id/progress"
+            android:layout_width="150dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="15dp"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:indeterminateTint="?attr/colorPrimary"
+            android:progressTint="?attr/colorPrimary"
+            android:indeterminate="true" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/header_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:paddingHorizontal="10dp"
+        android:visibility="gone" >
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="?attr/colorPrimary"
+            style="@style/AppTheme.Title" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/search"
+            style="?attr/materialIconButtonFilledTonalStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_search"
+            app:iconTint="?attr/colorPrimary"
+            android:layout_marginEnd="8dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/sort"
+            style="?attr/materialIconButtonFilledTonalStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_sort"
+            app:iconTint="?attr/colorPrimary" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/search_card"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:cardCornerRadius="45dp"
+        app:strokeColor="?attr/colorPrimary"
+        app:layout_constraintTop_toBottomOf="@id/header_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone" >
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/search_word"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:hint="@string/search_hint"
+                android:paddingStart="5dp"
+                android:inputType="text"
+                android:paddingEnd="40dp"
+                android:textColor="?android:textColorPrimary"
+                android:gravity="center_vertical" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/apply"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:src="@drawable/ic_check"
+                android:tint="?attr/colorPrimary"
+                android:background="?attr/selectableItemBackgroundBorderless" />
+        </FrameLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/content_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/search_card"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" >
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:background="@null"
+            android:visibility="gone"
+            app:tabMode="scrollable"
+            app:tabGravity="center" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:scrollbars="vertical"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/batch_options"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:icon="@drawable/ic_select"
+        android:layout_margin="25dp"
+        android:textAllCaps="false"
+        app:iconGravity="textStart"
+        android:visibility="gone"
+        android:textStyle="bold"
+        app:cornerRadius="16dp"
+        android:padding="10dp"
+        app:iconPadding="5dp" />
+</androidx.constraintlayout.widget.ConstraintLayout>

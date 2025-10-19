@@ -1,0 +1,27 @@
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+
+    <string name="cancel">"Batal"</string>
+    <string name="press_back">"Tekan kembali lagi untuk keluar"</string>
+    <string name="request_permission">"Meminta izin"</string>
+    <string name="start">"Mulai"</string>
+    <string name="yes">"Ya"</string>
+    <string name="copyright_text">"Hak cipta © 2025, sunilpaulmathew"</string>
+    <string name="app_theme">"Tema Aplikasi"</string>
+    <string name="app_theme_auto">"Otomatis"</string>
+    <string name="app_theme_dark">"Mode Gelap"</string>
+    <string name="app_theme_light">"Mode Terang"</string>
+    <string name="app_version">"aShell %s"</string>
+    <string name="developer_contact">"Hubungi pengembang"</string>
+    <string name="developer_contact_description">"Butuh bantuan atau memiliki saran? Hubungi pengembang sekarang"</string>
+    <string name="general">"Umum"</string>
+    <string name="privacy_policy">"Kebijakan privasi"</string>
+    <string name="privacy_policy_description">"Privasi anda penting: pelajari selengkapnya"</string>
+    <string name="settings">"Pengaturan"</string>
+    <string name="shizuku_access_denied_title">"Akses Shizuku ditolak oleh aShell"</string>
+    <string name="shizuku_learn">"Pelajari Shizuku"</string>
+    <string name="shizuku_learn_description">"Pelajari selengkapnya terkait Shizuku: Shizuku.rikka.app"</string>
+    <string name="shizuku_unavailable_title">"Dukungan Shizuku tidak ditemukan"</string>
+    <string name="translations">"Terjemahkan"</string>
+    <string name="translations_description">"Berkontribusi penerjemah aplikasi"</string>
+    <string name="user_interface">"Antarmuka"</string>
+</resources>

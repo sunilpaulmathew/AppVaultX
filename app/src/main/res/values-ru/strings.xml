@@ -1,0 +1,14 @@
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <!--Created by The Translator <https://play.google.com/store/apps/details?id=com.sunilpaulmathew.translator>-->
+
+    <string name="app_theme">"Тема приложения"</string>
+    <string name="app_theme_auto">"Авто"</string>
+    <string name="app_theme_dark">"Тёмная"</string>
+    <string name="app_theme_light">"Светлая"</string>
+    <string name="cancel">"Отмена"</string>
+    <string name="press_back">"Нажмите ещё раз для выхода"</string>
+    <string name="request_permission">"Запросить разрешение"</string>
+    <string name="start">"Начать"</string>
+    <string name="translations">"Переводы"</string>
+    <string name="yes">"Да"</string>
+</resources>

@@ -1,0 +1,28 @@
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <!-- Chines simplified (zh-hans) -->
+
+    <string name="cancel">"取消"</string>
+    <string name="press_back">"再次点击后退以退出"</string>
+    <string name="request_permission">"请求权限"</string>
+    <string name="start">"开始"</string>
+    <string name="yes">"是"</string>
+    <string name="copyright_text">"版权: © 2025, sunilpaulmathew"</string>
+    <string name="app_theme">"应用主题"</string>
+    <string name="app_theme_auto">"自动"</string>
+    <string name="app_theme_dark">"深色"</string>
+    <string name="app_theme_light">"浅色"</string>
+    <string name="app_version">"aShell %s"</string>
+    <string name="developer_contact">"联系开发者"</string>
+    <string name="developer_contact_description">"需要帮助或想要反馈？联系开发者"</string>
+    <string name="general">"通用"</string>
+    <string name="privacy_policy">"隐私政策"</string>
+    <string name="privacy_policy_description">"你的隐私很重要：了解更多"</string>
+    <string name="settings">"设置"</string>
+    <string name="shizuku_access_denied_title">"aShell 的 Shizuku 访问被拒绝"</string>
+    <string name="shizuku_learn">"了解 Shizuku"</string>
+    <string name="shizuku_learn_description">"了解更多关于 Shizuku: shizuku.rikka.app"</string>
+    <string name="shizuku_unavailable_title">"没有找到 Shizuku 支持"</string>
+    <string name="translations">"翻译"</string>
+    <string name="translations_description">"为本应用的翻译作出贡献"</string>
+    <string name="user_interface">"用户界面"</string>
+</resources>

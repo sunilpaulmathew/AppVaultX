@@ -1,0 +1,27 @@
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation" >
+
+    <string name="cancel">"Cancelar"</string>
+    <string name="press_back">"Presione atrás de nuevo para salir"</string>
+    <string name="request_permission">"Solicitar permiso"</string>
+    <string name="start">"Comenzar"</string>
+    <string name="yes">"Sí"</string>
+    <string name="copyright_text">"Derechos de autor: © 2025, sunilpaulmathew"</string>
+    <string name="app_theme">"Tema de la aplicación"</string>
+    <string name="app_theme_auto">"Auto"</string>
+    <string name="app_theme_dark">"Oscuro"</string>
+    <string name="app_theme_light">"Luz"</string>
+    <string name="app_version">"un Shell %s"</string>
+    <string name="developer_contact">"Contactar al desarrollador"</string>
+    <string name="developer_contact_description">"¿Necesitas ayuda o tienes algún comentario? Contacta con el desarrollador."</string>
+    <string name="general">"General"</string>
+    <string name="privacy_policy">"Política de privacidad"</string>
+    <string name="privacy_policy_description">"Tu privacidad es importante: Más información"</string>
+    <string name="settings">"Ajustes"</string>
+    <string name="shizuku_access_denied_title">"Acceso denegado a Shizuku para aShell"</string>
+    <string name="shizuku_learn">"Aprende shizuku"</string>
+    <string name="shizuku_learn_description">"Obtén más información sobre shizuku en: shizuku.rikka.app"</string>
+    <string name="shizuku_unavailable_title">"No se encontró soporte para Shizuku"</string>
+    <string name="translations">"Traducciones"</string>
+    <string name="translations_description">"Contribuir a la traducción de la aplicación"</string>
+    <string name="user_interface">"Interfaz de usuario"</string>
+</resources>

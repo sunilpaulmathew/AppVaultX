@@ -1,0 +1,27 @@
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+
+    <string name="cancel">"취소"</string>
+    <string name="press_back">"종료하려면 뒤로가기 버튼을 다시 누르세요"</string>
+    <string name="request_permission">"권한 요청"</string>
+    <string name="start">"시작"</string>
+    <string name="yes">"확인"</string>
+    <string name="copyright_text">"저작권: © 2025, sunilpaulmathew"</string>
+    <string name="app_theme">"앱 테마"</string>
+    <string name="app_theme_auto">"자동"</string>
+    <string name="app_theme_dark">"다크"</string>
+    <string name="app_theme_light">"라이트"</string>
+    <string name="app_version">"aShell %s"</string>
+    <string name="developer_contact">"개발자에게 문의하기"</string>
+    <string name="developer_contact_description">"도움이 필요하거나 피드백이 있으신가요? 개발자에게 문의하세요"</string>
+    <string name="general">"일반"</string>
+    <string name="privacy_policy">"개인정보 처리방침"</string>
+    <string name="privacy_policy_description">"개인정보는 중요합니다: 자세히 알아보기"</string>
+    <string name="settings">"설정"</string>
+    <string name="shizuku_access_denied_title">"Shizuku가 aShell의 권한을 거부했습니다"</string>
+    <string name="shizuku_learn">"shizuku 알아보기"</string>
+    <string name="shizuku_learn_description">"shizuku에 대한 자세한 정보: shizuku.rikka.app"</string>
+    <string name="shizuku_unavailable_title">"Shizuku 서비스를 찾을 수 없습니다"</string>
+    <string name="translations">"번역"</string>
+    <string name="translations_description">"앱 번역에 기여하기"</string>
+    <string name="user_interface">"사용자 환경"</string>
+</resources>

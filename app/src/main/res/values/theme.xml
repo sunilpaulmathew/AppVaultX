@@ -1,0 +1,28 @@
+<resources>
+    <style name="AppTheme" parent="Theme.Material3.DynamicColors.DayNight">
+        <item name="windowNoTitle">true</item>
+        <item name="android:statusBarColor">@color/colorBlack</item>
+    </style>
+
+    <style name="AppTheme.Title" parent="AppTheme">
+        <item name="android:textSize">25sp</item>
+        <item name="android:gravity">start|center</item>
+        <item name="android:layout_gravity">start|center</item>
+        <item name="android:layout_marginStart">15dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="AppTheme.Transparent" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowCloseOnTouchOutside">false</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="Divider" >
+        <item name="android:background">?android:attr/listDivider</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+    </style>
+</resources>

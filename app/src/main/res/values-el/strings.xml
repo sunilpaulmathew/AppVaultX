@@ -1,0 +1,9 @@
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation" >
+
+    <string name="cancel">Ακύρωση</string>
+    <string name="copyright_text">Copyright: © 2025, sunilpaulmathew</string>
+    <string name="press_back">Πατήστε ξανά πίσω για έξοδο</string>
+    <string name="request_permission">Αίτημα Άδειας</string>
+    <string name="start">Έναρξη</string>
+    <string name="yes">Ναι</string>
+</resources>

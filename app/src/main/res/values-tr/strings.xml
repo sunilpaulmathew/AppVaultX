@@ -1,0 +1,27 @@
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+
+    <string name="cancel">"İptal"</string>
+    <string name="press_back">"Çıkmak için tekrar geri tuşuna basın"</string>
+    <string name="request_permission">"İzin istemi"</string>
+    <string name="start">"Başlat"</string>
+    <string name="yes">"Evet"</string>
+    <string name="copyright_text">"Telif hakkı: © 2025, sunilpaulmathew"</string>
+    <string name="app_theme">"Uygulama teması"</string>
+    <string name="app_theme_auto">"Otomatik"</string>
+    <string name="app_theme_dark">"Koyu"</string>
+    <string name="app_theme_light">"Açık"</string>
+    <string name="app_version">"aShell %s"</string>
+    <string name="developer_contact">"Geliştirici ile iletişim kur"</string>
+    <string name="developer_contact_description">"Yardıma veya geri bildirime mi ihtiyacınız var? Geliştiriciyle iletişim kurun"</string>
+    <string name="general">"Genel"</string>
+    <string name="privacy_policy">"Gizlilik politikası"</string>
+    <string name="privacy_policy_description">"Gizliliğin önemli: Dahasını öğren"</string>
+    <string name="settings">"Ayarlar"</string>
+    <string name="shizuku_access_denied_title">"aShell için Shizuku erişimi reddedildi"</string>
+    <string name="shizuku_learn">"Shizuku hakkında"</string>
+    <string name="shizuku_learn_description">"Shizuku hakkında dahası için: shizuku.rikka.app"</string>
+    <string name="shizuku_unavailable_title">"Shizuku desteği bulunamadı"</string>
+    <string name="translations">"Çeviriler"</string>
+    <string name="translations_description">"Bu uygulamanın tercümesine katkıda bulunun"</string>
+    <string name="user_interface">"Kullanıcı arayüzü"</string>
+</resources>

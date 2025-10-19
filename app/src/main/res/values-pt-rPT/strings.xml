@@ -1,0 +1,13 @@
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+
+    <string name="app_theme">"Tema da aplicação"</string>
+    <string name="app_theme_auto">"Automático"</string>
+    <string name="app_theme_dark">"Escuro"</string>
+    <string name="app_theme_light">"Claro"</string>
+    <string name="cancel">"Cancelar"</string>
+    <string name="press_back">"Premir novamente para sair"</string>
+    <string name="request_permission">"Solicitar autorização"</string>
+    <string name="start">"Iniciar"</string>
+    <string name="translations">"Traduções"</string>
+    <string name="yes">"Sim"</string>
+</resources>

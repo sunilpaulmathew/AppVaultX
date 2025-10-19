@@ -1,0 +1,79 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:foreground="?attr/selectableItemBackgroundBorderless"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:clipToPadding="false"
+    android:clipChildren="false"
+    android:paddingBottom="8dp"
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp"
+    android:paddingTop="8dp"
+    android:clickable="true"
+    android:focusable="true" >
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/icon_container"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:orientation="vertical"
+            android:layout_marginStart="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" >
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/app_icon"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/app_icon_bg"
+                    android:scaleType="centerCrop" />
+
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/checkbox"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:buttonTint="?attr/colorPrimary"
+                    android:background="@null"
+                    android:visibility="gone" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="8dp"
+            app:layout_constraintStart_toEndOf="@id/icon_container"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/app_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textStyle="bold"
+                    android:ellipsize="end"
+                    android:textSize="16sp"
+                    android:maxLines="1" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/package_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold|italic"
+                    android:ellipsize="end"
+                    android:textSize="13sp"
+                    android:maxLines="1" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/priority_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:overScrollMode="never"
+                    android:clipToPadding="false"
+                    android:clipChildren="false" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.constraintlayout.widget.ConstraintLayout>

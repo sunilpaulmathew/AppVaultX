@@ -1,0 +1,27 @@
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+
+    <string name="cancel">"Hủy"</string>
+    <string name="press_back">"Nhấn lại lần nữa để thoát"</string>
+    <string name="request_permission">"Yêu cầu quyền"</string>
+    <string name="start">"Bắt đầu"</string>
+    <string name="yes">"Đúng"</string>
+    <string name="copyright_text">"Bản quyền: © 2025, sunilpaulmathew"</string>
+    <string name="app_theme">"Chủ đề ứng dụng"</string>
+    <string name="app_theme_auto">"Tự động"</string>
+    <string name="app_theme_dark">"Nền tối"</string>
+    <string name="app_theme_light">"Nền sáng"</string>
+    <string name="app_version">"aShell %s"</string>
+    <string name="developer_contact">"Liên hệ nhà phát triển"</string>
+    <string name="developer_contact_description">"Cần trợ giúp hoặc phản hồi? Liên hệ với nhà phát triển"</string>
+    <string name="general">"Tổng quan"</string>
+    <string name="privacy_policy">"Chính sách bảo mật"</string>
+    <string name="privacy_policy_description">"Quyền riêng tư của bạn rất quan trọng: Tìm hiểu thêm"</string>
+    <string name="settings">"Cài đặt"</string>
+    <string name="shizuku_access_denied_title">"Shizuku bị từ chối quyền truy cập vào aShell"</string>
+    <string name="shizuku_learn">"Tìm hiểu Shizuku"</string>
+    <string name="shizuku_learn_description">"Tìm hiểu thêm về shizuku tại: shizuku.rikka.app"</string>
+    <string name="shizuku_unavailable_title">"Shizuku không khả dụng"</string>
+    <string name="translations">"Bản dịch"</string>
+    <string name="translations_description">"Đóng góp vào bản dịch của ứng dụng"</string>
+    <string name="user_interface">"Giao diện người dùng"</string>
+</resources>

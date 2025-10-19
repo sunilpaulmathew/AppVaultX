@@ -1,0 +1,27 @@
+<b>Features</b>
+
+* 🔍 Smart App Recommendations
+  • Categorizes installed apps as **Recommended**, **Advanced**, **Expert**, or **Unsafe**
+  • Powered by trusted data from the **[Universal Android Debloater Next Generation](https://github.com/0x192/universal-android-debloater)** project
+
+* 🛠️ App Management with Shizuku Support
+  • **Force Close Apps** – safely stop any running app
+  • **Clear Data & Cache** – free storage and reset apps
+  • **Backup APKs & Icons** – save app files and icons for future use
+  • **Uninstall Apps (Individual or Batch)** – remove unwanted apps efficiently
+  • **Restore Removed System Apps** – safely recover system apps
+  • **APK Installer** – Seamlessly install, update, or downgrade APKs — including debug builds — directly from your file manager
+
+* 📱 Standard App Management (Without Shizuku)
+  • **Package Viewer** – explore installed apps and details
+  • **Open Apps** – launch any installed app directly
+  • **Save APKs & Icons** – backup apps locally
+  • **Access System Settings** – quick shortcuts to app-related settings
+
+* 💎 User Experience
+  • **Modern Material Design UI** – sleek, clean, and intuitive
+  • **Batch Operations** – manage multiple apps effortlessly
+
+<b>Translations</b>
+
+Please help me to translate this application via <a href='https://poeditor.com/join/project/9RjHEoKPIK'>POEditor</a>.
