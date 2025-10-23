@@ -92,7 +92,7 @@ public class AppVaultXActivity extends AppCompatActivity {
 
     private void updateInstallerActivityState() {
         boolean shizukuAvailable = Shizuku.pingBinder() && Shizuku.getVersion() >= 11 && Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED;
-        boolean shouldEnable = !Utils.isGooglePlayVersion(this) && shizukuAvailable;
+        boolean shouldEnable = !Utils.isGooglePlayVersion(this) && shizukuAvailable && !Settings.isShizukuIgnored(this);
 
         ComponentName installerActivity = new ComponentName(this, InstallerActivity.class);
         PackageManager pm = getPackageManager();
