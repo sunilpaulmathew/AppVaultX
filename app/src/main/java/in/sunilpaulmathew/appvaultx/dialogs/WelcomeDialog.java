@@ -28,8 +28,6 @@ public class WelcomeDialog extends BottomSheetDialog {
     public WelcomeDialog(Context context) {
         super(context);
 
-        //activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
         View root = View.inflate(context, R.layout.layout_welcome, null);
 
         MaterialTextView title = root.findViewById(R.id.title);
