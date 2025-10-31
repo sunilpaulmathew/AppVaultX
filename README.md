@@ -1,5 +1,26 @@
 # 🚀 AppVaultX — App Control Made Easy
 
+![AppVaultX](app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp?raw=true)
+
+[![](https://img.shields.io/badge/AppVaultX%20beta-v0.1-green)](https://github.com/sunilpaulmathew/AppVaultX/tree/beta-v0.1)
+![](https://img.shields.io/github/downloads/sunilpaulmathew/AppVaultX/total)
+![](https://img.shields.io/github/languages/top/sunilpaulmathew/AppVaultX)
+![](https://img.shields.io/github/contributors/sunilpaulmathew/AppVaultX)
+![](https://img.shields.io/github/license/sunilpaulmathew/AppVaultX)
+
+---
+
+## 📥 Download
+
+[<img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png"
+alt=""
+height="80">](https://apt.izzysoft.de/fdroid/index/apk/in.sunilpaulmathew.appvaultx)
+[<img src="https://i.ibb.co/q0mdc4Z/get-it-on-github.png"
+alt=""
+height="80">](https://github.com/sunilpaulmathew/AppVaultX/releases/tag/beta-v0.1)
+
+---
+
 ### ⚙️ Requirements
 - A fully working [**Shizuku**](https://shizuku.rikka.app/) environment to unlock full system-level control.
 
