@@ -1,0 +1,46 @@
+<androidx.appcompat.widget.LinearLayoutCompat android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:gravity="start|center"
+    android:padding="10sp">
+
+        <include layout="@layout/layout_app_data" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:gravity="center" >
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="5sp"
+                    android:clickable="false"
+                    android:textSize="15sp"
+                    android:padding="10sp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/command"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.Material3.Button.TonalButton"
+                    android:layout_marginHorizontal="10dp"
+                    android:textColor="?attr/colorPrimary"
+                    android:layout_marginBottom="0dp"
+                    app:iconTint="?attr/colorPrimary"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
+                    app:icon="@drawable/ic_copy"
+                    app:iconGravity="textEnd"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:textSize="15sp"
+                    android:padding="10sp" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.appcompat.widget.LinearLayoutCompat>

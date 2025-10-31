@@ -21,6 +21,7 @@ import com.google.android.material.textview.MaterialTextView;
 import java.util.List;
 
 import in.sunilpaulmathew.appvaultx.R;
+import in.sunilpaulmathew.appvaultx.dialogs.ADBInstructionsDialog;
 import in.sunilpaulmathew.appvaultx.dialogs.ProgressDialog;
 import in.sunilpaulmathew.appvaultx.serializable.PackagesEntry;
 import in.sunilpaulmathew.appvaultx.utils.Async;
@@ -104,6 +105,7 @@ public class RemovedPackagesAdapter extends RecyclerView.Adapter<RemovedPackages
         private final MaterialTextView appName, packageName;
         private final RecyclerView priority;
 
+        @SuppressLint("SetTextI18n")
         public ViewHolder(View view) {
             super(view);
             this.appIcon = view.findViewById(R.id.app_icon);
@@ -113,8 +115,8 @@ public class RemovedPackagesAdapter extends RecyclerView.Adapter<RemovedPackages
             this.packageName = view.findViewById(R.id.package_name);
 
             view.setOnClickListener(v -> {
+                PackagesEntry packageItems = data.get(getBindingAdapterPosition());
                 if (!Settings.isShizukuIgnored(v.getContext()) && Shizuku.pingBinder() && Shizuku.getVersion() >= 11 && Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED) {
-                    PackagesEntry packageItems = data.get(getBindingAdapterPosition());
                     if (!selectedApps.isEmpty()) {
                         if (selectedApps.contains(packageItems)) {
                             selectedApps.remove(packageItems);
@@ -164,6 +166,8 @@ public class RemovedPackagesAdapter extends RecyclerView.Adapter<RemovedPackages
                                         }
                                     }.execute()
                             ).show();
+                } else {
+                    new ADBInstructionsDialog(packageItems, v.getContext().getString(R.string.restore_impossible_message), "cmd package install-existing " + packageItems.getPackageName(), v.getContext());
                 }
             });
         }

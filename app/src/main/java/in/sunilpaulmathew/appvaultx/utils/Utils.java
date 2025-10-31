@@ -1,6 +1,8 @@
 package in.sunilpaulmathew.appvaultx.utils;
 
 import android.content.ActivityNotFoundException;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -133,6 +135,13 @@ public class Utils {
                 to.write(buf, 0, len);
             }
         }
+    }
+
+    public static void copyToClipboard(String text, Context context) {
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("Copied to clipboard", text);
+        clipboard.setPrimaryClip(clip);
+        toast("Copied to clipboard", context).show();
     }
 
     public static void create(String text, File path) {

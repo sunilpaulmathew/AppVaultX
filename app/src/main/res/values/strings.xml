@@ -1,6 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation" >
     <string name="app_name" translatable="false">AppVaultX</string>
 
+    <string name="adb_instruction_message">Alternatively, run this command in your ADB shell to achieve the same result.</string>
     <string name="app_theme">App Theme</string>
     <string name="app_theme_auto">Auto</string>
     <string name="app_theme_dark">Dark</string>
@@ -45,9 +46,11 @@
     <string name="reverse">Reverse</string>
     <string name="remove">Remove</string>
     <string name="remove_selected">Remove selected (%s)</string>
+    <string name="remove_user_app_message">However, you have selected a regular user app, which you can easily uninstall from your app drawer or using any standard app manager.</string>
     <string name="request_permission">Request Permission</string>
     <string name="restore">Restore</string>
     <string name="restore_question">Restore %s?</string>
+    <string name="restore_impossible_message">AppVaultX requires a fully working Shizuku environment to restore previously removed system apps.</string>
     <string name="restore_selected">Restore selected (%s)</string>
     <string name="save_apks">Save APK\'s</string>
     <string name="save_icon">Save icon</string>
@@ -71,6 +74,7 @@
     <string name="source_code">Source Code</string>
     <string name="source_code_description">Discover how AppVaultX works — open-source and transparent</string>
     <string name="start">Start</string>
+    <string name="task_impossible_message">AppVaultX requires a fully working Shizuku environment to do this task.</string>
     <string name="translations">Translations</string>
     <string name="translations_description">Contribute to the app\'s translation</string>
     <string name="uad_learn">Learn UAD-NG</string>

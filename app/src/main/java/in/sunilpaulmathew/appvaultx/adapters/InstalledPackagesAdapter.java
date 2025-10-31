@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Objects;
 
 import in.sunilpaulmathew.appvaultx.R;
+import in.sunilpaulmathew.appvaultx.dialogs.ADBInstructionsDialog;
 import in.sunilpaulmathew.appvaultx.dialogs.BottomMenuDialog;
 import in.sunilpaulmathew.appvaultx.dialogs.ProgressDialog;
 import in.sunilpaulmathew.appvaultx.serializable.MenuEntry;
@@ -150,20 +151,12 @@ public class InstalledPackagesAdapter extends RecyclerView.Adapter<InstalledPack
                     menuItems.add(new MenuEntry(R.string.open_app, R.drawable.ic_open, 0));
                 }
 
-                if (!Settings.isShizukuIgnored(v.getContext()) && Shizuku.pingBinder() && Shizuku.getVersion() >= 11 &&
-                        Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED) {
-                    menuItems.add(new MenuEntry(R.string.clear_data, R.drawable.ic_reset, 1));
-                    menuItems.add(new MenuEntry(R.string.force_close, R.drawable.ic_cancel, 2));
-                }
-
+                menuItems.add(new MenuEntry(R.string.clear_data, R.drawable.ic_reset, 1));
+                menuItems.add(new MenuEntry(R.string.force_close, R.drawable.ic_cancel, 2));
                 menuItems.add(new MenuEntry(R.string.save_apks, R.drawable.ic_download, 3));
                 menuItems.add(new MenuEntry(R.string.save_icon, R.drawable.ic_save, 4));
                 menuItems.add(new MenuEntry(R.string.settings, R.drawable.ic_settings, 5));
-
-                if (!Settings.isShizukuIgnored(v.getContext()) && Shizuku.pingBinder() && Shizuku.getVersion() >= 11 &&
-                        Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED) {
-                    menuItems.add(new MenuEntry(R.string.uninstall, R.drawable.ic_delete, 6));
-                }
+                menuItems.add(new MenuEntry(R.string.uninstall, R.drawable.ic_delete, 6));
 
                 new BottomMenuDialog(menuItems, packageItems.getAppIcon(), packageItems.getAppName(), packageItems.getPackageName(), v.getContext()) {
                     @Override
@@ -173,64 +166,74 @@ public class InstalledPackagesAdapter extends RecyclerView.Adapter<InstalledPack
                                 v.getContext().startActivity(packageItems.launchIntent(v.getContext()));
                                 break;
                             case 1:
-                                new Async() {
-                                    private ProgressDialog progressDialog;
-                                    private String result;
+                                if (!Settings.isShizukuIgnored(v.getContext()) && Shizuku.pingBinder() && Shizuku.getVersion() >= 11 &&
+                                        Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED) {
+                                    new Async() {
+                                        private ProgressDialog progressDialog;
+                                        private String result;
 
-                                    @Override
-                                    public void onPreExecute() {
-                                        progressDialog = new ProgressDialog(v.getContext());
-                                        progressDialog.setProgressStatus(R.string.applying);
-                                        progressDialog.startDialog();
-                                    }
-
-                                    @Override
-                                    public void doInBackground() {
-                                        result = ShizukuShell.runCommand("pm clear --user " + Utils.getUserID() + " " + packageItems.getPackageName());
-                                    }
-
-                                    @Override
-                                    public void onPostExecute() {
-                                        progressDialog.dismissDialog();
-                                        if (result != null && !result.trim().isEmpty() && !result.trim().equalsIgnoreCase("success")) {
-                                            new MaterialAlertDialogBuilder(v.getContext())
-                                                    .setIcon(packageItems.getAppIcon())
-                                                    .setTitle(result)
-                                                    .setPositiveButton(R.string.cancel, (dialogInterface, i) -> {
-                                                    }).show();
+                                        @Override
+                                        public void onPreExecute() {
+                                            progressDialog = new ProgressDialog(v.getContext());
+                                            progressDialog.setProgressStatus(R.string.applying);
+                                            progressDialog.startDialog();
                                         }
-                                    }
-                                }.execute();
+
+                                        @Override
+                                        public void doInBackground() {
+                                            result = ShizukuShell.runCommand("pm clear --user " + Utils.getUserID() + " " + packageItems.getPackageName());
+                                        }
+
+                                        @Override
+                                        public void onPostExecute() {
+                                            progressDialog.dismissDialog();
+                                            if (result != null && !result.trim().isEmpty() && !result.trim().equalsIgnoreCase("success")) {
+                                                new MaterialAlertDialogBuilder(v.getContext())
+                                                        .setIcon(packageItems.getAppIcon())
+                                                        .setTitle(result)
+                                                        .setPositiveButton(R.string.cancel, (dialogInterface, i) -> {
+                                                        }).show();
+                                            }
+                                        }
+                                    }.execute();
+                                } else {
+                                    new ADBInstructionsDialog(packageItems, v.getContext().getString(R.string.task_impossible_message), "pm clear --user " + Utils.getUserID() + " " + packageItems.getPackageName(), v.getContext());
+                                }
                                 break;
                             case 2:
-                                new Async() {
-                                    private ProgressDialog progressDialog;
-                                    private String result;
+                                if (!Settings.isShizukuIgnored(v.getContext()) && Shizuku.pingBinder() && Shizuku.getVersion() >= 11 &&
+                                        Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED) {
+                                    new Async() {
+                                        private ProgressDialog progressDialog;
+                                        private String result;
 
-                                    @Override
-                                    public void onPreExecute() {
-                                        progressDialog = new ProgressDialog(v.getContext());
-                                        progressDialog.setProgressStatus(R.string.applying);
-                                        progressDialog.startDialog();
-                                    }
-
-                                    @Override
-                                    public void doInBackground() {
-                                        result = ShizukuShell.runCommand("am force-stop " + packageItems.getPackageName());
-                                    }
-
-                                    @Override
-                                    public void onPostExecute() {
-                                        progressDialog.dismissDialog();
-                                        if (result != null && !result.trim().isEmpty()) {
-                                            new MaterialAlertDialogBuilder(v.getContext())
-                                                    .setIcon(packageItems.getAppIcon())
-                                                    .setTitle(result)
-                                                    .setPositiveButton(R.string.cancel, (dialogInterface, i) -> {
-                                                    }).show();
+                                        @Override
+                                        public void onPreExecute() {
+                                            progressDialog = new ProgressDialog(v.getContext());
+                                            progressDialog.setProgressStatus(R.string.applying);
+                                            progressDialog.startDialog();
                                         }
-                                    }
-                                }.execute();
+
+                                        @Override
+                                        public void doInBackground() {
+                                            result = ShizukuShell.runCommand("am force-stop " + packageItems.getPackageName());
+                                        }
+
+                                        @Override
+                                        public void onPostExecute() {
+                                            progressDialog.dismissDialog();
+                                            if (result != null && !result.trim().isEmpty()) {
+                                                new MaterialAlertDialogBuilder(v.getContext())
+                                                        .setIcon(packageItems.getAppIcon())
+                                                        .setTitle(result)
+                                                        .setPositiveButton(R.string.cancel, (dialogInterface, i) -> {
+                                                        }).show();
+                                            }
+                                        }
+                                    }.execute();
+                                } else {
+                                    new ADBInstructionsDialog(packageItems, v.getContext().getString(R.string.task_impossible_message), "am force-stop " + packageItems.getPackageName(), v.getContext());
+                                }
                                 break;
                             case 3:
                                 new Async() {
@@ -338,43 +341,48 @@ public class InstalledPackagesAdapter extends RecyclerView.Adapter<InstalledPack
                                 view.getContext().startActivity(settings);
                                 break;
                             case 6:
-                                new Async() {
-                                    private ProgressDialog progressDialog;
-                                    private String result;
+                                if (!Settings.isShizukuIgnored(v.getContext()) && Shizuku.pingBinder() && Shizuku.getVersion() >= 11 &&
+                                        Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED) {
+                                    new Async() {
+                                        private ProgressDialog progressDialog;
+                                        private String result;
 
-                                    @Override
-                                    public void onPreExecute() {
-                                        progressDialog = new ProgressDialog(v.getContext());
-                                        progressDialog.setProgressStatus(R.string.applying);
-                                        progressDialog.startDialog();
-                                    }
+                                        @Override
+                                        public void onPreExecute() {
+                                            progressDialog = new ProgressDialog(v.getContext());
+                                            progressDialog.setProgressStatus(R.string.applying);
+                                            progressDialog.startDialog();
+                                        }
 
-                                    @Override
-                                    public void doInBackground() {
-                                        result = ShizukuShell.runCommand("pm uninstall --user " + Utils.getUserID() + " " + packageItems.getPackageName());
-                                        if (result.trim().equalsIgnoreCase("success")) {
-                                            if (packageItems.isSystemApp()) {
-                                                Packages.getUninstalledPackages().add(new PackagesEntry(packageItems.getPackageName(), packageItems.getAPKPath(), packageItems.getRemovalRecommendation(), packageItems.getUADDescription(), packageItems.getAppType(), false));
+                                        @Override
+                                        public void doInBackground() {
+                                            result = ShizukuShell.runCommand("pm uninstall --user " + Utils.getUserID() + " " + packageItems.getPackageName());
+                                            if (result.trim().equalsIgnoreCase("success")) {
+                                                if (packageItems.isSystemApp()) {
+                                                    Packages.getUninstalledPackages().add(new PackagesEntry(packageItems.getPackageName(), packageItems.getAPKPath(), packageItems.getRemovalRecommendation(), packageItems.getUADDescription(), packageItems.getAppType(), false));
+                                                }
+                                                Packages.getPackages().remove(packageItems);
                                             }
-                                            Packages.getPackages().remove(packageItems);
                                         }
-                                    }
 
-                                    @Override
-                                    public void onPostExecute() {
-                                        progressDialog.dismissDialog();
-                                        if (result != null && !result.trim().isEmpty() && !result.trim().equalsIgnoreCase("success")) {
-                                            new MaterialAlertDialogBuilder(v.getContext())
-                                                    .setIcon(packageItems.getAppIcon())
-                                                    .setTitle(result)
-                                                    .setPositiveButton(R.string.cancel, (dialogInterface, i) -> {
-                                                    }).show();
-                                        } else {
-                                            data.remove(packageItems);
-                                            notifyItemRemoved(getBindingAdapterPosition());
+                                        @Override
+                                        public void onPostExecute() {
+                                            progressDialog.dismissDialog();
+                                            if (result != null && !result.trim().isEmpty() && !result.trim().equalsIgnoreCase("success")) {
+                                                new MaterialAlertDialogBuilder(v.getContext())
+                                                        .setIcon(packageItems.getAppIcon())
+                                                        .setTitle(result)
+                                                        .setPositiveButton(R.string.cancel, (dialogInterface, i) -> {
+                                                        }).show();
+                                            } else {
+                                                data.remove(packageItems);
+                                                notifyItemRemoved(getBindingAdapterPosition());
+                                            }
                                         }
-                                    }
-                                }.execute();
+                                    }.execute();
+                                } else {
+                                    new ADBInstructionsDialog(packageItems, v.getContext().getString(R.string.task_impossible_message), "pm uninstall --user " + Utils.getUserID() + " " + packageItems.getPackageName(), v.getContext());
+                                }
                                 break;
                         }
                     }
