@@ -4,9 +4,9 @@
     android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_gravity="center|start"
-    android:layout_marginStart="15dp"
+    android:layout_marginHorizontal="10sp"
+    android:layout_marginVertical="15sp"
     android:orientation="horizontal"
-    android:layout_marginEnd="15sp"
     android:gravity="start|center" >
 
     <androidx.appcompat.widget.AppCompatImageButton
@@ -15,7 +15,7 @@
         android:layout_gravity="center"
         android:src="@mipmap/ic_launcher"
         android:scaleType="fitCenter"
-        android:layout_margin="10dp"
+        android:layout_marginEnd="10dp"
         android:background="@null"
         android:clickable="false" />
 
