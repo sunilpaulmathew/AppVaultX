@@ -39,6 +39,7 @@ import in.sunilpaulmathew.appvaultx.R;
 import in.sunilpaulmathew.appvaultx.dialogs.ADBInstructionsDialog;
 import in.sunilpaulmathew.appvaultx.dialogs.BottomMenuDialog;
 import in.sunilpaulmathew.appvaultx.dialogs.ProgressDialog;
+import in.sunilpaulmathew.appvaultx.dialogs.UnsafeAppDialog;
 import in.sunilpaulmathew.appvaultx.serializable.MenuEntry;
 import in.sunilpaulmathew.appvaultx.serializable.PackagesEntry;
 import in.sunilpaulmathew.appvaultx.utils.Async;
@@ -95,6 +96,12 @@ public class InstalledPackagesAdapter extends RecyclerView.Adapter<InstalledPack
             }
 
             holder.appIcon.setOnClickListener(v -> {
+                if (this.data.get(position).getRemovalRecommendation() != null && this.data.get(position).getRemovalRecommendation().equalsIgnoreCase("unsafe") && Utils.getBoolean("unsafeAppRemovalProtection", true, v.getContext())) {
+                    if (!Utils.getBoolean("unsafe_appsWarning_viewed", false, v.getContext())) {
+                        new UnsafeAppDialog(this.data.get(position), v.getContext());
+                    }
+                    return;
+                }
                 holder.appIcon.setVisibility(GONE);
                 holder.checkBox.setVisibility(VISIBLE);
                 selectedApps.add(this.data.get(position));
@@ -136,6 +143,12 @@ public class InstalledPackagesAdapter extends RecyclerView.Adapter<InstalledPack
             view.setOnClickListener(v -> {
                 PackagesEntry packageItems = data.get(getBindingAdapterPosition());
                 if (!Settings.isShizukuIgnored(v.getContext()) && Shizuku.pingBinder() && Shizuku.getVersion() >= 11 && Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED && !selectedApps.isEmpty()) {
+                    if (packageItems.getRemovalRecommendation() != null && packageItems.getRemovalRecommendation().equalsIgnoreCase("unsafe") && Utils.getBoolean("unsafeAppRemovalProtection", true, v.getContext())) {
+                        if (!Utils.getBoolean("unsafe_appsWarning_viewed", false, v.getContext())) {
+                            new UnsafeAppDialog(packageItems, v.getContext());
+                        }
+                        return;
+                    }
                     if (selectedApps.contains(packageItems)) {
                         selectedApps.remove(packageItems);
                     } else {
@@ -156,7 +169,9 @@ public class InstalledPackagesAdapter extends RecyclerView.Adapter<InstalledPack
                 menuItems.add(new MenuEntry(R.string.save_apks, R.drawable.ic_download, 3));
                 menuItems.add(new MenuEntry(R.string.save_icon, R.drawable.ic_save, 4));
                 menuItems.add(new MenuEntry(R.string.settings, R.drawable.ic_settings, 5));
-                menuItems.add(new MenuEntry(R.string.uninstall, R.drawable.ic_delete, 6));
+                if (packageItems.getRemovalRecommendation() != null && !packageItems.getRemovalRecommendation().equalsIgnoreCase("unsafe") || !Utils.getBoolean("unsafeAppRemovalProtection", true, v.getContext())) {
+                    menuItems.add(new MenuEntry(R.string.uninstall, R.drawable.ic_delete, 6));
+                }
 
                 new BottomMenuDialog(menuItems, packageItems.getAppIcon(), packageItems.getAppName(), packageItems.getPackageName(), v.getContext()) {
                     @Override

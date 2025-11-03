@@ -7,7 +7,8 @@ import java.io.Serializable;
  */
 public class SettingsEntry implements Serializable {
 
-    private final boolean mEnabled, mSwitch;
+    private boolean mEnabled;
+    private final boolean mSwitch;
     private final int mIcon, mPosition;
     private final String mTitle;
     private String mDescription;
@@ -28,6 +29,15 @@ public class SettingsEntry implements Serializable {
         this.mDescription = description;
         this.mSwitch = false;
         this.mEnabled = false;
+    }
+
+    public SettingsEntry(int position, int icon, String title, String description, boolean isSwitch, boolean isEnabled) {
+        this.mPosition = position;
+        this.mIcon = icon;
+        this.mTitle = title;
+        this.mDescription = description;
+        this.mSwitch = isSwitch;
+        this.mEnabled = isEnabled;
     }
 
     public boolean isEnabled() {
@@ -52,6 +62,10 @@ public class SettingsEntry implements Serializable {
 
     public String getDescription() {
         return mDescription;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.mEnabled = enabled;
     }
 
     public void setDescription(String description) {

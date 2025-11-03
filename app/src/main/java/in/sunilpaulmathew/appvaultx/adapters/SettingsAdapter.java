@@ -1,5 +1,8 @@
 package in.sunilpaulmathew.appvaultx.adapters;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.view.LayoutInflater;
@@ -12,6 +15,7 @@ import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.util.List;
@@ -49,20 +53,27 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.ViewHo
         holder.mTitle.setText(data.get(position).geTitle());
         if (data.get(position).getDescription() != null) {
             holder.mDescription.setText(data.get(position).getDescription());
-            holder.mDescription.setVisibility(View.VISIBLE);
+            holder.mDescription.setVisibility(VISIBLE);
         } else {
-            holder.mDescription.setVisibility(View.GONE);
+            holder.mDescription.setVisibility(GONE);
         }
 
         if (data.get(position).getIcon() != Integer.MIN_VALUE) {
             holder.mIcon.setImageDrawable(Utils.getDrawable(data.get(position).getIcon(), holder.mIcon.getContext()));
-            holder.mIcon.setVisibility(View.VISIBLE);
+            holder.mIcon.setVisibility(VISIBLE);
         } else {
-            holder.mIcon.setVisibility(View.GONE);
+            holder.mIcon.setVisibility(GONE);
+        }
+
+        if (data.get(position).isSwitch()) {
+            holder.mCheckBox.setVisibility(VISIBLE);
+            holder.mCheckBox.setChecked(data.get(position).isEnabled());
+        } else {
+            holder.mCheckBox.setVisibility(GONE);
         }
 
         if (data.get(position).getPosition() == 0) {
-            holder.mDivider.setVisibility(View.VISIBLE);
+            holder.mDivider.setVisibility(VISIBLE);
             holder.mTitle.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT));
             holder.mTitle.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
@@ -70,7 +81,7 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.ViewHo
         } else {
             holder.mTitle.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
             holder.mTitle.setTextColor(Settings.getColorText(holder.mTitle.getContext()));
-            holder.mDivider.setVisibility(View.GONE);
+            holder.mDivider.setVisibility(GONE);
         }
 
         Settings.setSlideInAnimation(holder.itemView, position);
@@ -84,6 +95,7 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private final AppCompatImageButton mIcon;
+        private final MaterialCheckBox mCheckBox;
         private final MaterialTextView mTitle, mDescription;
         private final View mDivider;
 
@@ -91,6 +103,7 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.ViewHo
             super(view);
             view.setOnClickListener(this);
             this.mIcon = view.findViewById(R.id.icon);
+            this.mCheckBox = view.findViewById(R.id.checkbox);
             this.mTitle = view.findViewById(R.id.title);
             this.mDescription = view.findViewById(R.id.description);
             this.mDivider = view.findViewById(R.id.divider);
@@ -161,16 +174,21 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.ViewHo
                     }
                 }.show();
             } else if (position == 3) {
-                Utils.loadUrl("https://github.com/sunilpaulmathew/AppVaultX", view.getContext());
+                boolean newValue = !mCheckBox.isChecked();
+                Utils.saveBoolean("unsafeAppRemovalProtection", newValue, view.getContext());
+                data.get(getBindingAdapterPosition()).setEnabled(newValue);
+                notifyItemChanged(getBindingAdapterPosition());
             } else if (position == 4) {
-                Utils.loadUrl("https://shizuku.rikka.app/", view.getContext());
+                Utils.loadUrl("https://github.com/sunilpaulmathew/AppVaultX", view.getContext());
             } else if (position == 5) {
-                Utils.loadUrl("https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation", view.getContext());
+                Utils.loadUrl("https://shizuku.rikka.app/", view.getContext());
             } else if (position == 6) {
-                Utils.loadUrl("https://poeditor.com/join/project/9RjHEoKPIK", view.getContext());
+                Utils.loadUrl("https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation", view.getContext());
             } else if (position == 7) {
-                new PolicyDialog(view.getContext());
+                Utils.loadUrl("https://poeditor.com/join/project/9RjHEoKPIK", view.getContext());
             } else if (position == 8) {
+                new PolicyDialog(view.getContext());
+            } else if (position == 9) {
                 Utils.loadUrl("mailto:smartpack.org@gmail.com", view.getContext());
             }
         }

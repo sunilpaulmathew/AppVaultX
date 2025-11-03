@@ -88,6 +88,9 @@
     <string name="uad_status_unsafe">Removing %s is dangerous and not recommended.</string>
     <string name="uad_status_unsafe_title">Dangerous</string>
     <string name="uninstall">Uninstall</string>
+    <string name="unsafe_batch_add_warning">You tried to add \"%s\" to the batch list. This app is categorized as unsafe or dangerous to remove, so it is disabled by default. If you still want to uninstall it, please disable \"Protect Unsafe Apps\" in Settings.\n\nWarning: Proceed at your own risk.</string>
+    <string name="unsafe_removal_prevention">Protect Unsafe Apps</string>
+    <string name="unsafe_removal_prevention_description">Prevents the removal of unsafe apps by default. Disable this option if you want to uninstall apps categorized as unsafe to remove. Warning: Proceed at your own risk.</string>
     <string name="update">Update</string>
     <string name="user_interface">User interface</string>
     <string name="yes">Yes</string>
