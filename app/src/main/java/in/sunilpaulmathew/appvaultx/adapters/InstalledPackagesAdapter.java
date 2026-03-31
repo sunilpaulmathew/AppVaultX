@@ -164,13 +164,19 @@ public class InstalledPackagesAdapter extends RecyclerView.Adapter<InstalledPack
                     menuItems.add(new MenuEntry(R.string.open_app, R.drawable.ic_open, 0));
                 }
 
-                menuItems.add(new MenuEntry(R.string.clear_data, R.drawable.ic_reset, 1));
-                menuItems.add(new MenuEntry(R.string.force_close, R.drawable.ic_cancel, 2));
-                menuItems.add(new MenuEntry(R.string.save_apks, R.drawable.ic_download, 3));
-                menuItems.add(new MenuEntry(R.string.save_icon, R.drawable.ic_save, 4));
-                menuItems.add(new MenuEntry(R.string.settings, R.drawable.ic_settings, 5));
+                if (packageItems.isAppDisabled()) {
+                    menuItems.add(new MenuEntry(R.string.enable_app, R.drawable.ic_enable, 1));
+                } else {
+                    menuItems.add(new MenuEntry(R.string.disable_app, R.drawable.ic_cancel, 1));
+                }
+
+                menuItems.add(new MenuEntry(R.string.clear_data, R.drawable.ic_reset, 2));
+                menuItems.add(new MenuEntry(R.string.force_close, R.drawable.ic_close, 3));
+                menuItems.add(new MenuEntry(R.string.save_apks, R.drawable.ic_download, 4));
+                menuItems.add(new MenuEntry(R.string.save_icon, R.drawable.ic_save, 5));
+                menuItems.add(new MenuEntry(R.string.settings, R.drawable.ic_settings, 6));
                 if (packageItems.getRemovalRecommendation() != null && !packageItems.getRemovalRecommendation().equalsIgnoreCase("unsafe") || !Utils.getBoolean("unsafeAppRemovalProtection", true, v.getContext())) {
-                    menuItems.add(new MenuEntry(R.string.uninstall, R.drawable.ic_delete, 6));
+                    menuItems.add(new MenuEntry(R.string.uninstall, R.drawable.ic_delete, 7));
                 }
 
                 new BottomMenuDialog(menuItems, packageItems.getAppIcon(), packageItems.getAppName(), packageItems.getPackageName(), v.getContext()) {
@@ -181,6 +187,50 @@ public class InstalledPackagesAdapter extends RecyclerView.Adapter<InstalledPack
                                 v.getContext().startActivity(packageItems.launchIntent(v.getContext()));
                                 break;
                             case 1:
+                                if (!Settings.isShizukuIgnored(v.getContext()) && Shizuku.pingBinder() && Shizuku.getVersion() >= 11 &&
+                                        Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED) {
+                                    new Async() {
+                                        private ProgressDialog progressDialog;
+
+                                        @Override
+                                        public void onPreExecute() {
+                                            progressDialog = new ProgressDialog(v.getContext());
+                                            progressDialog.setProgressStatus(R.string.applying);
+                                            progressDialog.startDialog();
+                                        }
+
+                                        @Override
+                                        public void doInBackground() {
+                                            PackagesEntry updatedEntry;
+                                            String result;
+                                            if (packageItems.isAppDisabled()) {
+                                                result = ShizukuShell.runCommand("pm enable --user " + Utils.getUserID() + " " + packageItems.getPackageName());
+                                            } else {
+                                                result = ShizukuShell.runCommand("pm disable-user --user " + Utils.getUserID() + " " + packageItems.getPackageName());
+                                            }
+                                            if (result.trim().contains("new state: enabled")) {
+                                                updatedEntry = new PackagesEntry(packageItems.getPackageName(), packageItems.getAPKPath(), packageItems.getRemovalRecommendation(), packageItems.getUADDescription(), packageItems.getAppType() == 5 ? 2 : packageItems.getAppType() == 4 ? 1 : 0, true);
+                                            } else {
+                                                updatedEntry = new PackagesEntry(packageItems.getPackageName(), packageItems.getAPKPath(), packageItems.getRemovalRecommendation(), packageItems.getUADDescription(), packageItems.getAppType() == 2 ? 5 : packageItems.getAppType() == 1 ? 4 : 3, true);
+                                            }
+                                            data.set(getBindingAdapterPosition(), updatedEntry);
+                                            int index = Packages.getPackages().indexOf(packageItems);
+                                            if (index != -1) {
+                                                Packages.getPackages().set(index, updatedEntry);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onPostExecute() {
+                                            progressDialog.dismissDialog();
+                                            notifyItemChanged(getBindingAdapterPosition());
+                                        }
+                                    }.execute();
+                                } else {
+                                    new ADBInstructionsDialog(packageItems, v.getContext().getString(R.string.task_impossible_message), "pm clear --user " + Utils.getUserID() + " " + packageItems.getPackageName(), v.getContext());
+                                }
+                                break;
+                            case 2:
                                 if (!Settings.isShizukuIgnored(v.getContext()) && Shizuku.pingBinder() && Shizuku.getVersion() >= 11 &&
                                         Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED) {
                                     new Async() {
@@ -215,7 +265,7 @@ public class InstalledPackagesAdapter extends RecyclerView.Adapter<InstalledPack
                                     new ADBInstructionsDialog(packageItems, v.getContext().getString(R.string.task_impossible_message), "pm clear --user " + Utils.getUserID() + " " + packageItems.getPackageName(), v.getContext());
                                 }
                                 break;
-                            case 2:
+                            case 3:
                                 if (!Settings.isShizukuIgnored(v.getContext()) && Shizuku.pingBinder() && Shizuku.getVersion() >= 11 &&
                                         Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED) {
                                     new Async() {
@@ -250,7 +300,7 @@ public class InstalledPackagesAdapter extends RecyclerView.Adapter<InstalledPack
                                     new ADBInstructionsDialog(packageItems, v.getContext().getString(R.string.task_impossible_message), "am force-stop " + packageItems.getPackageName(), v.getContext());
                                 }
                                 break;
-                            case 3:
+                            case 4:
                                 new Async() {
                                     private File outputFile;
                                     private ProgressDialog progressDialog;
@@ -294,7 +344,7 @@ public class InstalledPackagesAdapter extends RecyclerView.Adapter<InstalledPack
                                     }
                                 }.execute();
                                 break;
-                            case 4:
+                            case 5:
                                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q && activity.checkCallingOrSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
                                         PackageManager.PERMISSION_GRANTED) {
                                     ActivityCompat.requestPermissions(activity, new String[] {
@@ -348,14 +398,14 @@ public class InstalledPackagesAdapter extends RecyclerView.Adapter<InstalledPack
                                     }.execute();
                                 }
                                 break;
-                            case 5:
+                            case 6:
                                 Intent settings = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                                 settings.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 Uri uri = Uri.fromParts("package", packageItems.getPackageName(), null);
                                 settings.setData(uri);
                                 view.getContext().startActivity(settings);
                                 break;
-                            case 6:
+                            case 7:
                                 if (!Settings.isShizukuIgnored(v.getContext()) && Shizuku.pingBinder() && Shizuku.getVersion() >= 11 &&
                                         Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED) {
                                     new Async() {

@@ -25,8 +25,10 @@
     <string name="copyright_text">Copyright: © 2025, sunilpaulmathew</string>
     <string name="developer_contact">Contact Developer</string>
     <string name="developer_contact_description">Need help or have feedback? Contact the developer</string>
+    <string name="disable_app">Disable app</string>
     <string name="downgrade">Downgrade</string>
     <string name="downgrade_required_status">Downgrade required: Yes</string>
+    <string name="enable_app">Enable app</string>
     <string name="force_close">Force close</string>
     <string name="general">General</string>
     <string name="ignore">Ignore</string>

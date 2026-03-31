@@ -62,6 +62,10 @@ public class PackagesEntry implements Serializable {
         return installed;
     }
 
+    public boolean isAppDisabled() {
+        return appType == 3 || appType == 4 || appType == 5;
+    }
+
     public boolean isSystemApp() {
         return appType == 1 || appType == 2 || appType == 4 || appType == 5;
     }
