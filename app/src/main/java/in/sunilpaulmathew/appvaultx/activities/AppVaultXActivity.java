@@ -4,8 +4,13 @@ import android.content.ComponentName;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
+import android.widget.FrameLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -14,8 +19,8 @@ import in.sunilpaulmathew.appvaultx.R;
 import in.sunilpaulmathew.appvaultx.dialogs.AccessUnavilableDialog;
 import in.sunilpaulmathew.appvaultx.dialogs.WelcomeDialog;
 import in.sunilpaulmathew.appvaultx.fragments.InstalledPackagesFragment;
-import in.sunilpaulmathew.appvaultx.fragments.SettingsFragment;
 import in.sunilpaulmathew.appvaultx.fragments.RemovedPackagesFragment;
+import in.sunilpaulmathew.appvaultx.fragments.SettingsFragment;
 import in.sunilpaulmathew.appvaultx.utils.Settings;
 import in.sunilpaulmathew.appvaultx.utils.ShizukuPermissionChecker;
 import in.sunilpaulmathew.appvaultx.utils.ShizukuShell;
@@ -41,6 +46,21 @@ public class AppVaultXActivity extends AppCompatActivity {
         updateInstallerActivityState();
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        View layoutRoot = findViewById(R.id.layout_root);
+        FrameLayout fragmentContainer = findViewById(R.id.fragment_container);
+
+        ViewCompat.setOnApplyWindowInsetsListener(layoutRoot, (view, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+
+            view.setPadding(
+                    systemBars.left,
+                    systemBars.top,
+                    systemBars.right,
+                    0
+            );
+
+            return insets;
+        });
 
         Menu menu = bottomNav.getMenu();
         menu.add(Menu.NONE, 0, Menu.NONE, null).setIcon(R.drawable.ic_apps);
@@ -65,6 +85,8 @@ public class AppVaultXActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             bottomNav.setSelectedItemId(0);
         }
+
+        bottomNav.post(() -> fragmentContainer.setPadding(0, 0, 0, bottomNav.getHeight()));
 
         if (!Utils.getBoolean("welcome_dialog_viewed", false, this)) {
             new WelcomeDialog(this);

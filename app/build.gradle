@@ -27,7 +27,7 @@ android {
     defaultConfig {
         applicationId "in.sunilpaulmathew.appvaultx"
         minSdk 24
-        targetSdk 35
+        targetSdk 36
         versionCode 1
         versionName "beta-v0.1"
     }
