@@ -1,0 +1,4 @@
+* Prevent removing unsafe apps by default
+* Support disable and enable apps
+* Now built for latest Android
+* Miscellaneous changes

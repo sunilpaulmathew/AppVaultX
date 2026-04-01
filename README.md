@@ -34,6 +34,7 @@ height="80">](https://github.com/sunilpaulmathew/AppVaultX/releases/tag/beta-v0.
 
 ### 🛠️ App Management with Shizuku Support
 Unlock powerful system-level tools when Shizuku is available:
+- 🔘 **Enable or Disable Apps** –quickly toggle system and user apps on or off
 - 🧩 **Force Close Apps** – safely stop any running app
 - 🧹 **Clear Data & Cache** – free storage and reset apps
 - 📦 **Backup APKs & Icons** – save app files and icons for future use
@@ -90,7 +91,7 @@ Your contributions — even small ones — help maintain and improve AppVaultX.
 
 ## 📄 License
 
-    Copyright (C) 2025 sunilpaulmathew <sunil.kde@gmail.com>
+    Copyright (C) 2025–2026 sunilpaulmathew <sunil.kde@gmail.com>
 
     AppVaultX is a free softwares: you can redistribute it and/or modify it
     under the terms of the GNU General Public License as published by the
