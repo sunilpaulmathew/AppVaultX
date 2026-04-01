@@ -63,7 +63,7 @@ public class PackagesEntry implements Serializable {
     }
 
     public boolean isAppDisabled() {
-        return appType == 3 || appType == 4 || appType == 5;
+        return appType == 3 || appType == 4 || appType == 5 || appType == 6;
     }
 
     public boolean isSystemApp() {
@@ -124,8 +124,12 @@ public class PackagesEntry implements Serializable {
                 if (removalRec != null) labels.add(removalRec);
 
                 switch (appType) {
+                    case 7:
+                        labels.add("Debuggable");
+                        break;
                     case 6:
                         labels.add("Debuggable");
+                        labels.add("Disabled");
                         break;
                     case 5:
                         labels.add("System");

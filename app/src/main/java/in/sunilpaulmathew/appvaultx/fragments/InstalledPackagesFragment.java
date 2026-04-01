@@ -252,10 +252,10 @@ public class InstalledPackagesFragment extends Fragment {
                         return type == 0 || type == 3;
                     case 3:
                         // Disabled
-                        return type == 3 || type == 4 || type == 5;
+                        return type == 3 || type == 4 || type == 5 || type == 6;
                     case 4:
                         // Debuggable
-                        return type == 6;
+                        return type == 6 || type == 7;
                     case 5:
                         // Safe to remove
                         return "Recommended".equals(rec);

@@ -38,10 +38,11 @@ public class Packages {
         boolean updatedSystemApp = (applicationInfo.flags & ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0;
         boolean debuggable = (applicationInfo.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
         boolean disabled = !applicationInfo.enabled;
-        int appType;
         if (debuggable) {
-            appType = 6;
-        } else if (disabled) {
+            return disabled ? 6 : 7;
+        }
+        int appType;
+        if (disabled) {
             if (systemApp) {
                 appType = 5;
             } else if (updatedSystemApp) {

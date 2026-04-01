@@ -199,6 +199,32 @@ public class InstalledPackagesAdapter extends RecyclerView.Adapter<InstalledPack
                                             progressDialog.startDialog();
                                         }
 
+                                        private int setDisabled() {
+                                            switch ((packageItems.getAppType())) {
+                                                case 7:
+                                                    return 6;
+                                                case 2:
+                                                    return 5;
+                                                case 1:
+                                                    return 4;
+                                                default:
+                                                    return 3;
+                                            }
+                                        }
+
+                                        private int setEnabled() {
+                                            switch (packageItems.getAppType()) {
+                                                case 6:
+                                                    return 7;
+                                                case 5:
+                                                    return 2;
+                                                case 4:
+                                                    return 1;
+                                                default:
+                                                    return 0;
+                                            }
+                                        }
+
                                         @Override
                                         public void doInBackground() {
                                             PackagesEntry updatedEntry;
@@ -209,9 +235,9 @@ public class InstalledPackagesAdapter extends RecyclerView.Adapter<InstalledPack
                                                 result = ShizukuShell.runCommand("pm disable-user --user " + Utils.getUserID() + " " + packageItems.getPackageName());
                                             }
                                             if (result.trim().contains("new state: enabled")) {
-                                                updatedEntry = new PackagesEntry(packageItems.getPackageName(), packageItems.getAPKPath(), packageItems.getRemovalRecommendation(), packageItems.getUADDescription(), packageItems.getAppType() == 5 ? 2 : packageItems.getAppType() == 4 ? 1 : 0, true);
+                                                updatedEntry = new PackagesEntry(packageItems.getPackageName(), packageItems.getAPKPath(), packageItems.getRemovalRecommendation(), packageItems.getUADDescription(), setEnabled(), true);
                                             } else {
-                                                updatedEntry = new PackagesEntry(packageItems.getPackageName(), packageItems.getAPKPath(), packageItems.getRemovalRecommendation(), packageItems.getUADDescription(), packageItems.getAppType() == 2 ? 5 : packageItems.getAppType() == 1 ? 4 : 3, true);
+                                                updatedEntry = new PackagesEntry(packageItems.getPackageName(), packageItems.getAPKPath(), packageItems.getRemovalRecommendation(), packageItems.getUADDescription(), setDisabled(), true);
                                             }
                                             data.set(getBindingAdapterPosition(), updatedEntry);
                                             int index = Packages.getPackages().indexOf(packageItems);
