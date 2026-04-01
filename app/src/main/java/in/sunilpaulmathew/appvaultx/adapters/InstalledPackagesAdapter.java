@@ -253,7 +253,9 @@ public class InstalledPackagesAdapter extends RecyclerView.Adapter<InstalledPack
                                         }
                                     }.execute();
                                 } else {
-                                    new ADBInstructionsDialog(packageItems, v.getContext().getString(R.string.task_impossible_message), "pm clear --user " + Utils.getUserID() + " " + packageItems.getPackageName(), v.getContext());
+                                    new ADBInstructionsDialog(packageItems, v.getContext().getString(R.string.task_impossible_message),
+                                            (packageItems.isAppDisabled() ? "pm enable --user " : "pm disable-user --user ") +
+                                                    Utils.getUserID() + " " + packageItems.getPackageName(), v.getContext());
                                 }
                                 break;
                             case 2:
