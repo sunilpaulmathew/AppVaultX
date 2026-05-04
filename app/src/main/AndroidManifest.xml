@@ -29,6 +29,9 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".activities.CrashReportActivity"
+            android:exported="false" />
+
         <activity
             android:enabled="false"
             android:name=".activities.InstallerActivity"

@@ -1,0 +1,142 @@
+<androidx.appcompat.widget.LinearLayoutCompat
+    android:id="@+id/layout_root"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical" >
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:text="@string/crash_report"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="?attr/colorPrimary"
+                    style="@style/AppTheme.Title" />
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/copy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center_vertical"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:layout_marginEnd="10dp"
+                    android:src="@drawable/ic_copy"
+                    app:tint="?attr/colorPrimary" />
+        </FrameLayout>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/request_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="10sp"
+            android:layout_margin="10dp"
+            android:textStyle="italic"
+            android:textSize="15sp" />
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fillViewport="true">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            app:cardCornerRadius="10dp">
+
+                                <HorizontalScrollView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="10dp" >
+
+                                        <com.google.android.material.textview.MaterialTextView
+                                            android:id="@+id/crash_log"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:textIsSelectable="true"
+                                            android:textStyle="bold|italic"
+                                            android:gravity="start" />
+                                </HorizontalScrollView>
+                        </com.google.android.material.card.MaterialCardView>
+                </androidx.appcompat.widget.LinearLayoutCompat>
+        </androidx.core.widget.NestedScrollView>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/windowBackground"
+            android:orientation="vertical"
+            android:padding="10dp" >
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:hint="@string/crash_reproduce_steps"
+                    android:layout_marginBottom="10dp" >
+
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                            android:id="@+id/crash_steps"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold|italic"
+                            android:textSize="15sp"
+                            android:padding="15dp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center"
+                    android:gravity="center" >
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/cancel_button"
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            style="@style/Widget.Material3.Button.TonalButton"
+                            app:iconTint="?attr/colorSecondary"
+                            android:paddingHorizontal="15sp"
+                            android:layout_gravity="center"
+                            app:icon="@drawable/ic_cancel"
+                            android:text="@string/cancel"
+                            android:textStyle="bold"
+                            android:gravity="center"
+                            app:iconGravity="start"
+                            app:iconPadding="10sp"
+                            android:padding="10sp"/>
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="1" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/report_button"
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            style="@style/Widget.Material3.Button.TonalButton"
+                            android:textColor="?attr/colorSecondary"
+                            android:layout_gravity="center"
+                            app:icon="@drawable/ic_share"
+                            android:text="@string/report"
+                            android:textStyle="bold"
+                            android:gravity="center"
+                            app:iconGravity="start"
+                            app:iconPadding="10sp"
+                            android:padding="10sp" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.appcompat.widget.LinearLayoutCompat>

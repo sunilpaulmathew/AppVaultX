@@ -1,6 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
 
     <string name="cancel">"İptal"</string>
+    <string name="crash_report">"Çökme Raporu"</string>
+    <string name="crash_reproduce_steps">"Sorunu tekrarlamak için adımlar (isteğe bağlı)"</string>
     <string name="press_back">"Çıkmak için tekrar geri tuşuna basın"</string>
     <string name="request_permission">"İzin istemi"</string>
     <string name="start">"Başlat"</string>
@@ -16,6 +18,7 @@
     <string name="general">"Genel"</string>
     <string name="privacy_policy">"Gizlilik politikası"</string>
     <string name="privacy_policy_description">"Gizliliğin önemli: Dahasını öğren"</string>
+    <string name="report">"Raporla"</string>
     <string name="settings">"Ayarlar"</string>
     <string name="shizuku_access_denied_title">"aShell için Shizuku erişimi reddedildi"</string>
     <string name="shizuku_learn">"Shizuku hakkında"</string>

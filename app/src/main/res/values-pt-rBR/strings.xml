@@ -4,7 +4,13 @@
     <string name="app_theme_dark">"Escuro"</string>
     <string name="app_theme_light">"Claro"</string>
     <string name="cancel">Cancelar</string>
+    <string name="crash_report">"Relatório de falha"</string>
+    <string name="crash_report_message">"Uma falha foi detectada durante o último uso deste aplicativo. Para ajudar o desenvolvedor a corrigir esse problema, considere relatar este log de falhas para
+
+        E-mail: smartpack.org@gmail.com"</string>
+    <string name="crash_reproduce_steps">"Etapas para reproduzir a falha (opcional)"</string>
     <string name="press_back">Pressione voltar novamente para sair</string>
+    <string name="report">"Relatar"</string>
     <string name="request_permission">Solicitar Permissão</string>
     <string name="start">Iniciar</string>
     <string name="translations">"Traduções"</string>

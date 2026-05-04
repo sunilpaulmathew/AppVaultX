@@ -2,6 +2,11 @@
     <!-- Chines simplified (zh-hans) -->
 
     <string name="cancel">"取消"</string>
+    <string name="crash_report">"崩溃报告"</string>
+    <string name="crash_report_message">"检测到上次使用应用时发生了崩溃。为了帮助开发者修复此问题，请考虑将此次崩溃报告给
+
+        E-mail: smartpack.org@gmail.com"</string>
+    <string name="crash_reproduce_steps">"重现崩溃的操作步骤（可选）"</string>
     <string name="press_back">"再次点击后退以退出"</string>
     <string name="request_permission">"请求权限"</string>
     <string name="start">"开始"</string>
@@ -17,6 +22,7 @@
     <string name="general">"通用"</string>
     <string name="privacy_policy">"隐私政策"</string>
     <string name="privacy_policy_description">"你的隐私很重要：了解更多"</string>
+    <string name="report">"报告"</string>
     <string name="settings">"设置"</string>
     <string name="shizuku_access_denied_title">"aShell 的 Shizuku 访问被拒绝"</string>
     <string name="shizuku_learn">"了解 Shizuku"</string>

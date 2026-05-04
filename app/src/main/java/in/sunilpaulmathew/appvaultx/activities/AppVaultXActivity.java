@@ -21,6 +21,7 @@ import in.sunilpaulmathew.appvaultx.dialogs.WelcomeDialog;
 import in.sunilpaulmathew.appvaultx.fragments.InstalledPackagesFragment;
 import in.sunilpaulmathew.appvaultx.fragments.RemovedPackagesFragment;
 import in.sunilpaulmathew.appvaultx.fragments.SettingsFragment;
+import in.sunilpaulmathew.appvaultx.utils.CrashReport;
 import in.sunilpaulmathew.appvaultx.utils.Settings;
 import in.sunilpaulmathew.appvaultx.utils.ShizukuPermissionChecker;
 import in.sunilpaulmathew.appvaultx.utils.ShizukuShell;
@@ -42,6 +43,9 @@ public class AppVaultXActivity extends AppCompatActivity {
         Settings.initializeAppTheme(this);
 
         setContentView(R.layout.activity_main);
+
+        // Initialize Crash Reporter
+        new CrashReport(this).initialize();
 
         updateInstallerActivityState();
 

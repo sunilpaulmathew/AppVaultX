@@ -1,6 +1,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
 
     <string name="cancel">"Hủy"</string>
+    <string name="crash_report">"Báo cáo sự cố"</string>
+    <string name="crash_report_message">"Sự cố được phát hiện trong lần sử dụng cuối cùng của ứng dụng này. Để giúp nhà phát triển khắc phục sự cố này, vui lòng xem xét báo cáo nhật ký sự cố này cho
+
+        Email: smartpack.org@gmail.com"</string>
+    <string name="crash_reproduce_steps">"Các bước để tái tạo sự cố (Tùy chọn)"</string>
     <string name="press_back">"Nhấn lại lần nữa để thoát"</string>
     <string name="request_permission">"Yêu cầu quyền"</string>
     <string name="start">"Bắt đầu"</string>
@@ -16,6 +21,7 @@
     <string name="general">"Tổng quan"</string>
     <string name="privacy_policy">"Chính sách bảo mật"</string>
     <string name="privacy_policy_description">"Quyền riêng tư của bạn rất quan trọng: Tìm hiểu thêm"</string>
+    <string name="report">"Báo cáo"</string>
     <string name="settings">"Cài đặt"</string>
     <string name="shizuku_access_denied_title">"Shizuku bị từ chối quyền truy cập vào aShell"</string>
     <string name="shizuku_learn">"Tìm hiểu Shizuku"</string>

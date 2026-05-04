@@ -6,7 +6,13 @@
     <string name="app_theme_dark">"Тёмная"</string>
     <string name="app_theme_light">"Светлая"</string>
     <string name="cancel">"Отмена"</string>
+    <string name="crash_report">"Отчет о сбое"</string>
+    <string name="crash_report_message">"Во время последнего использования данного приложения был обнаружен сбой. Чтобы помочь разработчику исправить эту проблему, пожалуйста, рассмотрите возможность отправки этого журнала сбоев на
+
+        электронную почту : smartpack.org@gmail.com"</string>
+    <string name="crash_reproduce_steps">"Действия по воспроизведению сбоя (необязательно)"</string>
     <string name="press_back">"Нажмите ещё раз для выхода"</string>
+    <string name="report">"Отчет"</string>
     <string name="request_permission">"Запросить разрешение"</string>
     <string name="start">"Начать"</string>
     <string name="translations">"Переводы"</string>

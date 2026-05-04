@@ -11,11 +11,17 @@
     <string name="app_theme_dark">"Mode Gelap"</string>
     <string name="app_theme_light">"Mode Terang"</string>
     <string name="app_version">"aShell %s"</string>
+    <string name="crash_report">"Laporan Kerusakan"</string>
+    <string name="crash_report_message">"Kerusakan terdeteksi selama penggunaan terakhir aplikasi ini. Untuk membantu pengembang memperbaiki masalah ini, harap pertimbangkan untuk melaporkan log kerusakan ini
+
+        Email: smartpack.org@gmail.com"</string>
+    <string name="crash_reproduce_steps">"Langkah-langkah untuk mereproduksi kerusakan"</string>
     <string name="developer_contact">"Hubungi pengembang"</string>
     <string name="developer_contact_description">"Butuh bantuan atau memiliki saran? Hubungi pengembang sekarang"</string>
     <string name="general">"Umum"</string>
     <string name="privacy_policy">"Kebijakan privasi"</string>
     <string name="privacy_policy_description">"Privasi anda penting: pelajari selengkapnya"</string>
+    <string name="report">"Laporan"</string>
     <string name="settings">"Pengaturan"</string>
     <string name="shizuku_access_denied_title">"Akses Shizuku ditolak oleh aShell"</string>
     <string name="shizuku_learn">"Pelajari Shizuku"</string>

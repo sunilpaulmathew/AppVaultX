@@ -1,6 +1,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation" >
 
     <string name="cancel">"Anuluj"</string>
+    <string name="crash_report">"Raport o awarii"</string>
+    <string name="crash_report_message">"Wykryto awarię podczas ostatniego użycia tej aplikacji. Aby pomóc programiście w rozwiązaniu tego problemu, rozważ zgłoszenie tego dziennika awarii do
+
+        E-mail: smartpack.org@gmail.com"</string>
+    <string name="crash_reproduce_steps">"Kroki do odtworzenia awarii (opcjonalnie)"</string>
     <string name="press_back">"Naciśnij ponownie wstecz, aby wyjść"</string>
     <string name="request_permission">"Żądaj uprawnień"</string>
     <string name="start">"Start"</string>
@@ -16,6 +21,7 @@
     <string name="general">"Ogólne"</string>
     <string name="privacy_policy">"Polityka prywatności"</string>
     <string name="privacy_policy_description">"Twoja prywatność ma znaczenie: Dowiedz się więcej"</string>
+    <string name="report">"Zgłoś"</string>
     <string name="settings">"Ustawienia"</string>
     <string name="shizuku_access_denied_title">"Odmowa dostępu Shizuku dla aShell"</string>
     <string name="shizuku_learn">"Dowiedz się więcej o Shizuku"</string>

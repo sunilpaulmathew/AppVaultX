@@ -2,6 +2,11 @@
     <!-- Chines traditional (zh-TW) -->
 
     <string name="cancel">"取消"</string>
+    <string name="crash_report">"崩潰報告"</string>
+    <string name="crash_report_message">"在上次使用此應用程序期間檢測到崩潰。 為了幫助開發者解決這個問題，請考慮將此崩潰日誌報告給
+
+        電子郵件：smartpack.org@gmail.com"</string>
+    <string name="crash_reproduce_steps">"重現崩潰的步驟（可選）"</string>
     <string name="press_back">"再按一次返回鍵即可關閉"</string>
     <string name="request_permission">"權限要求"</string>
     <string name="start">"開始"</string>
@@ -17,6 +22,7 @@
     <string name="general">"一般"</string>
     <string name="privacy_policy">"隱私權政策"</string>
     <string name="privacy_policy_description">"與您的隱私相關：了解更多"</string>
+    <string name="report">"報告"</string>
     <string name="settings">"設定"</string>
     <string name="shizuku_access_denied_title">"aShell 存取 Shizuku 遭拒"</string>
     <string name="shizuku_learn">"認識 Shizuku"</string>

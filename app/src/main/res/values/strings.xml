@@ -23,6 +23,9 @@
     <string name="cancel">Cancel</string>
     <string name="clear_data">Clear data</string>
     <string name="copyright_text">Copyright: © 2025–2026, sunilpaulmathew</string>
+    <string name="crash_report">Crash Report</string>
+    <string name="crash_report_message">A crash is detected during the last use of this app. Inorder to help the developer to fix this issue, please consider reporting this crash log to \n\nE-mail: smartpack.org@gmail.com</string>
+    <string name="crash_reproduce_steps">Steps to reproduce this crash</string>
     <string name="developer_contact">Contact Developer</string>
     <string name="developer_contact_description">Need help or have feedback? Contact the developer</string>
     <string name="disable_app">Disable app</string>
@@ -49,6 +52,7 @@
     <string name="remove">Remove</string>
     <string name="remove_selected">Remove selected (%s)</string>
     <string name="remove_user_app_message">However, you have selected a regular user app, which you can easily uninstall from your app drawer or using any standard app manager.</string>
+    <string name="report">Report</string>
     <string name="request_permission">Request Permission</string>
     <string name="restore">Restore</string>
     <string name="restore_question">Restore %s?</string>

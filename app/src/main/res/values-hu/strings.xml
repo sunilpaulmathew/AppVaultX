@@ -5,7 +5,13 @@
     <string name="app_theme_dark">"Sötét"</string>
     <string name="app_theme_light">"Világos"</string>
     <string name="cancel">"Mégse"</string>
+    <string name="crash_report">"Összeomlási jelentés"</string>
+    <string name="crash_report_message">"Összeomlást észlelt az alkalmazás az utolsó használata során. Segítse a fejlesztőt a probléma megoldásában, fontolja meg ennek az összeomlási naplónak a jelentését.
+
+        E-mail: smartpack.org@gmail.com"</string>
+    <string name="crash_reproduce_steps">"Az összeomlás reprodukálásának lépései"</string>
     <string name="press_back">"Nyomja meg ismét a vissza gombot a kilépéshez"</string>
+    <string name="report">"Jelentés"</string>
     <string name="request_permission">"Engedély kérés"</string>
     <string name="start">"Indítás"</string>
     <string name="translations">"Fordítások"</string>

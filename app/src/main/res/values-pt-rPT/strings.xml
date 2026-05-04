@@ -5,7 +5,13 @@
     <string name="app_theme_dark">"Escuro"</string>
     <string name="app_theme_light">"Claro"</string>
     <string name="cancel">"Cancelar"</string>
+    <string name="crash_report">"Relatório de erro"</string>
+    <string name="crash_report_message">"A aplicação encravou na última utilização da aplicação. Por forma a ajudar o programador a corrigir este problema, por favor considere enviar este relatório de erro para o email:
+
+        smartpack.org@gmail.com"</string>
+    <string name="crash_reproduce_steps">"Passos para reproduzir o erro (opcional)"</string>
     <string name="press_back">"Premir novamente para sair"</string>
+    <string name="report">"Reportar"</string>
     <string name="request_permission">"Solicitar autorização"</string>
     <string name="start">"Iniciar"</string>
     <string name="translations">"Traduções"</string>

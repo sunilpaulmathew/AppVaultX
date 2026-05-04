@@ -1,6 +1,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation" >
 
     <string name="cancel">"Cancelar"</string>
+    <string name="crash_report">"Informe del accidente"</string>
+    <string name="crash_report_message">"Se detectó un bloqueo durante el último uso de esta aplicación. Para ayudar al desarrollador a solucionar este problema, considere informar este registro de fallas a
+
+        Correo electrónico: smartpack.org@gmail.com"</string>
+    <string name="crash_reproduce_steps">"Pasos para reproducir el bloqueo"</string>
     <string name="press_back">"Presione atrás de nuevo para salir"</string>
     <string name="request_permission">"Solicitar permiso"</string>
     <string name="start">"Comenzar"</string>
@@ -16,6 +21,7 @@
     <string name="general">"General"</string>
     <string name="privacy_policy">"Política de privacidad"</string>
     <string name="privacy_policy_description">"Tu privacidad es importante: Más información"</string>
+    <string name="report">"Reporte"</string>
     <string name="settings">"Ajustes"</string>
     <string name="shizuku_access_denied_title">"Acceso denegado a Shizuku para aShell"</string>
     <string name="shizuku_learn">"Aprende shizuku"</string>
