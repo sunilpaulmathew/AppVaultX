@@ -1,0 +1,4 @@
+* Implemented crash reporting
+* AppVaultX now targets SDK 37
+* Updated UAD-NG database
+* Miscellaneous changes
