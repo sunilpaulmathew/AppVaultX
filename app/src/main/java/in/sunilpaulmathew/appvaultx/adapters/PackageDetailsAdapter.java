@@ -7,12 +7,14 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.util.List;
 
 import in.sunilpaulmathew.appvaultx.R;
 import in.sunilpaulmathew.appvaultx.serializable.PackageDetailsEntry;
+import in.sunilpaulmathew.appvaultx.serializable.PermissionsEntry;
 import in.sunilpaulmathew.appvaultx.utils.Settings;
 
 /*
@@ -44,13 +46,30 @@ public class PackageDetailsAdapter extends RecyclerView.Adapter<PackageDetailsAd
         return this.data.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         private final MaterialTextView title, text;
 
         public ViewHolder(View view) {
             super(view);
             this.title = view.findViewById(R.id.title);
             this.text = view.findViewById(R.id.text);
+
+            view.setOnClickListener(v -> {
+                int position = getBindingAdapterPosition();
+                List<PermissionsEntry> permissions = data.get(position).getPermissions();
+                if (position != RecyclerView.NO_POSITION && permissions != null) {
+                    StringBuilder sb = new StringBuilder();
+                    for (PermissionsEntry permissionsEntry : permissions) {
+                        sb.append(permissionsEntry.isGranted() ? "☑ " : "☐ ").append(permissionsEntry.getPermissionName()).append("\n");
+                    }
+                    new MaterialAlertDialogBuilder(v.getContext())
+                            .setIcon(R.drawable.ic_permissions)
+                            .setTitle(R.string.permissions)
+                            .setMessage(sb.toString().trim())
+                            .setPositiveButton(R.string.cancel, (dialogInterface, i) -> {
+                            }).show();
+                }
+            });
         }
     }
 

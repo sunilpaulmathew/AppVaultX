@@ -169,7 +169,7 @@ public class InstallerActivity extends AppCompatActivity {
                         details.add(new PackageDetailsEntry("Version code", String.valueOf(versionCode)));
                         details.add(new PackageDetailsEntry("Min SDK", sdkToAndroidVersion(minSdk)));
                         details.add(new PackageDetailsEntry("Target SDK", sdkToAndroidVersion(targetSdk)));
-                        details.add(new PackageDetailsEntry("Permissions", permissions.size() + " declared"));
+                        details.add(new PackageDetailsEntry("Permissions", permissions.size() + " declared (tap to learn more)", permissions));
                         details.add(new PackageDetailsEntry("APK size", apkSize));
                         if (downgrade) {
                             details.add(new PackageDetailsEntry(activity.getString(R.string.downgrade_required), activity.getString(R.string.yes)));
