@@ -19,15 +19,21 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import in.sunilpaulmathew.appvaultx.R;
 import in.sunilpaulmathew.appvaultx.dialogs.AccessUnavilableDialog;
 import in.sunilpaulmathew.appvaultx.dialogs.InstallerDialog;
 import in.sunilpaulmathew.appvaultx.dialogs.ProgressDialog;
+import in.sunilpaulmathew.appvaultx.serializable.PackageDetailsEntry;
+import in.sunilpaulmathew.appvaultx.serializable.PackageHeaderEntry;
+import in.sunilpaulmathew.appvaultx.serializable.PermissionsEntry;
 import in.sunilpaulmathew.appvaultx.utils.Async;
 import in.sunilpaulmathew.appvaultx.utils.Packages;
+import in.sunilpaulmathew.appvaultx.utils.Settings;
 import in.sunilpaulmathew.appvaultx.utils.ShizukuPermissionChecker;
 import in.sunilpaulmathew.appvaultx.utils.ShizukuShell;
 import in.sunilpaulmathew.appvaultx.utils.Utils;
@@ -43,6 +49,9 @@ public class InstallerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Initialize App Theme
+        Settings.initializeAppTheme(this);
 
         Uri uri = getIntent().getData();
 
@@ -67,11 +76,13 @@ public class InstallerActivity extends AppCompatActivity {
         if (uri != null) {
             new Async() {
                 private final Activity activity = InstallerActivity.this;
+                private final List<PackageHeaderEntry> header = new CopyOnWriteArrayList<>();
+                private final List<PackageDetailsEntry> details = new CopyOnWriteArrayList<>();
                 private boolean debuggable = false, downgrade = false, failed = false, update = false;
                 private Drawable appIcon = null;
                 private ParcelFileDescriptor fileDescriptor;
                 private ProgressDialog progressDialog;
-                private String appName = null, packageName = null, summary = null;
+                private String appName = null, packageName = null;
 
                 @Override
                 public void onPreExecute() {
@@ -121,10 +132,9 @@ public class InstallerActivity extends AppCompatActivity {
                     return String.format(Locale.getDefault(), "%.2f %s", readableSize, units[unitIndex]);
                 }
 
-
                 private void generateAPKInfo(String apkPath) {
                     PackageManager pm = getPackageManager();
-                    PackageInfo pkgInfo = pm.getPackageArchiveInfo(apkPath, 0);
+                    PackageInfo pkgInfo = pm.getPackageArchiveInfo(apkPath, PackageManager.GET_PERMISSIONS);
                     if (pkgInfo != null) {
                         ApplicationInfo appInfo = pkgInfo.applicationInfo;
                         Objects.requireNonNull(appInfo).sourceDir = apkPath;
@@ -135,22 +145,38 @@ public class InstallerActivity extends AppCompatActivity {
                         appIcon = pm.getApplicationIcon(appInfo);
 
                         String versionName = pkgInfo.versionName;
+                        String apkSize = getFileSize();
                         int versionCode = pkgInfo.versionCode;
                         int minSdk = appInfo.minSdkVersion;
                         int targetSdk = appInfo.targetSdkVersion;
+                        List<PermissionsEntry> permissions = new CopyOnWriteArrayList<>();
+                        if (pkgInfo.requestedPermissions != null && pkgInfo.requestedPermissionsFlags != null) {
+                            for (int i = 0; i < pkgInfo.requestedPermissions.length; i++) {
+                                String permissionName = pkgInfo.requestedPermissions[i];
+                                boolean isGranted = (pkgInfo.requestedPermissionsFlags[i] & PackageInfo.REQUESTED_PERMISSION_GRANTED) != 0;
+                                permissions.add(new PermissionsEntry(permissionName, isGranted));
+                            }
+                        }
                         debuggable = (appInfo.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
                         update = Packages.isAppInstalled(packageName, activity);
                         downgrade = isDowngradeRequired(versionCode, pm, packageName);
 
-                        String details = "Version: " + versionName +
-                                " (" + versionCode + ")" + "\n" +
-                                "Min SDK: " + sdkToAndroidVersion(minSdk) + "\n" +
-                                "Target SDK: " + sdkToAndroidVersion(targetSdk) + "\n" +
-                                "Size: " + getFileSize() + "\n" +
-                                (downgrade ? getString(R.string.downgrade_required_status) + "\n" : "") +
-                                "Debuggable: " + (debuggable ? "Yes" : "No") + "\n\n";
+                        header.add(new PackageHeaderEntry(versionName, R.drawable.ic_apks));
+                        header.add(new PackageHeaderEntry(apkSize, R.drawable.ic_storage));
+                        header.add(new PackageHeaderEntry(sdkToAndroidVersion(minSdk) + " +", R.drawable.ic_device));
 
-                        summary = details.trim();
+                        details.add(new PackageDetailsEntry("Version", versionName));
+                        details.add(new PackageDetailsEntry("Version code", String.valueOf(versionCode)));
+                        details.add(new PackageDetailsEntry("Min SDK", sdkToAndroidVersion(minSdk)));
+                        details.add(new PackageDetailsEntry("Target SDK", sdkToAndroidVersion(targetSdk)));
+                        details.add(new PackageDetailsEntry("Permissions", permissions.size() + " declared"));
+                        details.add(new PackageDetailsEntry("APK size", apkSize));
+                        if (downgrade) {
+                            details.add(new PackageDetailsEntry(activity.getString(R.string.downgrade_required), activity.getString(R.string.yes)));
+                        }
+                        if (debuggable) {
+                            details.add(new PackageDetailsEntry(activity.getString(R.string.app_type_debuggable_title), activity.getString(R.string.yes)));
+                        }
                     } else {
                         failed = true;
                     }
@@ -168,6 +194,8 @@ public class InstallerActivity extends AppCompatActivity {
 
                 public String sdkToAndroidVersion(int sdkVersion) {
                     switch (sdkVersion) {
+                        case 37:
+                            return "17 (CINNAMON_BUN, " + sdkVersion + ")";
                         case 36:
                             return "16 (BAKLAVA, " + sdkVersion + ")";
                         case 35:
@@ -274,13 +302,16 @@ public class InstallerActivity extends AppCompatActivity {
                 @Override
                 public void onPostExecute() {
                     progressDialog.dismissDialog();
-                    if (!failed && !summary.trim().isEmpty()) {
-                        new InstallerDialog(appIcon, appName, packageName, summary, update, downgrade, activity) {
+                    if (!failed) {
+                        new InstallerDialog(appIcon, appName, packageName, header, details, update, downgrade, activity) {
                             @Override
                             public void onInstall() {
                                 installAPK(debuggable, downgrade, appIcon, appName, fileDescriptor).execute();
                             }
                         };
+                    } else {
+                        Utils.toast(getString(R.string.error_package_parse), activity).show();
+                        activity.finish();
                     }
                 }
             }.execute();
