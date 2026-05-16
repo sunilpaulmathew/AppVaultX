@@ -25,14 +25,14 @@ import in.sunilpaulmathew.appvaultx.utils.Utils;
 /*
  * Created by sunilpaulmathew <sunil.kde@gmail.com> on October 18, 2025
  */
-public abstract class InstallerDialog extends MaterialAlertDialogBuilder {
+public abstract class APKDetailsDialog extends MaterialAlertDialogBuilder {
 
     private AlertDialog alertDialog;
 
-    public InstallerDialog(Drawable appIcon, String appName, String packageName, List<PackageHeaderEntry> headers, List<PackageDetailsEntry> details, boolean update, boolean downgrade, Activity activity) {
+    public APKDetailsDialog(Drawable appIcon, String appName, String packageName, List<PackageHeaderEntry> headers, List<PackageDetailsEntry> details, boolean update, boolean downgrade, Activity activity) {
         super(activity);
 
-        View rootView = View.inflate(activity, R.layout.layout_installer, null);
+        View rootView = View.inflate(activity, R.layout.layout_apk_details, null);
         AppCompatImageButton app_Icon = rootView.findViewById(R.id.app_icon);
         MaterialButton cancel_button = rootView.findViewById(R.id.cancel);
         MaterialButton install_button = rootView.findViewById(R.id.install);

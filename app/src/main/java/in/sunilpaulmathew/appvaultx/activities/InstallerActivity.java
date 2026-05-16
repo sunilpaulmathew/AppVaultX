@@ -26,7 +26,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import in.sunilpaulmathew.appvaultx.R;
 import in.sunilpaulmathew.appvaultx.dialogs.AccessUnavilableDialog;
-import in.sunilpaulmathew.appvaultx.dialogs.InstallerDialog;
+import in.sunilpaulmathew.appvaultx.dialogs.APKDetailsDialog;
 import in.sunilpaulmathew.appvaultx.dialogs.ProgressDialog;
 import in.sunilpaulmathew.appvaultx.serializable.PackageDetailsEntry;
 import in.sunilpaulmathew.appvaultx.serializable.PackageHeaderEntry;
@@ -303,7 +303,7 @@ public class InstallerActivity extends AppCompatActivity {
                 public void onPostExecute() {
                     progressDialog.dismissDialog();
                     if (!failed) {
-                        new InstallerDialog(appIcon, appName, packageName, header, details, update, downgrade, activity) {
+                        new APKDetailsDialog(appIcon, appName, packageName, header, details, update, downgrade, activity) {
                             @Override
                             public void onInstall() {
                                 installAPK(debuggable, downgrade, appIcon, appName, fileDescriptor).execute();
