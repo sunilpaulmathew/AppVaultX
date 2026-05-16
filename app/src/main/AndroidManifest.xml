@@ -33,16 +33,14 @@
             android:exported="false" />
 
         <activity
-            android:enabled="false"
             android:name=".activities.InstallerActivity"
             android:theme="@style/AppTheme.Transparent"
-            android:label="@string/installer"
             android:exported="true" >
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="application/vnd.android.package-archive" />
+                <category android:name="android.intent.category.BROWSABLE" />
                 <data android:mimeType="application/vnd.android.package-archive" />
             </intent-filter>
         </activity>

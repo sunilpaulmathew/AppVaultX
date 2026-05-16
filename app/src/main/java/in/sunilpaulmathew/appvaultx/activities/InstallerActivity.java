@@ -44,6 +44,7 @@ import rikka.shizuku.Shizuku;
  */
 public class InstallerActivity extends AppCompatActivity {
 
+    private boolean canInstall = false;
     private final Shizuku.OnRequestPermissionResultListener REQUEST_PERMISSION_RESULT_LISTENER = this::onRequestPermissionsResult;
 
     @Override
@@ -55,22 +56,24 @@ public class InstallerActivity extends AppCompatActivity {
 
         Uri uri = getIntent().getData();
 
-        if (Shizuku.pingBinder() && Shizuku.getVersion() >= 11) {
-            new ShizukuPermissionChecker(this) {
-                @Override
-                public void onRequestingPermission() {
-                    // Request permission
-                    Shizuku.addRequestPermissionResultListener(REQUEST_PERMISSION_RESULT_LISTENER);
-                    Shizuku.requestPermission(0);
-                }
+        if (!Utils.isGooglePlayVersion(this) && !Settings.isShizukuIgnored(this)) {
+            if (Shizuku.pingBinder() && Shizuku.getVersion() >= 11) {
+                new ShizukuPermissionChecker(this) {
+                    @Override
+                    public void onRequestingPermission() {
+                        // Request permission
+                        Shizuku.addRequestPermissionResultListener(REQUEST_PERMISSION_RESULT_LISTENER);
+                        Shizuku.requestPermission(0);
+                    }
 
-                @Override
-                public void onFinished() {
-                    ShizukuShell.ensureUserService(null);
-                }
-            };
-        } else {
-            new AccessUnavilableDialog(this).show();
+                    @Override
+                    public void onFinished() {
+                        canInstall = true;
+                    }
+                };
+            } else {
+                new AccessUnavilableDialog(this).show();
+            }
         }
 
         if (uri != null) {
@@ -303,7 +306,7 @@ public class InstallerActivity extends AppCompatActivity {
                 public void onPostExecute() {
                     progressDialog.dismissDialog();
                     if (!failed) {
-                        new APKDetailsDialog(appIcon, appName, packageName, header, details, update, downgrade, activity) {
+                        new APKDetailsDialog(appIcon, appName, packageName, header, details, update, downgrade, canInstall, activity) {
                             @Override
                             public void onInstall() {
                                 installAPK(debuggable, downgrade, appIcon, appName, fileDescriptor).execute();
@@ -393,8 +396,10 @@ public class InstallerActivity extends AppCompatActivity {
         if (requestCode == 0 && grantResult == PackageManager.PERMISSION_GRANTED) {
             Utils.toast("aShell got access to Shizuku service", this).show();
             ShizukuShell.ensureUserService(null);
+            canInstall = true;
         } else {
             Utils.toast(getString(R.string.shizuku_access_denied_title), this).show();
+            canInstall = false;
             finish();
         }
         Shizuku.removeRequestPermissionResultListener(REQUEST_PERMISSION_RESULT_LISTENER);

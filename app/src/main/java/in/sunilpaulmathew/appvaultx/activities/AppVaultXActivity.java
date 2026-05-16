@@ -1,6 +1,5 @@
 package in.sunilpaulmathew.appvaultx.activities;
 
-import android.content.ComponentName;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
@@ -46,8 +45,6 @@ public class AppVaultXActivity extends AppCompatActivity {
 
         // Initialize Crash Reporter
         new CrashReport(this).initialize();
-
-        updateInstallerActivityState();
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         View layoutRoot = findViewById(R.id.layout_root);
@@ -113,27 +110,6 @@ public class AppVaultXActivity extends AppCompatActivity {
             } else {
                 new AccessUnavilableDialog(this).show();
             }
-        }
-    }
-
-    private void updateInstallerActivityState() {
-        boolean shizukuAvailable = Shizuku.pingBinder() && Shizuku.getVersion() >= 11 && Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED;
-        boolean shouldEnable = !Utils.isGooglePlayVersion(this) && shizukuAvailable && !Settings.isShizukuIgnored(this);
-
-        ComponentName installerActivity = new ComponentName(this, InstallerActivity.class);
-        PackageManager pm = getPackageManager();
-
-        int currentState = pm.getComponentEnabledSetting(installerActivity);
-        int desiredState = shouldEnable ?
-                PackageManager.COMPONENT_ENABLED_STATE_ENABLED :
-                PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
-
-        if (currentState != desiredState) {
-            pm.setComponentEnabledSetting(
-                    installerActivity,
-                    desiredState,
-                    PackageManager.DONT_KILL_APP
-            );
         }
     }
 

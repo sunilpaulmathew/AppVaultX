@@ -1,11 +1,15 @@
 package in.sunilpaulmathew.appvaultx.dialogs;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatImageButton;
+import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,13 +33,14 @@ public abstract class APKDetailsDialog extends MaterialAlertDialogBuilder {
 
     private AlertDialog alertDialog;
 
-    public APKDetailsDialog(Drawable appIcon, String appName, String packageName, List<PackageHeaderEntry> headers, List<PackageDetailsEntry> details, boolean update, boolean downgrade, Activity activity) {
+    public APKDetailsDialog(Drawable appIcon, String appName, String packageName, List<PackageHeaderEntry> headers, List<PackageDetailsEntry> details, boolean update, boolean downgrade, boolean canInstall, Activity activity) {
         super(activity);
 
         View rootView = View.inflate(activity, R.layout.layout_apk_details, null);
         AppCompatImageButton app_Icon = rootView.findViewById(R.id.app_icon);
-        MaterialButton cancel_button = rootView.findViewById(R.id.cancel);
-        MaterialButton install_button = rootView.findViewById(R.id.install);
+        LinearLayoutCompat icons_Layout = rootView.findViewById(R.id.icons_layout);
+        MaterialButton cancel_Button = rootView.findViewById(R.id.cancel);
+        MaterialButton install_Button = rootView.findViewById(R.id.install);
         MaterialTextView app_Name = rootView.findViewById(R.id.app_name);
         MaterialTextView package_Name = rootView.findViewById(R.id.package_name);
         RecyclerView recyclerView_Header = rootView.findViewById(R.id.recycler_view_header);
@@ -52,18 +57,25 @@ public abstract class APKDetailsDialog extends MaterialAlertDialogBuilder {
         package_Name.setText(packageName);
         app_Icon.setImageDrawable(appIcon);
 
-        install_button.setIcon(Utils.getDrawable(downgrade ? R.drawable.ic_downgrade : R.drawable.ic_download, activity));
-        install_button.setText(activity.getString(update ? downgrade ? R.string.downgrade : R.string.update : R.string.install));
+        install_Button.setIcon(Utils.getDrawable(downgrade ? R.drawable.ic_downgrade : R.drawable.ic_download, activity));
+        install_Button.setText(activity.getString(update ? downgrade ? R.string.downgrade : R.string.update : R.string.install));
 
-        cancel_button.setOnClickListener(v -> {
+        cancel_Button.setOnClickListener(v -> {
             alertDialog.dismiss();
             activity.finish();
         });
 
-        install_button.setOnClickListener(v -> onInstall());
+        install_Button.setOnClickListener(v -> onInstall());
 
         setView(rootView);
         setCancelable(false);
+
+        if (canInstall) {
+            icons_Layout.setVisibility(VISIBLE);
+        } else {
+            icons_Layout.setVisibility(GONE);
+            setPositiveButton(R.string.cancel, (dialogInterface, i) -> activity.finish());
+        }
 
         alertDialog = create();
         alertDialog.show();

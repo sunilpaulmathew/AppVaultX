@@ -40,7 +40,6 @@
     <string name="install">Install</string>
     <string name="install_failed_message">Installation failed…</string>
     <string name="install_success_message">Installation completed successfully</string>
-    <string name="installer">Installer</string>
     <string name="installing_message">Installing %s…</string>
     <string name="loading">Loading…</string>
     <string name="miscellaneous">Miscellaneous</string>
