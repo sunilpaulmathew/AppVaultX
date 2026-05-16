@@ -2,6 +2,18 @@
     <string name="app_name" translatable="false">AppVaultX</string>
 
     <string name="adb_instruction_message">Alternatively, run this command in your ADB shell to achieve the same result.</string>
+    <string name="app_ops_allow_title">Allow</string>
+    <string name="app_ops_allow_description">Always permit this operation</string>
+    <string name="app_ops_deny_title">Deny</string>
+    <string name="app_ops_deny_description">Explicitly reject (like ignore, but may return an error)</string>
+    <string name="app_ops_default_title">Default</string>
+    <string name="app_ops_default_description">Use system’s default behavior (based on app’s declared permission and user grant state)</string>
+    <string name="app_ops_empty_toast">No meaningful AppOps data found…</string>
+    <string name="app_ops_failed_toast">Failed to change the status of %s</string>
+    <string name="app_ops_foreground_title">Foreground</string>
+    <string name="app_ops_foreground_description">Allow only when app is in foreground (for ops like location, mic, camera)</string>
+    <string name="app_ops_ignore_description">Always block/silently drop the operation</string>
+    <string name="app_ops_manage">Manage AppOps</string>
     <string name="app_theme">App Theme</string>
     <string name="app_theme_auto">Auto</string>
     <string name="app_theme_dark">Dark</string>

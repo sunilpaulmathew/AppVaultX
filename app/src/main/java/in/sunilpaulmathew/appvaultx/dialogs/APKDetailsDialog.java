@@ -52,7 +52,6 @@ public abstract class APKDetailsDialog extends MaterialAlertDialogBuilder {
         recyclerView_Details.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
         recyclerView_Details.setAdapter(new PackageDetailsAdapter(details));
 
-
         app_Name.setText(appName);
         package_Name.setText(packageName);
         app_Icon.setImageDrawable(appIcon);

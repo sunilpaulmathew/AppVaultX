@@ -34,14 +34,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import in.sunilpaulmathew.appvaultx.R;
 import in.sunilpaulmathew.appvaultx.dialogs.ADBInstructionsDialog;
+import in.sunilpaulmathew.appvaultx.dialogs.AppOpsDialog;
 import in.sunilpaulmathew.appvaultx.dialogs.BottomMenuDialog;
 import in.sunilpaulmathew.appvaultx.dialogs.ProgressDialog;
 import in.sunilpaulmathew.appvaultx.dialogs.UnsafeAppDialog;
 import in.sunilpaulmathew.appvaultx.serializable.MenuEntry;
 import in.sunilpaulmathew.appvaultx.serializable.PackagesEntry;
+import in.sunilpaulmathew.appvaultx.serializable.PermissionsEntry;
 import in.sunilpaulmathew.appvaultx.utils.Async;
 import in.sunilpaulmathew.appvaultx.utils.Packages;
 import in.sunilpaulmathew.appvaultx.utils.Settings;
@@ -169,9 +172,12 @@ public class InstalledPackagesAdapter extends RecyclerView.Adapter<InstalledPack
                 } else {
                     menuItems.add(new MenuEntry(R.string.disable_app, R.drawable.ic_cancel, 1));
                 }
-
-                menuItems.add(new MenuEntry(R.string.clear_data, R.drawable.ic_reset, 2));
+                if (!Settings.isShizukuIgnored(v.getContext()) && Shizuku.pingBinder() && Shizuku.getVersion() >= 11 &&
+                        Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED) {
+                    menuItems.add(new MenuEntry(R.string.app_ops_manage, R.drawable.ic_appops, 8));
+                }
                 menuItems.add(new MenuEntry(R.string.force_close, R.drawable.ic_close, 3));
+                menuItems.add(new MenuEntry(R.string.clear_data, R.drawable.ic_reset, 2));
                 menuItems.add(new MenuEntry(R.string.save_apks, R.drawable.ic_download, 4));
                 menuItems.add(new MenuEntry(R.string.save_icon, R.drawable.ic_save, 5));
                 menuItems.add(new MenuEntry(R.string.settings, R.drawable.ic_settings, 6));
@@ -200,7 +206,7 @@ public class InstalledPackagesAdapter extends RecyclerView.Adapter<InstalledPack
                                         }
 
                                         private int setDisabled() {
-                                            switch ((packageItems.getAppType())) {
+                                            switch (packageItems.getAppType()) {
                                                 case 7:
                                                     return 6;
                                                 case 2:
@@ -476,6 +482,45 @@ public class InstalledPackagesAdapter extends RecyclerView.Adapter<InstalledPack
                                 } else {
                                     new ADBInstructionsDialog(packageItems, v.getContext().getString(R.string.task_impossible_message), "pm uninstall --user " + Utils.getUserID() + " " + packageItems.getPackageName(), v.getContext());
                                 }
+                                break;
+                            case 8:
+                                new Async() {
+                                    private ProgressDialog progressDialog;
+                                    private final List<PermissionsEntry> appOps = new CopyOnWriteArrayList<>();
+
+                                    @Override
+                                    public void onPreExecute() {
+                                        progressDialog = new ProgressDialog(v.getContext());
+                                        progressDialog.setProgressStatus(R.string.applying);
+                                        progressDialog.startDialog();
+                                    }
+
+                                    @Override
+                                    public void doInBackground() {
+                                        String[] appOpsList = ShizukuShell.runCommand("cmd appops get " + packageItems.getPackageName()).trim().split("\\r?\\n");
+                                        for (String line : appOpsList) {
+                                            if (line.contains(":")) {
+                                                String[] splitOp = line.split(":");
+                                                String name = splitOp[0].trim();
+                                                String status = splitOp[1].trim();
+
+                                                if (line.contains("time=") && !line.equals("No operations.") && !name.equals("Uid mode")) {
+                                                    appOps.add(new PermissionsEntry(name, status, line.contains("allow")));
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onPostExecute() {
+                                        progressDialog.dismissDialog();
+                                        if (appOps != null && !appOps.isEmpty()) {
+                                           new AppOpsDialog(packageItems.getAppIcon(), appOps, packageItems.getAppName(), packageItems.getPackageName(), v.getContext());
+                                        } else {
+                                            Utils.toast(v.getContext().getString(R.string.app_ops_empty_toast), v.getContext()).show();
+                                        }
+                                    }
+                                }.execute();
                                 break;
                         }
                     }

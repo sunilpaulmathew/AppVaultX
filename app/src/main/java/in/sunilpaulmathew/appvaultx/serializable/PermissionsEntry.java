@@ -11,9 +11,17 @@ public class PermissionsEntry implements Serializable {
 
     private final boolean granted;
     private final String name;
+    private String status;
 
     public PermissionsEntry(String name, boolean granted) {
         this.name = name;
+        this.granted = granted;
+        this.status = null;
+    }
+
+    public PermissionsEntry(String name, String status, boolean granted) {
+        this.name = name;
+        this.status = status;
         this.granted = granted;
     }
 
@@ -33,6 +41,14 @@ public class PermissionsEntry implements Serializable {
             return matcher.group(1);
         }
         return this.name;
+    }
+
+    public String getStatus() {
+        return this.status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
 }
