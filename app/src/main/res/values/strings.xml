@@ -2,6 +2,7 @@
     <string name="app_name" translatable="false">AppVaultX</string>
 
     <string name="adb_instruction_message">Alternatively, run this command in your ADB shell to achieve the same result.</string>
+    <string name="app_info">App info</string>
     <string name="app_ops_allow_title">Allow</string>
     <string name="app_ops_allow_description">Always permit this operation</string>
     <string name="app_ops_deny_title">Deny</string>

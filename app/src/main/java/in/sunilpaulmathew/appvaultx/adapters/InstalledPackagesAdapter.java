@@ -6,6 +6,8 @@ import static android.view.View.VISIBLE;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -33,16 +35,20 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import in.sunilpaulmathew.appvaultx.R;
 import in.sunilpaulmathew.appvaultx.dialogs.ADBInstructionsDialog;
+import in.sunilpaulmathew.appvaultx.dialogs.APKDetailsDialog;
 import in.sunilpaulmathew.appvaultx.dialogs.AppOpsDialog;
 import in.sunilpaulmathew.appvaultx.dialogs.BottomMenuDialog;
 import in.sunilpaulmathew.appvaultx.dialogs.ProgressDialog;
 import in.sunilpaulmathew.appvaultx.dialogs.UnsafeAppDialog;
 import in.sunilpaulmathew.appvaultx.serializable.MenuEntry;
+import in.sunilpaulmathew.appvaultx.serializable.PackageDetailsEntry;
+import in.sunilpaulmathew.appvaultx.serializable.PackageHeaderEntry;
 import in.sunilpaulmathew.appvaultx.serializable.PackagesEntry;
 import in.sunilpaulmathew.appvaultx.serializable.PermissionsEntry;
 import in.sunilpaulmathew.appvaultx.utils.Async;
@@ -162,6 +168,8 @@ public class InstalledPackagesAdapter extends RecyclerView.Adapter<InstalledPack
                 }
 
                 List<MenuEntry> menuItems = new ArrayList<>();
+
+                menuItems.add(new MenuEntry(R.string.app_info, R.drawable.ic_info, 9));
 
                 if (packageItems.launchIntent(v.getContext()) != null) {
                     menuItems.add(new MenuEntry(R.string.open_app, R.drawable.ic_open, 0));
@@ -519,6 +527,113 @@ public class InstalledPackagesAdapter extends RecyclerView.Adapter<InstalledPack
                                         } else {
                                             Utils.toast(v.getContext().getString(R.string.app_ops_empty_toast), v.getContext()).show();
                                         }
+                                    }
+                                }.execute();
+                                break;
+                            case 9:
+                                new Async() {
+                                    private ProgressDialog progressDialog;
+                                    private final List<PackageHeaderEntry> header = new CopyOnWriteArrayList<>();
+                                    private final List<PackageDetailsEntry> details = new CopyOnWriteArrayList<>();
+
+                                    @Override
+                                    public void onPreExecute() {
+                                        progressDialog = new ProgressDialog(v.getContext());
+                                        progressDialog.setProgressStatus(R.string.loading);
+                                        progressDialog.startDialog();
+                                    }
+
+                                    private String getFileSize(long size) {
+                                        if (size <= 0) return "Unknown";
+                                        final String[] units = {"B", "KB", "MB", "GB", "TB"};
+                                        int unitIndex = 0;
+                                        double readableSize = size;
+                                        while (readableSize >= 1024 && unitIndex < units.length - 1) {
+                                            readableSize /= 1024;
+                                            unitIndex++;
+                                        }
+                                        return String.format(Locale.getDefault(), "%.2f %s", readableSize, units[unitIndex]);
+                                    }
+
+                                    private void generatePackageInfo() {
+                                        PackageManager pm = v.getContext().getPackageManager();
+                                        PackageInfo pkgInfo = null;
+
+                                        try {
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                                pkgInfo = pm.getPackageInfo(packageItems.getPackageName(), PackageManager.PackageInfoFlags.of(PackageManager.GET_PERMISSIONS));
+                                            } else {
+                                                pkgInfo = pm.getPackageInfo(packageItems.getPackageName(), PackageManager.GET_PERMISSIONS);
+                                            }
+                                        } catch (PackageManager.NameNotFoundException ignored) {
+                                        }
+
+                                        if (pkgInfo != null) {
+                                            ApplicationInfo appInfo = pkgInfo.applicationInfo;
+                                            String versionName = pkgInfo.versionName;
+                                            int versionCode = pkgInfo.versionCode;
+                                            int minSdk = Objects.requireNonNull(appInfo).minSdkVersion;
+                                            int targetSdk = appInfo.targetSdkVersion;
+                                            List<PermissionsEntry> permissions = new CopyOnWriteArrayList<>();
+                                            if (pkgInfo.requestedPermissions != null && pkgInfo.requestedPermissionsFlags != null) {
+                                                for (int i = 0; i < pkgInfo.requestedPermissions.length; i++) {
+                                                    String permissionName = pkgInfo.requestedPermissions[i];
+                                                    boolean isGranted = (pkgInfo.requestedPermissionsFlags[i] & PackageInfo.REQUESTED_PERMISSION_GRANTED) != 0;
+                                                    permissions.add(new PermissionsEntry(permissionName, isGranted));
+                                                }
+                                            }
+                                            boolean debuggable = (appInfo.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+
+                                            long totalSize = 0;
+                                            if (appInfo.sourceDir != null) {
+                                                File baseApk = new File(appInfo.sourceDir);
+                                                if (baseApk.exists()) {
+                                                    totalSize += baseApk.length();
+                                                }
+                                            }
+
+                                            if (appInfo.splitSourceDirs != null) {
+                                                for (String splitPath : appInfo.splitSourceDirs) {
+                                                    if (splitPath != null) {
+                                                        File splitApk = new File(splitPath);
+                                                        if (splitApk.exists()) {
+                                                            totalSize += splitApk.length();
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+                                            String apkSize = getFileSize(totalSize);
+
+                                            header.add(new PackageHeaderEntry(versionName, R.drawable.ic_apks));
+                                            header.add(new PackageHeaderEntry(apkSize, R.drawable.ic_storage));
+                                            header.add(new PackageHeaderEntry(Packages.sdkToAndroidVersion(minSdk) + " +", R.drawable.ic_device));
+
+                                            details.add(new PackageDetailsEntry("Version", versionName));
+                                            details.add(new PackageDetailsEntry("Version code", String.valueOf(versionCode)));
+                                            details.add(new PackageDetailsEntry("Min SDK", Packages.sdkToAndroidVersion(minSdk)));
+                                            details.add(new PackageDetailsEntry("Target SDK", Packages.sdkToAndroidVersion(targetSdk)));
+                                            details.add(new PackageDetailsEntry("Permissions", permissions.size() + " declared (tap to learn more)", permissions));
+                                            details.add(new PackageDetailsEntry("APK size", apkSize));
+                                            if (debuggable) {
+                                                details.add(new PackageDetailsEntry(activity.getString(R.string.app_type_debuggable_title), activity.getString(R.string.yes)));
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void doInBackground() {
+                                        generatePackageInfo();
+                                    }
+
+                                    @Override
+                                    public void onPostExecute() {
+                                        progressDialog.dismissDialog();
+                                        new APKDetailsDialog(packageItems.getAppIcon(), packageItems.getAppName(), packageItems.getPackageName(), header, details, false, false, false, false, activity) {
+                                            @Override
+                                            public void onInstall() {
+                                            }
+                                        };
                                     }
                                 }.execute();
                                 break;

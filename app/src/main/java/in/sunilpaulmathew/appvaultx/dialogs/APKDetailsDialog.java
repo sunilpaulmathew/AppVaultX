@@ -29,7 +29,9 @@ import in.sunilpaulmathew.appvaultx.utils.Utils;
  */
 public abstract class APKDetailsDialog extends BottomSheetDialog {
 
-    public APKDetailsDialog(Drawable appIcon, String appName, String packageName, List<PackageHeaderEntry> headers, List<PackageDetailsEntry> details, boolean update, boolean downgrade, boolean canInstall, Activity activity) {
+    public APKDetailsDialog(Drawable appIcon, String appName, String packageName, List<PackageHeaderEntry> headers,
+                            List<PackageDetailsEntry> details, boolean update, boolean downgrade, boolean canInstall,
+                            boolean shouldExit, Activity activity) {
         super(activity);
 
         View rootView = View.inflate(activity, R.layout.layout_apk_details, null);
@@ -63,7 +65,9 @@ public abstract class APKDetailsDialog extends BottomSheetDialog {
 
         cancel_Button.setOnClickListener(v -> {
             dismiss();
-            activity.finish();
+            if (shouldExit) {
+                activity.finish();
+            }
         });
 
         install_Button.setOnClickListener(v -> {
@@ -71,14 +75,20 @@ public abstract class APKDetailsDialog extends BottomSheetDialog {
                 onInstall();
             } else {
                 dismiss();
-                activity.finish();
+                if (shouldExit) {
+                    activity.finish();
+                }
             }
         });
 
         setContentView(rootView);
         setCancelable(true);
         setCanceledOnTouchOutside(true);
-        setOnCancelListener(dialog -> activity.finish());
+        setOnCancelListener(dialog -> {
+            if (shouldExit) {
+                activity.finish();
+            }
+        });
         show();
     }
 

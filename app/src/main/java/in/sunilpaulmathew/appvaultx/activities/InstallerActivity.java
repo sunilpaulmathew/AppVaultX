@@ -168,12 +168,12 @@ public class InstallerActivity extends AppCompatActivity {
 
                         header.add(new PackageHeaderEntry(versionName, R.drawable.ic_apks));
                         header.add(new PackageHeaderEntry(apkSize, R.drawable.ic_storage));
-                        header.add(new PackageHeaderEntry(sdkToAndroidVersion(minSdk) + " +", R.drawable.ic_device));
+                        header.add(new PackageHeaderEntry(Packages.sdkToAndroidVersion(minSdk) + " +", R.drawable.ic_device));
 
                         details.add(new PackageDetailsEntry("Version", versionName));
                         details.add(new PackageDetailsEntry("Version code", String.valueOf(versionCode)));
-                        details.add(new PackageDetailsEntry("Min SDK", sdkToAndroidVersion(minSdk)));
-                        details.add(new PackageDetailsEntry("Target SDK", sdkToAndroidVersion(targetSdk)));
+                        details.add(new PackageDetailsEntry("Min SDK", Packages.sdkToAndroidVersion(minSdk)));
+                        details.add(new PackageDetailsEntry("Target SDK", Packages.sdkToAndroidVersion(targetSdk)));
                         details.add(new PackageDetailsEntry("Permissions", permissions.size() + " declared (tap to learn more)", permissions));
                         details.add(new PackageDetailsEntry("APK size", apkSize));
                         if (downgrade) {
@@ -195,87 +195,6 @@ public class InstallerActivity extends AppCompatActivity {
                     } catch (PackageManager.NameNotFoundException ignored) {
                     }
                     return false;
-                }
-
-                public String sdkToAndroidVersion(int sdkVersion) {
-                    switch (sdkVersion) {
-                        case 37:
-                            return "17 (CINNAMON_BUN, " + sdkVersion + ")";
-                        case 36:
-                            return "16 (BAKLAVA, " + sdkVersion + ")";
-                        case 35:
-                            return "15 (VANILLA_ICE_CREAM, " + sdkVersion + ")";
-                        case 34:
-                            return "14 (UPSIDE_DOWN_CAKE, " + sdkVersion + ")";
-                        case 33:
-                            return "13 (TIRAMISU, " + sdkVersion + ")";
-                        case 32:
-                            return "12.1 (S_V2, " + sdkVersion + ")";
-                        case 31:
-                            return "12 (S, " + sdkVersion + ")";
-                        case 30:
-                            return "11 (R, " + sdkVersion + ")";
-                        case 29:
-                            return "10 (Q, " + sdkVersion + ")";
-                        case 28:
-                            return "9 (P, " + sdkVersion + ")";
-                        case 27:
-                            return "8 (O_MR1, " + sdkVersion + ")";
-                        case 26:
-                            return "8.0 (0, " + sdkVersion + ")";
-                        case 25:
-                            return "7.1.1 (N_MRI, " + sdkVersion + ")";
-                        case 24:
-                            return "7.0 (N, " + sdkVersion + ")";
-                        case 23:
-                            return "6.0 (M, " + sdkVersion + ")";
-                        case 22:
-                            return "5.1 (LOLLIPOP_MR1, " + sdkVersion + ")";
-                        case 21:
-                            return "5.0 (LOLLIPOP, " + sdkVersion + ")";
-                        case 20:
-                            return "4.4 (KITKAT_WATCH, " + sdkVersion + ")";
-                        case 19:
-                            return "4.4 (KITKAT, " + sdkVersion + ")";
-                        case 18:
-                            return "4.3 (JELLY_BEAN_MR2, " + sdkVersion + ")";
-                        case 17:
-                            return "4.2 (JELLY_BEAN_MR1, " + sdkVersion + ")";
-                        case 16:
-                            return "4.1 (JELLY_BEAN, " + sdkVersion + ")";
-                        case 15:
-                            return "4.0.3 (ICE_CREAM_SANDWICH_MR1, " + sdkVersion + ")";
-                        case 14:
-                            return "4.0 (ICE_CREAM_SANDWICH, " + sdkVersion + ")";
-                        case 13:
-                            return "3.2 (HONEYCOMB_MR2, " + sdkVersion + ")";
-                        case 12:
-                            return "3.1 (HONEYCOMB_MR1, " + sdkVersion + ")";
-                        case 11:
-                            return "3.0 (HONEYCOMB, " + sdkVersion + ")";
-                        case 10:
-                            return "2.3.3 (GINGERBREAD_MR1, " + sdkVersion + ")";
-                        case 9:
-                            return "2.3 (GINGERBREAD, " + sdkVersion + ")";
-                        case 8:
-                            return "2.2 (FROYO, " + sdkVersion + ")";
-                        case 7:
-                            return "2.1 (ECLAIR_MR1, " + sdkVersion + ")";
-                        case 6:
-                            return "2.0.1 (ECLAIR_0_1, " + sdkVersion + ")";
-                        case 5:
-                            return "2.0 (ECLAIR, " + sdkVersion + ")";
-                        case 4:
-                            return "1.6 (DONUT, " + sdkVersion + ")";
-                        case 3:
-                            return "1.5 (CUPCAKE, " + sdkVersion + ")";
-                        case 2:
-                            return "1.1 (BASE_1_1, " + sdkVersion + ")";
-                        case 1:
-                            return "1.0 (BASE, " + sdkVersion + ")";
-                        default:
-                            return String.valueOf(sdkVersion);
-                    }
                 }
 
                 private File copyToCache() throws IOException {
@@ -308,7 +227,7 @@ public class InstallerActivity extends AppCompatActivity {
                 public void onPostExecute() {
                     progressDialog.dismissDialog();
                     if (!failed) {
-                        new APKDetailsDialog(appIcon, appName, packageName, header, details, update, downgrade, canInstall, activity) {
+                        new APKDetailsDialog(appIcon, appName, packageName, header, details, update, downgrade, canInstall, true, activity) {
                             @Override
                             public void onInstall() {
                                 installAPK(debuggable, downgrade, appIcon, appName, fileDescriptor).execute();
