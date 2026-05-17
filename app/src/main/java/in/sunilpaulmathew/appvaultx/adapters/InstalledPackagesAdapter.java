@@ -614,7 +614,7 @@ public class InstalledPackagesAdapter extends RecyclerView.Adapter<InstalledPack
                                             details.add(new PackageDetailsEntry("Min SDK", Packages.sdkToAndroidVersion(minSdk)));
                                             details.add(new PackageDetailsEntry("Target SDK", Packages.sdkToAndroidVersion(targetSdk)));
                                             details.add(new PackageDetailsEntry("Permissions", permissions.size() + " declared (tap to learn more)", permissions));
-                                            details.add(new PackageDetailsEntry("APK size", apkSize));
+                                            details.add(new PackageDetailsEntry(appInfo.splitSourceDirs != null ? "Bundle Size" :  "APK size", apkSize));
                                             if (debuggable) {
                                                 details.add(new PackageDetailsEntry(activity.getString(R.string.app_type_debuggable_title), activity.getString(R.string.yes)));
                                             }
