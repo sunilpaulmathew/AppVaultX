@@ -7,6 +7,7 @@
 * 🛠️ App Management with Shizuku Support
   • **Enable or Disable Apps** –quickly toggle system and user apps on or off
   • **Force Close Apps** – safely stop any running app
+  • **Manage AppOps** - Tweak system-level operations and restrict background behaviors easily
   • **Clear Data & Cache** – free storage and reset apps
   • **Backup APKs & Icons** – save app files and icons for future use
   • **Uninstall Apps (Individual or Batch)** – remove unwanted apps efficiently

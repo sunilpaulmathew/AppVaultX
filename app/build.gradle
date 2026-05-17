@@ -28,8 +28,8 @@ android {
         applicationId "in.sunilpaulmathew.appvaultx"
         minSdk 24
         targetSdk 37
-        versionCode 3
-        versionName "beta-v0.3"
+        versionCode 4
+        versionName "v0.4"
     }
 
     buildTypes {

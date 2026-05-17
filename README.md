@@ -2,7 +2,7 @@
 
 ![AppVaultX](app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp?raw=true)
 
-[![](https://img.shields.io/badge/AppVaultX%20beta-v0.3-green)](https://github.com/sunilpaulmathew/AppVaultX/tree/beta-v0.3)
+[![](https://img.shields.io/badge/AppVaultX%20v0.4-green)](https://github.com/sunilpaulmathew/AppVaultX/tree/v0.4)
 ![](https://img.shields.io/github/downloads/sunilpaulmathew/AppVaultX/total)
 ![](https://img.shields.io/github/languages/top/sunilpaulmathew/AppVaultX)
 ![](https://img.shields.io/github/contributors/sunilpaulmathew/AppVaultX)
@@ -11,13 +11,15 @@
 ---
 
 ## 📥 Download
-
+[<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"
+alt="Get it on Google Play"
+height="80">](https://play.google.com/store/apps/details?id=in.sunilpaulmathew.appvaultx)
 [<img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png"
 alt=""
 height="80">](https://apt.izzysoft.de/fdroid/index/apk/in.sunilpaulmathew.appvaultx)
 [<img src="https://i.ibb.co/q0mdc4Z/get-it-on-github.png"
 alt=""
-height="80">](https://github.com/sunilpaulmathew/AppVaultX/releases/tag/beta-v0.3)
+height="80">](https://github.com/sunilpaulmathew/AppVaultX/releases/tag/v0.4)
 
 ---
 
