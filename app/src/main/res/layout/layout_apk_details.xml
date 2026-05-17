@@ -50,12 +50,10 @@
         </androidx.core.widget.NestedScrollView>
 
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/icons_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingVertical="10dp"
-            android:visibility="gone" >
+            android:paddingVertical="10dp" >
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/cancel"

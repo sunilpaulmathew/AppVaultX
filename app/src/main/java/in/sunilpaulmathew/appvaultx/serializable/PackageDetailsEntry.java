@@ -34,7 +34,8 @@ public class PackageDetailsEntry implements Serializable {
             title.setText(this.title);
         }
         if (text != null) {
-            text.setText(this.text);
+            String updatedTxt =  " : " + this.text;
+            text.setText(updatedTxt);
         }
     }
 

@@ -1,12 +1,12 @@
 <androidx.appcompat.widget.LinearLayoutCompat
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:baselineAligned="true"
     android:gravity="center_vertical"
-    android:paddingHorizontal="8dp" >
+    android:orientation="horizontal"
+    android:paddingHorizontal="8dp"
+    android:baselineAligned="true"
+    android:paddingVertical="5dp" >
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/title"
@@ -14,27 +14,6 @@
         android:layout_height="wrap_content"
         android:textColor="?attr/colorPrimary"
         android:textStyle="bold|italic" />
-
-    <com.google.android.material.button.MaterialButton
-        style="@style/Widget.Material3.Button.ElevatedButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="5dp"
-        android:textColor="?attr/colorSecondary"
-        android:paddingHorizontal="6dp"
-        android:paddingVertical="6dp"
-        android:insetBottom="0dp"
-        android:insetRight="0dp"
-        android:gravity="center"
-        android:textStyle="bold"
-        android:minHeight="0dp"
-        android:insetLeft="0dp"
-        android:minWidth="0dp"
-        android:insetTop="0dp"
-        app:cornerRadius="2dp"
-        app:strokeWidth="0dp"
-        app:elevation="1dp"
-        android:text=":" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/text"

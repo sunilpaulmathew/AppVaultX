@@ -1,7 +1,5 @@
 package in.sunilpaulmathew.appvaultx.adapters;
 
-import static android.view.View.GONE;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +14,7 @@ import java.util.List;
 
 import in.sunilpaulmathew.appvaultx.R;
 import in.sunilpaulmathew.appvaultx.serializable.AppOpsMenuEntry;
+import in.sunilpaulmathew.appvaultx.utils.Utils;
 
 /*
  * Created by sunilpaulmathew <sunil.kde@gmail.com> on May 16, 2026
@@ -42,13 +41,14 @@ public class AppOpsMenuAdapter extends RecyclerView.Adapter<AppOpsMenuAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         AppOpsMenuEntry item = this.data.get(position);
-        holder.icon.setVisibility(GONE);
         holder.name.setText(item.getTile());
         holder.status.setText(item.getDescription());
 
         if (currentStatus.contains(data.get(position).getTile().toLowerCase())) {
+            holder.icon.setImageDrawable(Utils.getDrawable(R.drawable.ic_check, holder.icon.getContext()));
             holder.itemView.setAlpha(1);
         } else {
+            holder.icon.setImageDrawable(Utils.getDrawable(R.drawable.ic_check_unmarked, holder.icon.getContext()));
             holder.itemView.setAlpha((float) 0.5);
         }
     }

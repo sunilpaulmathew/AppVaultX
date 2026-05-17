@@ -1,6 +1,7 @@
 package in.sunilpaulmathew.appvaultx.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -13,6 +14,7 @@ import android.os.ParcelFileDescriptor;
 import android.provider.OpenableColumns;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -52,7 +54,7 @@ public class InstallerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         // Initialize App Theme
-        Settings.initializeAppTheme(this);
+        initializeAppTheme(this);
 
         Uri uri = getIntent().getData();
 
@@ -390,6 +392,22 @@ public class InstallerActivity extends AppCompatActivity {
                 }
             }
         };
+    }
+
+    private static void initializeAppTheme(Context context) {
+        int appTheme = Utils.getInt("appTheme", 0, context);
+        switch (appTheme) {
+            case 1:
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                break;
+            case 2:
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                break;
+            default:
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                break;
+        }
+        context.setTheme(R.style.AppTheme_Transparent);
     }
 
     private void onRequestPermissionsResult(int requestCode, int grantResult) {
