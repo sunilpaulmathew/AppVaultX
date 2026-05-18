@@ -625,7 +625,9 @@ public class InstalledPackagesAdapter extends RecyclerView.Adapter<InstalledPack
                                             if (firstInstalled < lastUpdated) {
                                                 details.add(new PackageDetailsEntry(v.getContext().getString(R.string.date_updated), DateFormat.getDateTimeInstance().format(lastUpdated)));
                                             }
-                                            details.add(new PackageDetailsEntry(v.getContext().getString(R.string.permissions), v.getContext().getString(R.string.permissions_count_description, String.valueOf(permissions.size())), permissions));
+                                            if (!permissions.isEmpty()) {
+                                                details.add(new PackageDetailsEntry(v.getContext().getString(R.string.permissions), v.getContext().getString(R.string.permissions_count_description, String.valueOf(permissions.size())), permissions));
+                                            }
                                             if (splitAPKNames.isEmpty()) {
                                                 details.add(new PackageDetailsEntry(v.getContext().getString(R.string.size_apk), apkSize));
                                             } else {

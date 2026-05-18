@@ -174,7 +174,9 @@ public class InstallerActivity extends AppCompatActivity {
                         details.add(new PackageDetailsEntry(activity.getString(R.string.version_code), String.valueOf(versionCode)));
                         details.add(new PackageDetailsEntry(activity.getString(R.string.sdk_version_min), Packages.sdkToAndroidVersion(minSdk)));
                         details.add(new PackageDetailsEntry(activity.getString(R.string.sdk_version_target), Packages.sdkToAndroidVersion(targetSdk)));
-                        details.add(new PackageDetailsEntry(activity.getString(R.string.permissions), activity.getString(R.string.permissions_count_description, String.valueOf(permissions.size())), permissions));
+                        if (!permissions.isEmpty()) {
+                            details.add(new PackageDetailsEntry(activity.getString(R.string.permissions), activity.getString(R.string.permissions_count_description, String.valueOf(permissions.size())), permissions));
+                        }
                         details.add(new PackageDetailsEntry(activity.getString(R.string.size_apk), apkSize));
                         if (downgrade) {
                             details.add(new PackageDetailsEntry(activity.getString(R.string.downgrade_required), activity.getString(R.string.yes)));
