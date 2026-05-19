@@ -617,25 +617,25 @@ public class InstalledPackagesAdapter extends RecyclerView.Adapter<InstalledPack
                                             header.add(new PackageHeaderEntry(apkSize, R.drawable.ic_storage));
                                             header.add(new PackageHeaderEntry(Packages.sdkToAndroidVersion(minSdk) + " +", R.drawable.ic_device));
 
-                                            details.add(new PackageDetailsEntry("Version", versionName));
-                                            details.add(new PackageDetailsEntry("Version code", String.valueOf(versionCode)));
-                                            details.add(new PackageDetailsEntry("Min SDK", Packages.sdkToAndroidVersion(minSdk)));
-                                            details.add(new PackageDetailsEntry("Target SDK", Packages.sdkToAndroidVersion(targetSdk)));
-                                            details.add(new PackageDetailsEntry("Installed on", DateFormat.getDateTimeInstance().format(firstInstalled)));
+                                            details.add(new PackageDetailsEntry(v.getContext().getString(R.string.version), versionName));
+                                            details.add(new PackageDetailsEntry(v.getContext().getString(R.string.version_code), String.valueOf(versionCode)));
+                                            details.add(new PackageDetailsEntry(v.getContext().getString(R.string.sdk_version_min), Packages.sdkToAndroidVersion(minSdk)));
+                                            details.add(new PackageDetailsEntry(v.getContext().getString(R.string.sdk_version_target), Packages.sdkToAndroidVersion(targetSdk)));
+                                            details.add(new PackageDetailsEntry(v.getContext().getString(R.string.date_installed), DateFormat.getDateTimeInstance().format(firstInstalled)));
                                             if (firstInstalled < lastUpdated) {
-                                                details.add(new PackageDetailsEntry("Last updated", DateFormat.getDateTimeInstance().format(lastUpdated)));
+                                                details.add(new PackageDetailsEntry(v.getContext().getString(R.string.date_updated), DateFormat.getDateTimeInstance().format(lastUpdated)));
                                             }
-                                            details.add(new PackageDetailsEntry("Permissions", permissions.size() + " declared (tap to learn more)", permissions));
+                                            details.add(new PackageDetailsEntry(v.getContext().getString(R.string.permissions), v.getContext().getString(R.string.permissions_count_description, String.valueOf(permissions.size())), permissions));
                                             if (splitAPKNames.isEmpty()) {
-                                                details.add(new PackageDetailsEntry("APK size", apkSize));
+                                                details.add(new PackageDetailsEntry(v.getContext().getString(R.string.size_apk), apkSize));
                                             } else {
                                                 splitAPKNames.add(new PermissionsEntry(baseAPKName, packageItems.getAppIcon()));
                                                 splitAPKNames.sort((lhs, rhs) -> String.CASE_INSENSITIVE_ORDER.compare(lhs.getPermission(), rhs.getPermission()));
-                                                details.add(new PackageDetailsEntry("Bundle Size", apkSize));
-                                                details.add(new PackageDetailsEntry("Split APKs", splitAPKNames.size() + " found (tap to learn more)", splitAPKNames));
+                                                details.add(new PackageDetailsEntry(v.getContext().getString(R.string.size_bundle), apkSize));
+                                                details.add(new PackageDetailsEntry(v.getContext().getString(R.string.apks_split), v.getContext().getString(R.string.permissions_count_description, String.valueOf(splitAPKNames.size())), splitAPKNames));
                                             }
                                             if (debuggable) {
-                                                details.add(new PackageDetailsEntry(activity.getString(R.string.app_type_debuggable_title), activity.getString(R.string.yes)));
+                                                details.add(new PackageDetailsEntry(v.getContext().getString(R.string.app_type_debuggable_title), v.getContext().getString(R.string.yes)));
                                             }
                                         }
                                     }

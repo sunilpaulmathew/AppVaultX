@@ -170,12 +170,12 @@ public class InstallerActivity extends AppCompatActivity {
                         header.add(new PackageHeaderEntry(apkSize, R.drawable.ic_storage));
                         header.add(new PackageHeaderEntry(Packages.sdkToAndroidVersion(minSdk) + " +", R.drawable.ic_device));
 
-                        details.add(new PackageDetailsEntry("Version", versionName));
-                        details.add(new PackageDetailsEntry("Version code", String.valueOf(versionCode)));
-                        details.add(new PackageDetailsEntry("Min SDK", Packages.sdkToAndroidVersion(minSdk)));
-                        details.add(new PackageDetailsEntry("Target SDK", Packages.sdkToAndroidVersion(targetSdk)));
-                        details.add(new PackageDetailsEntry("Permissions", permissions.size() + " declared (tap to learn more)", permissions));
-                        details.add(new PackageDetailsEntry("APK size", apkSize));
+                        details.add(new PackageDetailsEntry(activity.getString(R.string.version), versionName));
+                        details.add(new PackageDetailsEntry(activity.getString(R.string.version_code), String.valueOf(versionCode)));
+                        details.add(new PackageDetailsEntry(activity.getString(R.string.sdk_version_min), Packages.sdkToAndroidVersion(minSdk)));
+                        details.add(new PackageDetailsEntry(activity.getString(R.string.sdk_version_target), Packages.sdkToAndroidVersion(targetSdk)));
+                        details.add(new PackageDetailsEntry(activity.getString(R.string.permissions), activity.getString(R.string.permissions_count_description, String.valueOf(permissions.size())), permissions));
+                        details.add(new PackageDetailsEntry(activity.getString(R.string.size_apk), apkSize));
                         if (downgrade) {
                             details.add(new PackageDetailsEntry(activity.getString(R.string.downgrade_required), activity.getString(R.string.yes)));
                         }
