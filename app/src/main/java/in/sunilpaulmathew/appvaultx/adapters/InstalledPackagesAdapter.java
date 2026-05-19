@@ -515,7 +515,7 @@ public class InstalledPackagesAdapter extends RecyclerView.Adapter<InstalledPack
                                                 String status = splitOp[1].trim();
 
                                                 if (line.contains("time=") && !line.equals("No operations.") && !name.equals("Uid mode")) {
-                                                    appOps.add(new AppOpsEntry(name, status, line.contains("allow")));
+                                                    appOps.add(new AppOpsEntry(name, status));
                                                 }
                                             }
                                         }

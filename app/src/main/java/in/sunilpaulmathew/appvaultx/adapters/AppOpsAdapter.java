@@ -46,8 +46,7 @@ public class AppOpsAdapter extends RecyclerView.Adapter<AppOpsAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         AppOpsEntry item = this.data.get(position);
         holder.icon.setImageDrawable(Utils.getDrawable(R.drawable.ic_permissions, holder.icon.getContext()));
-        holder.name.setText(item.getName());
-        holder.status.setText(item.getStatus());
+        item.load(holder.name, holder.status, holder.description);
     }
 
     @Override
@@ -57,12 +56,13 @@ public class AppOpsAdapter extends RecyclerView.Adapter<AppOpsAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private final AppCompatImageButton icon;
-        private final MaterialTextView name, status;
+        private final MaterialTextView description, name, status;
         ViewHolder(@NonNull View view) {
             super(view);
-            icon = view.findViewById(R.id.app_icon);
-            name = view.findViewById(R.id.app_name);
-            status = view.findViewById(R.id.package_name);
+            icon = view.findViewById(R.id.icon);
+            name = view.findViewById(R.id.name);
+            status = view.findViewById(R.id.status);
+            description = view.findViewById(R.id.description);
 
             view.setOnClickListener(v -> {
                 List<AppOpsMenuEntry> menuItems = new ArrayList<>();

@@ -63,9 +63,9 @@ public class AppOpsMenuAdapter extends RecyclerView.Adapter<AppOpsMenuAdapter.Vi
         private final MaterialTextView name, status;
         ViewHolder(@NonNull View view) {
             super(view);
-            icon = view.findViewById(R.id.app_icon);
-            name = view.findViewById(R.id.app_name);
-            status = view.findViewById(R.id.package_name);
+            icon = view.findViewById(R.id.icon);
+            name = view.findViewById(R.id.name);
+            status = view.findViewById(R.id.description);
 
             view.setOnClickListener(v -> listener.onItemClick(data.get(getBindingAdapterPosition()).getID()));
         }

@@ -15,7 +15,12 @@
     <string name="app_ops_foreground_title">Foreground</string>
     <string name="app_ops_foreground_description">Allow only when app is in foreground (for ops like location, mic, camera)</string>
     <string name="app_ops_ignore_description">Always block/silently drop the operation</string>
+    <string name="app_ops_duration">Duration: %s</string>
     <string name="app_ops_manage">Manage AppOps</string>
+    <string name="app_ops_status_allowed">Allowed: %s</string>
+    <string name="app_ops_status_current">Current status: %s</string>
+    <string name="app_ops_status_recent">Recent activity: %s</string>
+    <string name="app_ops_status_rejected">Rejected: %s</string>
     <string name="app_theme">App Theme</string>
     <string name="app_theme_auto">Auto</string>
     <string name="app_theme_dark">Dark</string>
@@ -59,6 +64,7 @@
     <string name="installing_message">Installing %s…</string>
     <string name="loading">Loading…</string>
     <string name="miscellaneous">Miscellaneous</string>
+    <string name="never">Never</string>
     <string name="never_show">Never show</string>
     <string name="open_app">Open app</string>
     <string name="permissions">Permissions</string>
