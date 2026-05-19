@@ -1,3 +1,0 @@
-* Implemented AppOps management.
-* Added a brand new, detailed information dialog for packages.
-* APK Viewer now to work for all users.
