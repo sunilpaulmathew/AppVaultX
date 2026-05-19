@@ -20,14 +20,14 @@ import java.util.List;
 
 import in.sunilpaulmathew.appvaultx.R;
 import in.sunilpaulmathew.appvaultx.adapters.AppOpsAdapter;
-import in.sunilpaulmathew.appvaultx.serializable.PermissionsEntry;
+import in.sunilpaulmathew.appvaultx.serializable.AppOpsEntry;
 
 /*
  * Created by sunilpaulmathew <sunil.kde@gmail.com> on May 16, 2026
  */
 public class AppOpsDialog extends BottomSheetDialog {
 
-    public AppOpsDialog(Drawable headerIcon, List<PermissionsEntry> appOps, String headerTitle, String headerDescription, Context context) {
+    public AppOpsDialog(Drawable headerIcon, List<AppOpsEntry> appOps, String headerTitle, String headerDescription, Context context) {
         super(context);
 
         View rootView = View.inflate(context, R.layout.layout_app_ops, null);

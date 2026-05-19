@@ -25,6 +25,10 @@ public class PackageDetailsEntry implements Serializable {
         this.permissions = permissions;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
     public List<PermissionsEntry> getPermissions() {
         return this.permissions;
     }

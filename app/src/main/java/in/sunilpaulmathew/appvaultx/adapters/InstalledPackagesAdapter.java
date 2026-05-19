@@ -33,6 +33,7 @@ import com.google.android.material.textview.MaterialTextView;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -46,6 +47,7 @@ import in.sunilpaulmathew.appvaultx.dialogs.AppOpsDialog;
 import in.sunilpaulmathew.appvaultx.dialogs.BottomMenuDialog;
 import in.sunilpaulmathew.appvaultx.dialogs.ProgressDialog;
 import in.sunilpaulmathew.appvaultx.dialogs.UnsafeAppDialog;
+import in.sunilpaulmathew.appvaultx.serializable.AppOpsEntry;
 import in.sunilpaulmathew.appvaultx.serializable.MenuEntry;
 import in.sunilpaulmathew.appvaultx.serializable.PackageDetailsEntry;
 import in.sunilpaulmathew.appvaultx.serializable.PackageHeaderEntry;
@@ -494,12 +496,12 @@ public class InstalledPackagesAdapter extends RecyclerView.Adapter<InstalledPack
                             case 8:
                                 new Async() {
                                     private ProgressDialog progressDialog;
-                                    private final List<PermissionsEntry> appOps = new CopyOnWriteArrayList<>();
+                                    private final List<AppOpsEntry> appOps = new CopyOnWriteArrayList<>();
 
                                     @Override
                                     public void onPreExecute() {
                                         progressDialog = new ProgressDialog(v.getContext());
-                                        progressDialog.setProgressStatus(R.string.applying);
+                                        progressDialog.setProgressStatus(R.string.loading);
                                         progressDialog.startDialog();
                                     }
 
@@ -513,7 +515,7 @@ public class InstalledPackagesAdapter extends RecyclerView.Adapter<InstalledPack
                                                 String status = splitOp[1].trim();
 
                                                 if (line.contains("time=") && !line.equals("No operations.") && !name.equals("Uid mode")) {
-                                                    appOps.add(new PermissionsEntry(name, status, line.contains("allow")));
+                                                    appOps.add(new AppOpsEntry(name, status, line.contains("allow")));
                                                 }
                                             }
                                         }
@@ -574,12 +576,16 @@ public class InstalledPackagesAdapter extends RecyclerView.Adapter<InstalledPack
                                             int versionCode = pkgInfo.versionCode;
                                             int minSdk = Objects.requireNonNull(appInfo).minSdkVersion;
                                             int targetSdk = appInfo.targetSdkVersion;
+                                            long firstInstalled = pkgInfo.firstInstallTime;
+                                            long lastUpdated = pkgInfo.lastUpdateTime;
+                                            String baseAPKName = null;
+                                            List<PermissionsEntry> splitAPKNames = new CopyOnWriteArrayList<>();
                                             List<PermissionsEntry> permissions = new CopyOnWriteArrayList<>();
                                             if (pkgInfo.requestedPermissions != null && pkgInfo.requestedPermissionsFlags != null) {
                                                 for (int i = 0; i < pkgInfo.requestedPermissions.length; i++) {
                                                     String permissionName = pkgInfo.requestedPermissions[i];
                                                     boolean isGranted = (pkgInfo.requestedPermissionsFlags[i] & PackageInfo.REQUESTED_PERMISSION_GRANTED) != 0;
-                                                    permissions.add(new PermissionsEntry(permissionName, isGranted));
+                                                    permissions.add(new PermissionsEntry(permissionName, isGranted ? R.drawable.ic_check : R.drawable.ic_check_unmarked));
                                                 }
                                             }
                                             boolean debuggable = (appInfo.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
@@ -589,6 +595,7 @@ public class InstalledPackagesAdapter extends RecyclerView.Adapter<InstalledPack
                                                 File baseApk = new File(appInfo.sourceDir);
                                                 if (baseApk.exists()) {
                                                     totalSize += baseApk.length();
+                                                    baseAPKName = baseApk.getName();
                                                 }
                                             }
 
@@ -598,6 +605,7 @@ public class InstalledPackagesAdapter extends RecyclerView.Adapter<InstalledPack
                                                         File splitApk = new File(splitPath);
                                                         if (splitApk.exists()) {
                                                             totalSize += splitApk.length();
+                                                            splitAPKNames.add(new PermissionsEntry(splitApk.getName(), R.drawable.ic_apks));
                                                         }
                                                     }
                                                 }
@@ -613,8 +621,19 @@ public class InstalledPackagesAdapter extends RecyclerView.Adapter<InstalledPack
                                             details.add(new PackageDetailsEntry("Version code", String.valueOf(versionCode)));
                                             details.add(new PackageDetailsEntry("Min SDK", Packages.sdkToAndroidVersion(minSdk)));
                                             details.add(new PackageDetailsEntry("Target SDK", Packages.sdkToAndroidVersion(targetSdk)));
+                                            details.add(new PackageDetailsEntry("Installed on", DateFormat.getDateTimeInstance().format(firstInstalled)));
+                                            if (firstInstalled < lastUpdated) {
+                                                details.add(new PackageDetailsEntry("Last updated", DateFormat.getDateTimeInstance().format(lastUpdated)));
+                                            }
                                             details.add(new PackageDetailsEntry("Permissions", permissions.size() + " declared (tap to learn more)", permissions));
-                                            details.add(new PackageDetailsEntry(appInfo.splitSourceDirs != null ? "Bundle Size" :  "APK size", apkSize));
+                                            if (splitAPKNames.isEmpty()) {
+                                                details.add(new PackageDetailsEntry("APK size", apkSize));
+                                            } else {
+                                                splitAPKNames.add(new PermissionsEntry(baseAPKName, packageItems.getAppIcon()));
+                                                splitAPKNames.sort((lhs, rhs) -> String.CASE_INSENSITIVE_ORDER.compare(lhs.getPermission(), rhs.getPermission()));
+                                                details.add(new PackageDetailsEntry("Bundle Size", apkSize));
+                                                details.add(new PackageDetailsEntry("Split APKs", splitAPKNames.size() + " found (tap to learn more)", splitAPKNames));
+                                            }
                                             if (debuggable) {
                                                 details.add(new PackageDetailsEntry(activity.getString(R.string.app_type_debuggable_title), activity.getString(R.string.yes)));
                                             }

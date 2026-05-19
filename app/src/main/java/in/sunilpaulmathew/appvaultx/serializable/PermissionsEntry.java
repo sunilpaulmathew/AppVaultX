@@ -1,54 +1,56 @@
 package in.sunilpaulmathew.appvaultx.serializable;
 
+import android.graphics.drawable.Drawable;
+import android.widget.ImageButton;
+import android.widget.TextView;
+
 import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import in.sunilpaulmathew.appvaultx.utils.Utils;
 
 /*
  * Created by sunilpaulmathew <sunil.kde@gmail.com> on May 15, 2026
  */
 public class PermissionsEntry implements Serializable {
 
-    private final boolean granted;
+    private final Drawable drawable;
+    private final int icon;
     private final String name;
-    private String status;
 
-    public PermissionsEntry(String name, boolean granted) {
+    public PermissionsEntry(String name, Drawable drawable) {
         this.name = name;
-        this.granted = granted;
-        this.status = null;
+        this.drawable = drawable;
+        this.icon = Integer.MIN_VALUE;
     }
 
-    public PermissionsEntry(String name, String status, boolean granted) {
+    public PermissionsEntry(String name, int icon) {
         this.name = name;
-        this.status = status;
-        this.granted = granted;
-    }
-
-    public boolean isGranted() {
-        return this.granted;
+        this.icon = icon;
+        this.drawable = null;
     }
 
     public String getPermission() {
         return this.name;
     }
 
-    public String getPermissionName() {
-        Pattern pattern = Pattern.compile("([A-Z_]+)$");
-        Matcher matcher = pattern.matcher(this.name);
-
-        if (matcher.find()) {
-            return matcher.group(1);
+    public void load(ImageButton button, TextView textView) {
+        if (this.drawable != null) {
+            button.setImageDrawable(this.drawable);
+        } else if (this.icon != Integer.MIN_VALUE) {
+            button.setImageDrawable(Utils.getDrawable(this.icon, button.getContext()));
         }
-        return this.name;
-    }
+        if (this.name != null) {
+            Pattern pattern = Pattern.compile("([A-Z_]+)$");
+            Matcher matcher = pattern.matcher(this.name);
 
-    public String getStatus() {
-        return this.status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
+            if (matcher.find()) {
+                textView.setText(matcher.group(1));
+            } else {
+                textView.setText(this.name);
+            }
+        }
     }
 
 }

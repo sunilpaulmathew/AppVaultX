@@ -159,7 +159,7 @@ public class InstallerActivity extends AppCompatActivity {
                             for (int i = 0; i < pkgInfo.requestedPermissions.length; i++) {
                                 String permissionName = pkgInfo.requestedPermissions[i];
                                 boolean isGranted = (pkgInfo.requestedPermissionsFlags[i] & PackageInfo.REQUESTED_PERMISSION_GRANTED) != 0;
-                                permissions.add(new PermissionsEntry(permissionName, isGranted));
+                                permissions.add(new PermissionsEntry(permissionName, isGranted ? R.drawable.ic_check : R.drawable.ic_check_unmarked));
                             }
                         }
                         debuggable = (appInfo.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;

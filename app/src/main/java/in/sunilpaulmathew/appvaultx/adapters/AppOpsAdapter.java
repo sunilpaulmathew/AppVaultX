@@ -16,8 +16,8 @@ import java.util.Locale;
 
 import in.sunilpaulmathew.appvaultx.R;
 import in.sunilpaulmathew.appvaultx.dialogs.AppOpsMenuDialog;
+import in.sunilpaulmathew.appvaultx.serializable.AppOpsEntry;
 import in.sunilpaulmathew.appvaultx.serializable.AppOpsMenuEntry;
-import in.sunilpaulmathew.appvaultx.serializable.PermissionsEntry;
 import in.sunilpaulmathew.appvaultx.utils.Async;
 import in.sunilpaulmathew.appvaultx.utils.ShizukuShell;
 import in.sunilpaulmathew.appvaultx.utils.Utils;
@@ -27,10 +27,10 @@ import in.sunilpaulmathew.appvaultx.utils.Utils;
  */
 public class AppOpsAdapter extends RecyclerView.Adapter<AppOpsAdapter.ViewHolder> {
 
-    private final List<PermissionsEntry> data;
+    private final List<AppOpsEntry> data;
     private final String packageName;
 
-    public AppOpsAdapter(List<PermissionsEntry> items, String packageName) {
+    public AppOpsAdapter(List<AppOpsEntry> items, String packageName) {
         this.data = items;
         this.packageName = packageName;
     }
@@ -44,9 +44,9 @@ public class AppOpsAdapter extends RecyclerView.Adapter<AppOpsAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        PermissionsEntry item = this.data.get(position);
+        AppOpsEntry item = this.data.get(position);
         holder.icon.setImageDrawable(Utils.getDrawable(R.drawable.ic_permissions, holder.icon.getContext()));
-        holder.name.setText(item.getPermission());
+        holder.name.setText(item.getName());
         holder.status.setText(item.getStatus());
     }
 
@@ -89,11 +89,11 @@ public class AppOpsAdapter extends RecyclerView.Adapter<AppOpsAdapter.ViewHolder
                                 };
 
                                 ShizukuShell.runCommand("cmd appops set " + packageName + " " +
-                                        data.get(getBindingAdapterPosition()).getPermission() + " " + options[menuID]);
+                                        data.get(getBindingAdapterPosition()).getName() + " " + options[menuID]);
                                 String result = ShizukuShell.runCommand("cmd appops get " + packageName + " " +
-                                        data.get(getBindingAdapterPosition()).getPermission());
+                                        data.get(getBindingAdapterPosition()).getName());
 
-                                newStatus = result.trim().split(data.get(getBindingAdapterPosition()).getPermission() + ": ")[1];
+                                newStatus = result.trim().split(data.get(getBindingAdapterPosition()).getName() + ": ")[1];
                                 success = newStatus.contains(options[menuID]);
                             }
 
@@ -103,7 +103,7 @@ public class AppOpsAdapter extends RecyclerView.Adapter<AppOpsAdapter.ViewHolder
                                     data.get(getBindingAdapterPosition()).setStatus(newStatus);
                                     notifyItemChanged(getBindingAdapterPosition());
                                 } else {
-                                    Utils.toast(v.getContext().getString(R.string.app_ops_failed_toast, data.get(getBindingAdapterPosition()).getPermission().toUpperCase(Locale.getDefault())), v.getContext()).show();
+                                    Utils.toast(v.getContext().getString(R.string.app_ops_failed_toast, data.get(getBindingAdapterPosition()).getName().toUpperCase(Locale.getDefault())), v.getContext()).show();
                                 }
                             }
                         }.execute();

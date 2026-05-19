@@ -5,6 +5,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -58,14 +60,17 @@ public class PackageDetailsAdapter extends RecyclerView.Adapter<PackageDetailsAd
                 int position = getBindingAdapterPosition();
                 List<PermissionsEntry> permissions = data.get(position).getPermissions();
                 if (position != RecyclerView.NO_POSITION && permissions != null) {
-                    StringBuilder sb = new StringBuilder();
-                    for (PermissionsEntry permissionsEntry : permissions) {
-                        sb.append(permissionsEntry.isGranted() ? "☑ " : "☐ ").append(permissionsEntry.getPermissionName()).append("\n");
-                    }
+                    View rootView = View.inflate(v.getContext(), R.layout.layout_recycler_view, null);
+                    RecyclerView recyclerView = rootView.findViewById(R.id.recycler_view);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(v.getContext()));
+                    recyclerView.addItemDecoration(new DividerItemDecoration(v.getContext(), DividerItemDecoration.VERTICAL));
+                    recyclerView.setAdapter(new PermissionsAdapter(permissions));
+
                     new MaterialAlertDialogBuilder(v.getContext())
-                            .setIcon(R.drawable.ic_permissions)
-                            .setTitle(R.string.permissions)
-                            .setMessage(sb.toString().trim())
+                            .setIcon(data.get(position).getTitle().equals(v.getContext().getString(R.string.permissions)) ?
+                                    R.drawable.ic_permissions : R.drawable.ic_apks)
+                            .setTitle(data.get(position).getTitle())
+                            .setView(rootView)
                             .setPositiveButton(R.string.cancel, (dialogInterface, i) -> {
                             }).show();
                 }
