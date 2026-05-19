@@ -186,7 +186,7 @@ public class RemovedPackagesFragment extends Fragment {
                     if (Utils.getBoolean("reverse_order", false, requireActivity())) {
                         Collections.reverse(mPackages);
                     }
-                    adapter = new RemovedPackagesAdapter(mPackages, selectedApps, batchOptions);
+                    adapter = new RemovedPackagesAdapter(mPackages, selectedApps, batchOptions, requireActivity());
                 } catch (NullPointerException ignored) {}
             }
 

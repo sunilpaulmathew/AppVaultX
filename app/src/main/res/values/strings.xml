@@ -79,7 +79,6 @@
     <string name="report">Report</string>
     <string name="request_permission">Request Permission</string>
     <string name="restore">Restore</string>
-    <string name="restore_question">Restore %s?</string>
     <string name="restore_impossible_message">AppVaultX requires a fully working Shizuku environment to restore previously removed system apps.</string>
     <string name="restore_selected">Restore selected (%s)</string>
     <string name="save_apks">Save APK\'s</string>
