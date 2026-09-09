@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
@@ -129,7 +130,36 @@ public class InstalledPackagesAdapter extends RecyclerView.Adapter<InstalledPack
             holder.appIcon.setClickable(false);
         }
 
-        Settings.setSlideInAnimation(holder.itemView, position);
+        Settings.setSlideInAnimation(holder.appIcon, position);
+    }
+
+    public void updateData(@NonNull List<PackagesEntry> newData) {
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new DiffUtil.Callback() {
+            @Override
+            public int getOldListSize() {
+                return data.size();
+            }
+
+            @Override
+            public int getNewListSize() {
+                return newData.size();
+            }
+
+            @Override
+            public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+                return Objects.equals(data.get(oldItemPosition).getPackageName(), newData.get(newItemPosition).getPackageName());
+            }
+
+            @Override
+            public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+                return Objects.equals(data.get(oldItemPosition).getPackageName(), newData.get(newItemPosition).getPackageName());
+            }
+        });
+
+        this.data.clear();
+        this.data.addAll(newData);
+
+        diffResult.dispatchUpdatesTo(this);
     }
 
     @Override

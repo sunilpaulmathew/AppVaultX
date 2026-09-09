@@ -52,8 +52,6 @@ public class RemovedPackagesFragment extends Fragment {
 
     private ContentLoadingProgressBar progressBar;
     private LinearLayoutCompat contentLayout, headerLayout, progressLayout;
-    private MaterialButton batchOptions;
-    private RecyclerView recyclerView;
     private TextInputEditText editText;
     private RemovedPackagesAdapter adapter;
     private List<PackagesEntry> mPackages;
@@ -68,12 +66,12 @@ public class RemovedPackagesFragment extends Fragment {
 
         AppCompatImageButton apply = mRootView.findViewById(R.id.apply);
         progressBar = mRootView.findViewById(R.id.progress);
-        batchOptions = mRootView.findViewById(R.id.batch_options);
+        MaterialButton batchOptions = mRootView.findViewById(R.id.batch_options);
         MaterialCardView searchCard = mRootView.findViewById(R.id.search_card);
         contentLayout = mRootView.findViewById(R.id.content_layout);
         headerLayout = mRootView.findViewById(R.id.header_layout);
         progressLayout = mRootView.findViewById(R.id.progress_layout);
-        recyclerView = mRootView.findViewById(R.id.recycler_view);
+        RecyclerView recyclerView = mRootView.findViewById(R.id.recycler_view);
         editText = mRootView.findViewById(R.id.search_word);
         MaterialButton searchButton = mRootView.findViewById(R.id.search);
         MaterialButton sortButton = mRootView.findViewById(R.id.sort);
@@ -82,6 +80,8 @@ public class RemovedPackagesFragment extends Fragment {
         title.setText(getString(R.string.apps_removed));
 
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
+        adapter = new RemovedPackagesAdapter(new CopyOnWriteArrayList<>(), selectedApps, batchOptions, requireActivity());
+        recyclerView.setAdapter(adapter);
 
         searchButton.setOnClickListener(v -> {
             if (searchCard.getVisibility() == VISIBLE) {
@@ -197,8 +197,7 @@ public class RemovedPackagesFragment extends Fragment {
                 progressLayout.setVisibility(GONE);
                 headerLayout.setVisibility(VISIBLE);
                 contentLayout.setVisibility(VISIBLE);
-                adapter = new RemovedPackagesAdapter(mPackages, selectedApps, batchOptions, requireActivity());
-                recyclerView.setAdapter(adapter);
+                adapter.updateData(mPackages);
                 editText.setHint(getString(R.string.search_hint, adapter.getItemCount()));
                 mSearchText = searchText;
             }
@@ -207,7 +206,6 @@ public class RemovedPackagesFragment extends Fragment {
 
     private Async restoreApps(List<String> apps) {
         return new Async() {
-            private final List<Integer> positions = new CopyOnWriteArrayList<>();
             private ProgressDialog progressDialog;
             @Override
             public void onPreExecute() {
@@ -236,7 +234,6 @@ public class RemovedPackagesFragment extends Fragment {
                     }
                     if (index != -1) {
                         mPackages.remove(index);
-                        positions.add(index);
                     }
                 }
             }
@@ -245,10 +242,7 @@ public class RemovedPackagesFragment extends Fragment {
             public void onPostExecute() {
                 if (!isAdded()) return;
                 progressDialog.dismissDialog();
-                for (Integer position : positions) {
-                    adapter.notifyItemRemoved(position);
-                }
-                adapter.notifyItemRangeChanged(0, mPackages.size());
+                adapter.updateData(mPackages);
             }
         };
     }

@@ -59,8 +59,6 @@ public class InstalledPackagesFragment extends Fragment {
     private NavView navigationView;
     private ContentLoadingProgressBar progressBar;
     private LinearLayoutCompat contentLayout, headerLayout, progressLayout;
-    private MaterialButton batchOptions;
-    private RecyclerView recyclerView;
     private TextInputEditText editText;
     private InstalledPackagesAdapter adapter;
     private List<PackagesEntry> mPackages;
@@ -75,12 +73,12 @@ public class InstalledPackagesFragment extends Fragment {
 
         AppCompatImageButton apply = mRootView.findViewById(R.id.apply);
         progressBar = mRootView.findViewById(R.id.progress);
-        batchOptions = mRootView.findViewById(R.id.batch_options);
+        MaterialButton batchOptions = mRootView.findViewById(R.id.batch_options);
         MaterialCardView searchCard = mRootView.findViewById(R.id.search_card);
         contentLayout = mRootView.findViewById(R.id.content_layout);
         headerLayout = mRootView.findViewById(R.id.header_layout);
         progressLayout = mRootView.findViewById(R.id.progress_layout);
-        recyclerView = mRootView.findViewById(R.id.recycler_view);
+        RecyclerView recyclerView = mRootView.findViewById(R.id.recycler_view);
         editText = mRootView.findViewById(R.id.search_word);
         MaterialButton searchButton = mRootView.findViewById(R.id.search);
         MaterialButton sortButton = mRootView.findViewById(R.id.sort);
@@ -90,6 +88,8 @@ public class InstalledPackagesFragment extends Fragment {
         title.setText(getString(R.string.apps_installed));
 
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
+        adapter = new InstalledPackagesAdapter(new CopyOnWriteArrayList<>(), selectedApps, batchOptions, requireActivity());
+        recyclerView.setAdapter(adapter);
 
         navigationView = Settings.getNavView(requireActivity());
 
@@ -284,8 +284,7 @@ public class InstalledPackagesFragment extends Fragment {
                 headerLayout.setVisibility(VISIBLE);
                 contentLayout.setVisibility(VISIBLE);
                 navigationView.setVisibility(VISIBLE);
-                adapter = new InstalledPackagesAdapter(mPackages, selectedApps, batchOptions, requireActivity());
-                recyclerView.setAdapter(adapter);
+                adapter.updateData(mPackages);
                 editText.setHint(getString(R.string.search_hint, adapter.getItemCount()));
                 mSearchText = searchText;
             }
@@ -294,7 +293,6 @@ public class InstalledPackagesFragment extends Fragment {
 
     private Async removeApps(List<String> apps) {
         return new Async() {
-            private final List<Integer> positions = new CopyOnWriteArrayList<>();
             private ProgressDialog progressDialog;
             @Override
             public void onPreExecute() {
@@ -325,7 +323,6 @@ public class InstalledPackagesFragment extends Fragment {
                     }
                     if (index != -1) {
                         mPackages.remove(index);
-                        positions.add(index);
                     }
                 }
             }
@@ -334,10 +331,7 @@ public class InstalledPackagesFragment extends Fragment {
             public void onPostExecute() {
                 if (!isAdded()) return;
                 progressDialog.dismissDialog();
-                for (Integer position : positions) {
-                    adapter.notifyItemRemoved(position);
-                }
-                adapter.notifyItemRangeChanged(0, mPackages.size());
+                adapter.updateData(mPackages);
             }
         };
     }
