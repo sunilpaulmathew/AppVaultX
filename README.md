@@ -32,7 +32,7 @@ height="80">](https://github.com/sunilpaulmathew/AppVaultX/releases/tag/v0.5)
 
 ### 🔍 Smart App Recommendations
 - Categorizes installed apps as **Recommended**, **Advanced**, **Expert**, or **Unsafe**
-- Powered by trusted data from the **[Universal Android Debloater Next Generation](https://github.com/0x192/universal-android-debloater)** project
+- Powered by trusted data from the **[Universal Android Debloater Next Generation](https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation)** project
 
 ### 🛠️ App Management with Shizuku Support
 Unlock powerful system-level tools when Shizuku is available:
