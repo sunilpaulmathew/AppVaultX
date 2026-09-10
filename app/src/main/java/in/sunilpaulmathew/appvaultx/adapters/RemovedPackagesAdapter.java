@@ -80,7 +80,6 @@ public class RemovedPackagesAdapter extends RecyclerView.Adapter<RemovedPackages
         return new ViewHolder(rowItem);
     }
 
-    @SuppressLint("StringFormatMatches")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         this.data.get(position).loadPackageInfo(holder.priority, holder.appIcon, holder.appName, holder.packageName);
@@ -96,31 +95,36 @@ public class RemovedPackagesAdapter extends RecyclerView.Adapter<RemovedPackages
                 holder.appIcon.setVisibility(VISIBLE);
             }
 
-            if (selectedApps.isEmpty()) {
-                batchOptions.setVisibility(GONE);
-            } else {
-                batchOptions.setText(batchOptions.getContext().getString(R.string.restore_selected, selectedApps.size()));
-                batchOptions.setVisibility(VISIBLE);
-            }
+            toggleBatchMenu();
 
             holder.appIcon.setOnClickListener(v -> {
-                holder.appIcon.setVisibility(GONE);
-                holder.checkBox.setVisibility(VISIBLE);
-                selectedApps.add(this.data.get(position));
-                notifyItemChanged(position);
+                int currentPosition = holder.getBindingAdapterPosition();
+                selectedApps.add(this.data.get(currentPosition));
+                toggleBatchMenu();
+                notifyItemChanged(currentPosition);
             });
 
             holder.checkBox.setOnClickListener(v -> {
-                holder.appIcon.setVisibility(VISIBLE);
-                holder.checkBox.setVisibility(GONE);
-                selectedApps.remove(this.data.get(position));
-                notifyItemChanged(position);
+                int currentPosition = holder.getBindingAdapterPosition();
+                selectedApps.remove(this.data.get(currentPosition));
+                toggleBatchMenu();
+                notifyItemChanged(currentPosition);
             });
         } else {
             holder.appIcon.setClickable(false);
         }
 
         Settings.setSlideInAnimation(holder.appIcon, position);
+    }
+
+    @SuppressLint("StringFormatMatches")
+    private void toggleBatchMenu() {
+        if (selectedApps.isEmpty()) {
+            batchOptions.setVisibility(GONE);
+        } else {
+            batchOptions.setText(batchOptions.getContext().getString(R.string.restore_selected, selectedApps.size()));
+            batchOptions.setVisibility(VISIBLE);
+        }
     }
 
     public void updateData(@NonNull List<PackagesEntry> newData) {
@@ -152,6 +156,12 @@ public class RemovedPackagesAdapter extends RecyclerView.Adapter<RemovedPackages
         diffResult.dispatchUpdatesTo(this);
     }
 
+    public void refreshData() {
+        if (!this.data.isEmpty()) {
+            notifyItemRangeChanged(0, getItemCount());
+        }
+    }
+
     @Override
     public int getItemCount() {
         return data.size();
@@ -175,11 +185,8 @@ public class RemovedPackagesAdapter extends RecyclerView.Adapter<RemovedPackages
             view.setOnClickListener(v -> {
                 PackagesEntry packageItems = data.get(getBindingAdapterPosition());
                 if (!Settings.isShizukuIgnored(v.getContext()) && Shizuku.pingBinder() && Shizuku.getVersion() >= 11 && Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED && !selectedApps.isEmpty()) {
-                    if (selectedApps.contains(packageItems)) {
-                        selectedApps.remove(packageItems);
-                    } else {
-                        selectedApps.add(packageItems);
-                    }
+                    selectedApps.remove(packageItems);
+                    toggleBatchMenu();
                     notifyItemChanged(getBindingAdapterPosition());
                     return;
                 }

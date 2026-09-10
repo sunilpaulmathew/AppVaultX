@@ -84,7 +84,7 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.ViewHo
             holder.mDivider.setVisibility(GONE);
         }
 
-        Settings.setSlideInAnimation(holder.itemView, position);
+        Settings.setSlideInAnimation(holder.mIcon, position);
     }
 
     @Override

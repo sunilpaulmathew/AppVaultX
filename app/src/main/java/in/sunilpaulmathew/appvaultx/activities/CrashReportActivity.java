@@ -10,11 +10,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageButton;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
@@ -26,12 +22,12 @@ import in.sunilpaulmathew.appvaultx.R;
 /*
  * Created by sunilpaulmathew <sunil.kde@gmail.com> on May 05, 2026
  */
-public class CrashReportActivity extends AppCompatActivity {
+public class CrashReportActivity extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_crashreport);
+        setContentView(R.layout.activity_crashreport, R.id.layout_root);
 
         AppCompatImageButton mCopyButton = findViewById(R.id.copy);
         MaterialAutoCompleteTextView mCrashSteps = findViewById(R.id.crash_steps);
@@ -39,19 +35,6 @@ public class CrashReportActivity extends AppCompatActivity {
         MaterialButton mReportButton = findViewById(R.id.report_button);
         MaterialTextView mRequestMessage = findViewById(R.id.request_message);
         MaterialTextView mCrashLog = findViewById(R.id.crash_log);
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.layout_root), (view, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-
-            view.setPadding(
-                    systemBars.left,
-                    systemBars.top,
-                    systemBars.right,
-                    systemBars.bottom
-            );
-
-            return insets;
-        });
 
         mRequestMessage.setText(getString(R.string.crash_report_message));
 

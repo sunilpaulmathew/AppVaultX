@@ -5,14 +5,11 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.core.widget.ContentLoadingProgressBar;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.textview.MaterialTextView;
 
 import in.sunilpaulmathew.appvaultx.R;
-import in.sunilpaulmathew.appvaultx.utils.Utils;
 
 /*
  * Created by sunilpaulmathew <sunil.kde@gmail.com> on October 18, 2025
@@ -20,17 +17,13 @@ import in.sunilpaulmathew.appvaultx.utils.Utils;
 public class ProgressDialog extends MaterialAlertDialogBuilder {
 
     private final AlertDialog mAlertDialog;
-    private final AppCompatImageButton mIcon;
     private final ContentLoadingProgressBar mProgressBar;
-    private final MaterialTextView mTitle;
 
     public ProgressDialog(Context context) {
         super(context);
 
-        View progressLayout = View.inflate(context, R.layout.layout_progress, null);
+        View progressLayout = View.inflate(context, R.layout.layout_progress_view, null);
         mProgressBar = progressLayout.findViewById(R.id.progress);
-        mIcon = progressLayout.findViewById(R.id.icon);
-        mTitle = progressLayout.findViewById(R.id.title);
 
         mAlertDialog = new MaterialAlertDialogBuilder(context)
                 .setView(progressLayout)
@@ -39,19 +32,19 @@ public class ProgressDialog extends MaterialAlertDialogBuilder {
     }
 
     public void setProgressIcon(Drawable drawable) {
-        mIcon.setImageDrawable(drawable);
+        setIcon(drawable);
     }
 
     public void setProgressIcon(int resource) {
-        mIcon.setImageDrawable(Utils.getDrawable(resource, mIcon.getContext()));
+        setIcon(resource);
     }
 
     public void setProgressStatus(int resource) {
-        mTitle.setText(mTitle.getContext().getString(resource));
+        setTitle(resource);
     }
 
     public void setProgressStatus(String title) {
-        mTitle.setText(title);
+        setTitle(title);
     }
 
     public void startDialog() {

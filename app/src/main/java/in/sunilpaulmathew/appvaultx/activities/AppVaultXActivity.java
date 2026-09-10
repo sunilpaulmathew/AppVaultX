@@ -1,13 +1,14 @@
 package in.sunilpaulmathew.appvaultx.activities;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
+import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.view.View;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.appcompat.widget.LinearLayoutCompat;
+import androidx.core.widget.ContentLoadingProgressBar;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -18,7 +19,9 @@ import in.sunilpaulmathew.appvaultx.dialogs.WelcomeDialog;
 import in.sunilpaulmathew.appvaultx.fragments.InstalledPackagesFragment;
 import in.sunilpaulmathew.appvaultx.fragments.RemovedPackagesFragment;
 import in.sunilpaulmathew.appvaultx.fragments.SettingsFragment;
+import in.sunilpaulmathew.appvaultx.utils.Async;
 import in.sunilpaulmathew.appvaultx.utils.CrashReport;
+import in.sunilpaulmathew.appvaultx.utils.Packages;
 import in.sunilpaulmathew.appvaultx.utils.Settings;
 import in.sunilpaulmathew.appvaultx.utils.ShizukuPermissionChecker;
 import in.sunilpaulmathew.appvaultx.utils.ShizukuShell;
@@ -30,7 +33,7 @@ import rikka.shizuku.Shizuku;
 /*
  * Created by sunilpaulmathew <sunil.kde@gmail.com> on October 18, 2025
  */
-public class AppVaultXActivity extends AppCompatActivity {
+public class AppVaultXActivity extends BaseActivity {
 
     private final Shizuku.OnRequestPermissionResultListener REQUEST_PERMISSION_RESULT_LISTENER = this::onRequestPermissionsResult;
 
@@ -41,44 +44,14 @@ public class AppVaultXActivity extends AppCompatActivity {
         // Initialize App Theme
         Settings.initializeAppTheme(this);
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main, R.id.layout_root);
+
+        ContentLoadingProgressBar progressBar = findViewById(R.id.progress);
+        NavView mNavView = findViewById(R.id.nav_view);
+        LinearLayoutCompat progressLayout = findViewById(R.id.progress_layout);
 
         // Initialize Crash Reporter
         new CrashReport(this).initialize();
-
-        NavView mNavView = findViewById(R.id.nav_view);
-        View layoutRoot = findViewById(R.id.layout_root);
-
-        ViewCompat.setOnApplyWindowInsetsListener(layoutRoot, (view, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-
-            view.setPadding(
-                    systemBars.left,
-                    systemBars.top,
-                    systemBars.right,
-                    0
-            );
-
-            return insets;
-        });
-
-        List<NavViewEntry> data = new CopyOnWriteArrayList<>();
-        data.add(new NavViewEntry(InstalledPackagesFragment::new, R.drawable.ic_apps));
-        data.add(new NavViewEntry(RemovedPackagesFragment::new, R.drawable.ic_delete));
-        data.add(new NavViewEntry(SettingsFragment::new, R.drawable.ic_menu));
-
-        mNavView.setNavigationItems(data);
-
-        mNavView.setOnItemSelectedListener((fragment, position) -> getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .commit()
-        );
-
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    new InstalledPackagesFragment()).commit();
-        }
 
         if (!Utils.getBoolean("welcome_dialog_viewed", false, this)) {
             new WelcomeDialog(this);
@@ -102,6 +75,51 @@ public class AppVaultXActivity extends AppCompatActivity {
                 new AccessUnavilableDialog(this).show();
             }
         }
+
+        new Async() {
+            private final Activity activity = AppVaultXActivity.this;
+            public void onPreExecute() {
+                progressLayout.setVisibility(VISIBLE);
+            }
+
+            @Override
+            public void doInBackground() {
+                // Load package details on first app launch
+                if (!Packages.isDataLoaded()) {
+                    Packages.loadPackages(progressBar, activity);
+                }
+            }
+
+            private List<NavViewEntry> getData() {
+                List<NavViewEntry> data = new CopyOnWriteArrayList<>();
+                data.add(new NavViewEntry(InstalledPackagesFragment::new, R.drawable.ic_apps));
+                data.add(new NavViewEntry(RemovedPackagesFragment::new, R.drawable.ic_delete));
+                data.add(new NavViewEntry(SettingsFragment::new, R.drawable.ic_menu));
+                return data;
+            }
+
+            @Override
+            public void onPostExecute() {
+                if ( activity.isFinishing() || activity.isDestroyed()) {
+                    return;
+                }
+
+                mNavView.setNavigationItems(getData());
+
+                mNavView.setOnItemSelectedListener((fragment, position) -> getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, fragment)
+                        .commit()
+                );
+
+                if (savedInstanceState == null) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                            new InstalledPackagesFragment()).commit();
+                }
+
+                progressLayout.setVisibility(GONE);
+            }
+        }.execute();
     }
 
     private void onRequestPermissionsResult(int requestCode, int grantResult) {

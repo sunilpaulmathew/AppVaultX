@@ -33,6 +33,11 @@ public class Packages {
         }
     }
 
+    public static boolean isDataLoaded() {
+        return mInstalledPackageItems != null && !mInstalledPackageItems.isEmpty() &
+                mUninstalledPackageItems != null && !mUninstalledPackageItems.isEmpty();
+    }
+
     private static int getAppType(ApplicationInfo applicationInfo) {
         boolean systemApp = (applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0;
         boolean updatedSystemApp = (applicationInfo.flags & ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0;
@@ -71,6 +76,7 @@ public class Packages {
     }
 
     public static void loadPackages(ContentLoadingProgressBar progressBar, Context context) {
+        if (isDataLoaded()) return;
         List<DebloaterEntry> debloaterEntries = getUADList(context);
         mInstalledPackageItems = new CopyOnWriteArrayList<>();
         mUninstalledPackageItems = new CopyOnWriteArrayList<>();
@@ -85,7 +91,6 @@ public class Packages {
 
         for (ApplicationInfo packageInfo : packages) {
             boolean installed = (packageInfo.flags & ApplicationInfo.FLAG_INSTALLED) != 0;
-            boolean removed = (packageInfo.flags & ApplicationInfo.FLAG_INSTALLED) == 0;
             int appType = getAppType(packageInfo);
             if (installed) {
                 mInstalledPackageItems.add(new PackagesEntry(packageInfo.packageName, packageInfo.sourceDir, debloaterEntries.stream()
@@ -98,7 +103,7 @@ public class Packages {
                         .findFirst()
                         .orElse(null), appType, true)
                 );
-            } else if (removed) {
+            } else {
                 mUninstalledPackageItems.add(new PackagesEntry(packageInfo.packageName, packageInfo.sourceDir, debloaterEntries.stream()
                         .filter(entry -> entry.getPackageName().equals(packageInfo.packageName))
                         .map(DebloaterEntry::getRemovalStatus)

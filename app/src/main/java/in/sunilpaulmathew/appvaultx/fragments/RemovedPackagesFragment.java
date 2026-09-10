@@ -25,10 +25,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textview.MaterialTextView;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
@@ -44,6 +44,7 @@ import in.sunilpaulmathew.appvaultx.utils.Packages;
 import in.sunilpaulmathew.appvaultx.utils.Settings;
 import in.sunilpaulmathew.appvaultx.utils.ShizukuShell;
 import in.sunilpaulmathew.appvaultx.utils.Utils;
+import navView.NavView;
 
 /*
  * Created by sunilpaulmathew <sunil.kde@gmail.com> on October 18, 2025
@@ -51,37 +52,35 @@ import in.sunilpaulmathew.appvaultx.utils.Utils;
 public class RemovedPackagesFragment extends Fragment {
 
     private ContentLoadingProgressBar progressBar;
-    private LinearLayoutCompat contentLayout, headerLayout, progressLayout;
-    private TextInputEditText editText;
-    private RemovedPackagesAdapter adapter;
+    private LinearLayoutCompat progressLayout;
     private List<PackagesEntry> mPackages;
-    private final List<PackagesEntry> selectedApps = new CopyOnWriteArrayList<>();
+    private NavView navigationView;
+    private RemovedPackagesAdapter adapter;
     private String mSearchText = null;
+    private TextInputEditText editText;
+    private final List<PackagesEntry> selectedApps = new CopyOnWriteArrayList<>();
 
     @SuppressLint({"SetTextI18n", "StringFormatMatches"})
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View mRootView = inflater.inflate(R.layout.fragment_packages, container, false);
+        View mRootView = inflater.inflate(R.layout.fragment_packages_removed, container, false);
 
         AppCompatImageButton apply = mRootView.findViewById(R.id.apply);
         progressBar = mRootView.findViewById(R.id.progress);
         MaterialButton batchOptions = mRootView.findViewById(R.id.batch_options);
         MaterialCardView searchCard = mRootView.findViewById(R.id.search_card);
-        contentLayout = mRootView.findViewById(R.id.content_layout);
-        headerLayout = mRootView.findViewById(R.id.header_layout);
         progressLayout = mRootView.findViewById(R.id.progress_layout);
         RecyclerView recyclerView = mRootView.findViewById(R.id.recycler_view);
         editText = mRootView.findViewById(R.id.search_word);
         MaterialButton searchButton = mRootView.findViewById(R.id.search);
         MaterialButton sortButton = mRootView.findViewById(R.id.sort);
-        MaterialTextView title = mRootView.findViewById(R.id.title);
-
-        title.setText(getString(R.string.apps_removed));
 
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
         adapter = new RemovedPackagesAdapter(new CopyOnWriteArrayList<>(), selectedApps, batchOptions, requireActivity());
         recyclerView.setAdapter(adapter);
+
+        navigationView = Settings.getNavView(requireActivity());
 
         searchButton.setOnClickListener(v -> {
             if (searchCard.getVisibility() == VISIBLE) {
@@ -147,6 +146,9 @@ public class RemovedPackagesFragment extends Fragment {
                 if (searchCard.getVisibility() == VISIBLE) {
                     searchCard.setVisibility(GONE);
                     editText.setText(null);
+                } else if (!selectedApps.isEmpty()) {
+                    selectedApps.clear();
+                    adapter.refreshData();
                 } else {
                     Settings.navigateToFragment(0, requireActivity());
                 }
@@ -162,20 +164,22 @@ public class RemovedPackagesFragment extends Fragment {
             @Override
             public void onPreExecute() {
                 progressLayout.setVisibility(VISIBLE);
-                headerLayout.setVisibility(GONE);
-                contentLayout.setVisibility(GONE);
+                navigationView.setVisibility(GONE);
+                mPackages = new CopyOnWriteArrayList<>();
             }
 
             @Override
             public void doInBackground() {
                 try {
-                    mPackages = new CopyOnWriteArrayList<>();
-                    progressBar.setMax(Packages.getUninstalledPackages().size());
-                    for (PackagesEntry packageItems : Packages.getUninstalledPackages()) {
-                        if (searchText == null || packageItems.getPackageName().toLowerCase().contains(searchText.toLowerCase())) {
-                            mPackages.add(new PackagesEntry(packageItems.getPackageName(), packageItems.getAPKPath(), packageItems.getRemovalRecommendation(), packageItems.getUADDescription(), packageItems.getAppType(), packageItems.isInstalled()));
-                        }
-                        if (progressBar.getProgress() < Packages.getUninstalledPackages().size()) {
+                    String query = searchText == null ? "" : searchText.toLowerCase(Locale.ROOT);
+
+                    int max = Packages.getUninstalledPackages().size();
+                    progressBar.setMax(max);
+                    for (PackagesEntry pkg : Packages.getUninstalledPackages()) {
+                        if (!query.isEmpty() && !pkg.getPackageName().toLowerCase(Locale.ROOT).contains(query)) continue;
+
+                        mPackages.add(pkg);
+                        if (progressBar.getProgress() < max) {
                             progressBar.setProgress(progressBar.getProgress() + 1);
                         } else {
                             progressBar.setProgress(0);
@@ -195,8 +199,7 @@ public class RemovedPackagesFragment extends Fragment {
                 if (!isAdded()) return;
 
                 progressLayout.setVisibility(GONE);
-                headerLayout.setVisibility(VISIBLE);
-                contentLayout.setVisibility(VISIBLE);
+                navigationView.setVisibility(VISIBLE);
                 adapter.updateData(mPackages);
                 editText.setHint(getString(R.string.search_hint, adapter.getItemCount()));
                 mSearchText = searchText;

@@ -1,0 +1,79 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingHorizontal="2dp"
+    android:paddingVertical="2dp" >
+
+    <include layout="@layout/layout_progress" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" >
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/search_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:strokeColor="?attr/colorPrimary"
+            android:layout_marginTop="8dp"
+            app:cardCornerRadius="45dp"
+            android:visibility="gone" >
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="15dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/search_word"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:hint="@string/search_hint"
+                    android:paddingStart="5dp"
+                    android:inputType="text"
+                    android:paddingEnd="40dp"
+                    android:textColor="?android:textColorPrimary"
+                    android:gravity="center_vertical" />
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/apply"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center_vertical"
+                    android:src="@drawable/ic_check"
+                    android:tint="?attr/colorPrimary"
+                    android:background="?attr/selectableItemBackgroundBorderless" />
+            </FrameLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/batch_options"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:icon="@drawable/ic_select"
+        android:layout_margin="75dp"
+        android:textAllCaps="false"
+        app:iconGravity="textStart"
+        android:visibility="gone"
+        android:textStyle="bold"
+        app:cornerRadius="16dp"
+        android:padding="10dp"
+        app:iconPadding="5dp" />
+</androidx.constraintlayout.widget.ConstraintLayout>
