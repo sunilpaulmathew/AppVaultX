@@ -1,0 +1,92 @@
+package navView;
+
+import android.content.Context;
+import android.util.AttributeSet;
+import android.view.View;
+import android.widget.FrameLayout;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.List;
+
+import bottomNavView.R;
+import navView.adapters.NavViewAdapter;
+import navView.serializables.NavViewEntry;
+
+/*
+ * Created by sunilpaulmathew <sunil.kde@gmail.com> on July 13, 2026
+ */
+public class NavView extends FrameLayout {
+
+    private final RecyclerView recyclerView;
+    private NavViewAdapter adapter;
+    private OnItemSelectedListener itemSelectedListener;
+
+    public NavView(@NonNull Context context, @Nullable AttributeSet attrs) {
+        super(context, attrs);
+
+        View view = inflate(context, R.layout.layout_navview, this);
+        recyclerView = view.findViewById(R.id.recycler_view);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+    }
+
+    private Fragment getOrCreateFragment(NavViewEntry.FragmentSupplier supplier, int position) {
+        if (!(getContext() instanceof FragmentActivity) || supplier == null) {
+            return null;
+        }
+
+        FragmentManager fm = ((FragmentActivity) getContext()).getSupportFragmentManager();
+        String tag = "nav_tab_" + position;
+
+        Fragment fragment = fm.findFragmentByTag(tag);
+
+        if (fragment == null || fragment.isDetached()) {
+            fragment = supplier.create();
+        }
+
+        return fragment;
+    }
+
+    public void setNavigationItems(List<NavViewEntry> entries) {
+        adapter = new NavViewAdapter(entries, (fragmentSupplier, position) -> {
+            if (itemSelectedListener != null) {
+                Fragment fragment = getOrCreateFragment(fragmentSupplier, position);
+
+                if (fragment != null) {
+                    itemSelectedListener.onItemSelected(fragment, position);
+                }
+            }
+        });
+        recyclerView.setAdapter(adapter);
+    }
+
+    public interface OnItemSelectedListener {
+        void onItemSelected(Fragment fragment, int position);
+    }
+
+    public void setOnItemSelectedListener(OnItemSelectedListener listener) {
+        this.itemSelectedListener = listener;
+    }
+
+    public void setSelectedPosition(int position) {
+        if (adapter != null) {
+            adapter.setSelectedPosition(position);
+
+            NavViewEntry entry = adapter.getNavViewEntry(position);
+            if (entry != null && itemSelectedListener != null) {
+                Fragment fragment = getOrCreateFragment(entry.getSupplier(), position);
+                if (fragment != null) {
+                    itemSelectedListener.onItemSelected(fragment, position);
+                }
+            }
+        }
+    }
+
+}

@@ -53,6 +53,7 @@ android {
 }
 
 dependencies {
+    api(project(":navView"))
     implementation libs.material
     implementation libs.preference
     implementation libs.shizukuApi

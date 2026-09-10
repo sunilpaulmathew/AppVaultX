@@ -2,17 +2,15 @@ package in.sunilpaulmathew.appvaultx.activities;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.View;
-import android.widget.FrameLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.Fragment;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import in.sunilpaulmathew.appvaultx.R;
 import in.sunilpaulmathew.appvaultx.dialogs.AccessUnavilableDialog;
@@ -25,6 +23,8 @@ import in.sunilpaulmathew.appvaultx.utils.Settings;
 import in.sunilpaulmathew.appvaultx.utils.ShizukuPermissionChecker;
 import in.sunilpaulmathew.appvaultx.utils.ShizukuShell;
 import in.sunilpaulmathew.appvaultx.utils.Utils;
+import navView.NavView;
+import navView.serializables.NavViewEntry;
 import rikka.shizuku.Shizuku;
 
 /*
@@ -46,9 +46,8 @@ public class AppVaultXActivity extends AppCompatActivity {
         // Initialize Crash Reporter
         new CrashReport(this).initialize();
 
-        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        NavView mNavView = findViewById(R.id.nav_view);
         View layoutRoot = findViewById(R.id.layout_root);
-        FrameLayout fragmentContainer = findViewById(R.id.fragment_container);
 
         ViewCompat.setOnApplyWindowInsetsListener(layoutRoot, (view, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -63,31 +62,23 @@ public class AppVaultXActivity extends AppCompatActivity {
             return insets;
         });
 
-        Menu menu = bottomNav.getMenu();
-        menu.add(Menu.NONE, 0, Menu.NONE, null).setIcon(R.drawable.ic_apps);
-        menu.add(Menu.NONE, 1, Menu.NONE, null).setIcon(R.drawable.ic_delete);
-        menu.add(Menu.NONE, 2, Menu.NONE, null).setIcon(R.drawable.ic_menu);
+        List<NavViewEntry> data = new CopyOnWriteArrayList<>();
+        data.add(new NavViewEntry(InstalledPackagesFragment::new, R.drawable.ic_apps));
+        data.add(new NavViewEntry(RemovedPackagesFragment::new, R.drawable.ic_delete));
+        data.add(new NavViewEntry(SettingsFragment::new, R.drawable.ic_menu));
 
-        bottomNav.setOnItemSelectedListener(item -> {
-            Fragment fragment = null;
-            if (item.getItemId() == 0) fragment = new InstalledPackagesFragment();
-            else if (item.getItemId() == 1) fragment = new RemovedPackagesFragment();
-            else if (item.getItemId() == 2) fragment = new SettingsFragment();
+        mNavView.setNavigationItems(data);
 
-            if (fragment != null) {
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_container, fragment)
-                        .commitAllowingStateLoss();
-            }
-            return true;
-        });
+        mNavView.setOnItemSelectedListener((fragment, position) -> getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .commit()
+        );
 
         if (savedInstanceState == null) {
-            bottomNav.setSelectedItemId(0);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    new InstalledPackagesFragment()).commit();
         }
-
-        bottomNav.post(() -> fragmentContainer.setPadding(0, 0, 0, bottomNav.getHeight()));
 
         if (!Utils.getBoolean("welcome_dialog_viewed", false, this)) {
             new WelcomeDialog(this);

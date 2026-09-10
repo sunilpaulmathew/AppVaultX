@@ -12,3 +12,4 @@ shizukuProvider = { module = "dev.rikka.shizuku:provider", version.ref = "shizuk
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
+androidLibrary = { id = "com.android.library", version.ref = "agp" }

@@ -6,6 +6,7 @@ import static android.view.View.VISIBLE;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -20,11 +21,9 @@ import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.widget.ContentLoadingProgressBar;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.tabs.TabLayout;
@@ -46,8 +45,10 @@ import in.sunilpaulmathew.appvaultx.dialogs.ProgressDialog;
 import in.sunilpaulmathew.appvaultx.serializable.PackagesEntry;
 import in.sunilpaulmathew.appvaultx.utils.Async;
 import in.sunilpaulmathew.appvaultx.utils.Packages;
+import in.sunilpaulmathew.appvaultx.utils.Settings;
 import in.sunilpaulmathew.appvaultx.utils.ShizukuShell;
 import in.sunilpaulmathew.appvaultx.utils.Utils;
+import navView.NavView;
 
 /*
  * Created by sunilpaulmathew <sunil.kde@gmail.com> on October 18, 2025
@@ -55,7 +56,7 @@ import in.sunilpaulmathew.appvaultx.utils.Utils;
 public class InstalledPackagesFragment extends Fragment {
 
     private boolean mExit;
-    private BottomNavigationView navigationView;
+    private NavView navigationView;
     private ContentLoadingProgressBar progressBar;
     private LinearLayoutCompat contentLayout, headerLayout, progressLayout;
     private MaterialButton batchOptions;
@@ -65,7 +66,6 @@ public class InstalledPackagesFragment extends Fragment {
     private List<PackagesEntry> mPackages;
     private final List<PackagesEntry> selectedApps = new CopyOnWriteArrayList<>();
     private String mSearchText = null;
-    private final Handler mHandler = new Handler();
 
     @SuppressLint({"SetTextI18n", "StringFormatMatches"})
     @Nullable
@@ -74,7 +74,6 @@ public class InstalledPackagesFragment extends Fragment {
         View mRootView = inflater.inflate(R.layout.fragment_packages, container, false);
 
         AppCompatImageButton apply = mRootView.findViewById(R.id.apply);
-        navigationView = requireActivity().findViewById(R.id.bottom_navigation);
         progressBar = mRootView.findViewById(R.id.progress);
         batchOptions = mRootView.findViewById(R.id.batch_options);
         MaterialCardView searchCard = mRootView.findViewById(R.id.search_card);
@@ -89,6 +88,10 @@ public class InstalledPackagesFragment extends Fragment {
         TabLayout tabLayout = mRootView.findViewById(R.id.tab_layout);
 
         title.setText(getString(R.string.apps_installed));
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
+
+        navigationView = Settings.getNavView(requireActivity());
 
         tabLayout.setVisibility(VISIBLE);
         for (String label : getLabels()) {
@@ -171,6 +174,8 @@ public class InstalledPackagesFragment extends Fragment {
             }
         });
 
+        Settings.applyMargin(recyclerView, requireActivity());
+
         requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -186,7 +191,7 @@ public class InstalledPackagesFragment extends Fragment {
                 } else {
                     Utils.toast(getString(R.string.press_back), requireActivity()).show();
                     mExit = true;
-                    mHandler.postDelayed(() -> mExit = false, 2000);
+                    new Handler(Looper.getMainLooper()).postDelayed(() -> mExit = false, 2000);
                 }
             }
         });
@@ -231,8 +236,6 @@ public class InstalledPackagesFragment extends Fragment {
                     if (Utils.getBoolean("reverse_order", false, requireActivity())) {
                         Collections.reverse(mPackages);
                     }
-
-                    adapter = new InstalledPackagesAdapter(mPackages, selectedApps, batchOptions, requireActivity());
                 } catch (Exception ignored) {}
             }
 
@@ -281,15 +284,10 @@ public class InstalledPackagesFragment extends Fragment {
                 headerLayout.setVisibility(VISIBLE);
                 contentLayout.setVisibility(VISIBLE);
                 navigationView.setVisibility(VISIBLE);
-                mSearchText = searchText;
-                editText.setHint(getString(R.string.search_hint, adapter.getItemCount()));
-                recyclerView.setItemAnimator(null);
-                recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
-                while (recyclerView.getItemDecorationCount() > 0) {
-                    recyclerView.removeItemDecorationAt(0);
-                }
-                recyclerView.addItemDecoration(new DividerItemDecoration(requireActivity(), DividerItemDecoration.VERTICAL));
+                adapter = new InstalledPackagesAdapter(mPackages, selectedApps, batchOptions, requireActivity());
                 recyclerView.setAdapter(adapter);
+                editText.setHint(getString(R.string.search_hint, adapter.getItemCount()));
+                mSearchText = searchText;
             }
         };
     }

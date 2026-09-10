@@ -48,8 +48,6 @@ public class SettingsFragment extends Fragment {
         String titleText = getString(R.string.app_name) + " " + BuildConfig.VERSION_NAME;
         title.setText(titleText);
 
-        recyclerView.setItemAnimator(null);
-
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
 
         recyclerView.setAdapter(new SettingsAdapter(getData(), REQUEST_PERMISSION_RESULT_LISTENER));
@@ -61,6 +59,8 @@ public class SettingsFragment extends Fragment {
             settings.setData(uri);
             startActivity(settings);
         });
+
+        Settings.applyMargin(recyclerView, requireActivity());
 
         requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
             @Override

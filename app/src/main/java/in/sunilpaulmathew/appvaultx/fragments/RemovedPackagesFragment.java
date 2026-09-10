@@ -19,7 +19,6 @@ import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.widget.ContentLoadingProgressBar;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -82,7 +81,7 @@ public class RemovedPackagesFragment extends Fragment {
 
         title.setText(getString(R.string.apps_removed));
 
-        recyclerView.setItemAnimator(null);
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
 
         searchButton.setOnClickListener(v -> {
             if (searchCard.getVisibility() == VISIBLE) {
@@ -140,6 +139,8 @@ public class RemovedPackagesFragment extends Fragment {
             }
         });
 
+        Settings.applyMargin(recyclerView, requireActivity());
+
         requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -186,7 +187,6 @@ public class RemovedPackagesFragment extends Fragment {
                     if (Utils.getBoolean("reverse_order", false, requireActivity())) {
                         Collections.reverse(mPackages);
                     }
-                    adapter = new RemovedPackagesAdapter(mPackages, selectedApps, batchOptions, requireActivity());
                 } catch (NullPointerException ignored) {}
             }
 
@@ -197,14 +197,10 @@ public class RemovedPackagesFragment extends Fragment {
                 progressLayout.setVisibility(GONE);
                 headerLayout.setVisibility(VISIBLE);
                 contentLayout.setVisibility(VISIBLE);
-                mSearchText = searchText;
-                editText.setHint(getString(R.string.search_hint, adapter.getItemCount()));
-                recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
-                while (recyclerView.getItemDecorationCount() > 0) {
-                    recyclerView.removeItemDecorationAt(0);
-                }
-                recyclerView.addItemDecoration(new DividerItemDecoration(requireActivity(), DividerItemDecoration.VERTICAL));
+                adapter = new RemovedPackagesAdapter(mPackages, selectedApps, batchOptions, requireActivity());
                 recyclerView.setAdapter(adapter);
+                editText.setHint(getString(R.string.search_hint, adapter.getItemCount()));
+                mSearchText = searchText;
             }
         };
     }

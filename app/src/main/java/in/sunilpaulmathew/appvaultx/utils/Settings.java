@@ -5,12 +5,14 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.graphics.Rect;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.color.DynamicColors;
 
 import java.util.ArrayList;
@@ -18,6 +20,7 @@ import java.util.List;
 
 import in.sunilpaulmathew.appvaultx.R;
 import in.sunilpaulmathew.appvaultx.serializable.PolicyEntry;
+import navView.NavView;
 import rikka.shizuku.Shizuku;
 
 /*
@@ -84,6 +87,10 @@ public class Settings {
         return mData;
     }
 
+    public static NavView getNavView(Activity activity) {
+        return activity.findViewById(R.id.nav_view);
+    }
+
     public static String getAppTheme(Context context) {
         int appTheme = Utils.getInt("appTheme", 0, context);
         switch (appTheme) {
@@ -125,6 +132,20 @@ public class Settings {
         };
     }
 
+    public static void applyMargin(RecyclerView recyclerView, Activity activity) {
+        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(@NonNull Rect outRect, @NonNull View view,
+                                       @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+                if (parent.getChildAdapterPosition(view) == state.getItemCount() - 1) {
+                    outRect.bottom = getNavView(activity).getHeight();
+                } else {
+                    outRect.bottom = 0;
+                }
+            }
+        });
+    }
+
     public static void initializeAppTheme(Context context) {
         int appTheme = Utils.getInt("appTheme", 0, context);
         switch (appTheme) {
@@ -142,8 +163,7 @@ public class Settings {
     }
 
     public static void navigateToFragment(int position, Activity activity) {
-        BottomNavigationView bottomNavigationView = activity.findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setSelectedItemId(position);
+        getNavView(activity).setSelectedPosition(position);
     }
 
     public static void setSlideInAnimation(final View viewToAnimate, int position) {
