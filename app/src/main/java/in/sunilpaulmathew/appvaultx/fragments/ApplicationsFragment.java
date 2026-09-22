@@ -102,7 +102,7 @@ public class ApplicationsFragment extends Fragment {
         ApplicationsViewModel viewModel = new ViewModelProvider(requireActivity()).get(ApplicationsViewModel.class);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
-        adapter = new ApplicationsAdapter(new CopyOnWriteArrayList<>(), selectedApps, batchOptions, requireActivity());
+        adapter = new ApplicationsAdapter(new CopyOnWriteArrayList<>(), selectedApps, batchOptions, 0, requireActivity());
         recyclerView.setAdapter(adapter);
 
         navigationView = Settings.getNavView(requireActivity());
@@ -181,11 +181,10 @@ public class ApplicationsFragment extends Fragment {
             public void onPreExecute() {
                 progressLayout.setVisibility(VISIBLE);
                 navigationView.setVisibility(GONE);
-                mPackages = new CopyOnWriteArrayList<>();
             }
 
-            @Override
-            public void doInBackground() {
+            private List<PackagesEntry> getData() {
+                List<PackagesEntry> data = new CopyOnWriteArrayList<>();
                 try {
                     String query = searchText == null ? "" : searchText.toLowerCase(Locale.ROOT);
 
@@ -197,7 +196,7 @@ public class ApplicationsFragment extends Fragment {
 
                         if (!query.isEmpty() && !pkg.getPackageName().toLowerCase(Locale.ROOT).contains(query)) continue;
 
-                        mPackages.add(pkg);
+                        data.add(pkg);
                         if (progressBar.getProgress() < max) {
                             progressBar.setProgress(progressBar.getProgress() + 1);
                         } else {
@@ -207,12 +206,18 @@ public class ApplicationsFragment extends Fragment {
 
                     Utils.saveInt("appType", mTabPosition, requireActivity());
 
-                    mPackages.sort((lhs, rhs) -> String.CASE_INSENSITIVE_ORDER.compare(lhs.getPackageName(), rhs.getPackageName()));
+                    data.sort((lhs, rhs) -> String.CASE_INSENSITIVE_ORDER.compare(lhs.getPackageName(), rhs.getPackageName()));
 
                     if (Utils.getBoolean("reverse_order", false, requireActivity())) {
-                        Collections.reverse(mPackages);
+                        Collections.reverse(data);
                     }
                 } catch (Exception ignored) {}
+                return data;
+            }
+
+            @Override
+            public void doInBackground() {
+                mPackages = getData();
             }
 
             private boolean matchesAppType(int selectedType, PackagesEntry pkg) {
@@ -230,21 +235,18 @@ public class ApplicationsFragment extends Fragment {
                         // User apps
                         return type == 0 || type == 3;
                     case 3:
-                        // Disabled
-                        return type == 3 || type == 4 || type == 5 || type == 6;
-                    case 4:
                         // Debuggable
                         return type == 6 || type == 7;
-                    case 5:
+                    case 4:
                         // Safe to remove
                         return "Recommended".equals(rec);
-                    case 6:
+                    case 5:
                         // Likely safe
                         return "Advanced".equals(rec);
-                    case 7:
+                    case 6:
                         // Likely dangerous
                         return "Expert".equals(rec);
-                    case 8:
+                    case 7:
                         // Dangerous
                         return "Unsafe".equals(rec);
                     default:
@@ -267,6 +269,7 @@ public class ApplicationsFragment extends Fragment {
 
     private Async removeApps(List<String> apps) {
         return new Async() {
+            private  boolean failed = false;
             private ProgressDialog progressDialog;
             @Override
             public void onPreExecute() {
@@ -278,25 +281,29 @@ public class ApplicationsFragment extends Fragment {
             @Override
             public void doInBackground() {
                 String cmd = apps.stream()
-                        .map(pkg -> "pm uninstall --user " + Utils.getUserID() + " " + pkg)
+                        .map(pkg -> "pm enable --user " + Utils.getUserID() + " " + pkg)
                         .collect(Collectors.joining("; "));
                 ShizukuShell.runCommands(cmd);
 
                 for (String packageName : apps) {
-                    PackagesEntry entry = Packages.getPackages().stream().filter(i -> i.getPackageName().equals(packageName)).findFirst().orElse(null);
-                    int index = IntStream.range(0, mPackages.size())
-                            .filter(i -> mPackages.get(i).getPackageName().equals(packageName))
-                            .findFirst()
-                            .orElse(-1);
-                    if (entry != null) {
-                        selectedApps.remove(entry);
-                        Packages.getPackages().remove(entry);
-                        if (entry.isSystemApp()) {
-                            Packages.getUninstalledPackages().add(new PackagesEntry(entry.getPackageName(), entry.getAPKPath(), entry.getRemovalRecommendation(), entry.getUADDescription(), entry.getAppType(), false));
+                    if (!Packages.isAppInstalled(packageName, requireActivity())) {
+                        PackagesEntry entry = Packages.getPackages().stream().filter(i -> i.getPackageName().equals(packageName)).findFirst().orElse(null);
+                        int index = IntStream.range(0, mPackages.size())
+                                .filter(i -> mPackages.get(i).getPackageName().equals(packageName))
+                                .findFirst()
+                                .orElse(-1);
+                        if (entry != null) {
+                            selectedApps.remove(entry);
+                            Packages.getPackages().remove(entry);
+                            if (entry.isSystemApp()) {
+                                Packages.getUninstalledPackages().add(new PackagesEntry(entry.getPackageName(), entry.getAPKPath(), entry.getRemovalRecommendation(), entry.getUADDescription(), entry.getAppType(), false));
+                            }
                         }
-                    }
-                    if (index != -1) {
-                        mPackages.remove(index);
+                        if (index != -1) {
+                            mPackages.remove(index);
+                        }
+                    } else {
+                        failed = true;
                     }
                 }
             }
@@ -306,6 +313,10 @@ public class ApplicationsFragment extends Fragment {
                 if (!isAdded()) return;
                 progressDialog.dismissDialog();
                 adapter.updateData(mPackages);
+
+                if (failed) {
+                    Utils.toast(R.string.remove_selected_failed, requireActivity()).show();
+                }
             }
         };
     }

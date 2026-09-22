@@ -16,6 +16,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import in.sunilpaulmathew.appvaultx.R;
 import in.sunilpaulmathew.appvaultx.dialogs.AccessUnavilableDialog;
 import in.sunilpaulmathew.appvaultx.dialogs.WelcomeDialog;
+import in.sunilpaulmathew.appvaultx.fragments.DisabledPackagesFragment;
 import in.sunilpaulmathew.appvaultx.fragments.InstalledPackagesFragment;
 import in.sunilpaulmathew.appvaultx.fragments.RemovedPackagesFragment;
 import in.sunilpaulmathew.appvaultx.fragments.SettingsFragment;
@@ -93,6 +94,7 @@ public class AppVaultXActivity extends BaseActivity {
             private List<NavViewEntry> getData() {
                 List<NavViewEntry> data = new CopyOnWriteArrayList<>();
                 data.add(new NavViewEntry(InstalledPackagesFragment::new, R.drawable.ic_apps));
+                data.add(new NavViewEntry(DisabledPackagesFragment::new, R.drawable.ic_cancel));
                 data.add(new NavViewEntry(RemovedPackagesFragment::new, R.drawable.ic_delete));
                 data.add(new NavViewEntry(SettingsFragment::new, R.drawable.ic_menu));
                 return data;

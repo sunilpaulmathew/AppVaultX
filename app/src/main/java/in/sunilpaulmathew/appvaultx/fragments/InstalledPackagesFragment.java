@@ -78,7 +78,6 @@ public class InstalledPackagesFragment extends Fragment {
                 getString(R.string.app_type_system_title),
                 getString(R.string.app_type_system_updated_title),
                 getString(R.string.app_type_user_title),
-                getString(R.string.app_type_disabled_title),
                 getString(R.string.app_type_debuggable_title),
                 getString(R.string.uad_status_recommended_title),
                 getString(R.string.uad_status_advanced_title),

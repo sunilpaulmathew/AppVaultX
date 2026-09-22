@@ -28,7 +28,6 @@
     <string name="app_type_debuggable">%s is built for development; may expose debug information.</string>
     <string name="app_type_debuggable_title">Debuggable</string>
     <string name="app_type_disabled">%s is currently turned off and not active on the device.</string>
-    <string name="app_type_disabled_title">Disabled</string>
     <string name="app_type_system_title">System</string>
     <string name="app_type_system">%s is a preinstalled app and is a part of the Android system.</string>
     <string name="app_type_system_updated">%s is a system app that has been updated with a newer version.</string>
@@ -36,6 +35,7 @@
     <string name="app_type_user">%s is installed manually by the user or from the Play Store.</string>
     <string name="app_type_user_title">User.</string>
     <string name="app_version">AppVaultX %s</string>
+    <string name="apps_disabled">Disabled Apps</string>
     <string name="apps_installed">Installed Apps</string>
     <string name="apps_removed">Removed Apps</string>
     <string name="applying">Applying…</string>
@@ -72,9 +72,11 @@
     <string name="press_back">Press back again to exit…</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="privacy_policy_description">Your privacy matters: Learn more</string>
+    <string name="re_enable_selected">Re-enable selected (%s)</string>
     <string name="reverse">Reverse</string>
     <string name="remove">Remove</string>
     <string name="remove_selected">Remove selected (%s)</string>
+    <string name="remove_selected_failed">Failed to remove some apps. Tap the batch button to know more</string>
     <string name="remove_user_app_message">However, you have selected a regular user app, which you can easily uninstall from your app drawer or using any standard app manager.</string>
     <string name="report">Report</string>
     <string name="request_permission">Request Permission</string>

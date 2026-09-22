@@ -105,6 +105,10 @@ public class Utils {
         return buf.toString("UTF-8");
     }
 
+    public static Toast toast(int strRes, Context context) {
+        return Toast.makeText(context, strRes, Toast.LENGTH_LONG);
+    }
+
     public static Toast toast(String message, Context context) {
         return Toast.makeText(context, message, Toast.LENGTH_LONG);
     }

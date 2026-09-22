@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textview.MaterialTextView;
 
 import java.util.Collections;
 import java.util.List;
@@ -35,7 +36,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import in.sunilpaulmathew.appvaultx.R;
-import in.sunilpaulmathew.appvaultx.adapters.RemovedPackagesAdapter;
+import in.sunilpaulmathew.appvaultx.adapters.ApplicationsAdapter;
 import in.sunilpaulmathew.appvaultx.dialogs.BatchDialog;
 import in.sunilpaulmathew.appvaultx.dialogs.ProgressDialog;
 import in.sunilpaulmathew.appvaultx.serializable.PackagesEntry;
@@ -51,11 +52,11 @@ import navView.NavView;
  */
 public class RemovedPackagesFragment extends Fragment {
 
+    private ApplicationsAdapter adapter;
     private ContentLoadingProgressBar progressBar;
     private LinearLayoutCompat progressLayout;
     private List<PackagesEntry> mPackages;
     private NavView navigationView;
-    private RemovedPackagesAdapter adapter;
     private String mSearchText = null;
     private TextInputEditText editText;
     private final List<PackagesEntry> selectedApps = new CopyOnWriteArrayList<>();
@@ -64,20 +65,23 @@ public class RemovedPackagesFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View mRootView = inflater.inflate(R.layout.fragment_packages_removed, container, false);
+        View mRootView = inflater.inflate(R.layout.fragment_packages, container, false);
 
         AppCompatImageButton apply = mRootView.findViewById(R.id.apply);
         progressBar = mRootView.findViewById(R.id.progress);
         MaterialButton batchOptions = mRootView.findViewById(R.id.batch_options);
         MaterialCardView searchCard = mRootView.findViewById(R.id.search_card);
+        MaterialTextView title = mRootView.findViewById(R.id.title);
         progressLayout = mRootView.findViewById(R.id.progress_layout);
         RecyclerView recyclerView = mRootView.findViewById(R.id.recycler_view);
         editText = mRootView.findViewById(R.id.search_word);
         MaterialButton searchButton = mRootView.findViewById(R.id.search);
         MaterialButton sortButton = mRootView.findViewById(R.id.sort);
 
+        title.setText(R.string.apps_removed);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
-        adapter = new RemovedPackagesAdapter(new CopyOnWriteArrayList<>(), selectedApps, batchOptions, requireActivity());
+        adapter = new ApplicationsAdapter(new CopyOnWriteArrayList<>(), selectedApps, batchOptions, 2, requireActivity());
         recyclerView.setAdapter(adapter);
 
         navigationView = Settings.getNavView(requireActivity());
@@ -168,8 +172,8 @@ public class RemovedPackagesFragment extends Fragment {
                 mPackages = new CopyOnWriteArrayList<>();
             }
 
-            @Override
-            public void doInBackground() {
+            private List<PackagesEntry> getData() {
+                List<PackagesEntry> data = new CopyOnWriteArrayList<>();
                 try {
                     String query = searchText == null ? "" : searchText.toLowerCase(Locale.ROOT);
 
@@ -178,7 +182,7 @@ public class RemovedPackagesFragment extends Fragment {
                     for (PackagesEntry pkg : Packages.getUninstalledPackages()) {
                         if (!query.isEmpty() && !pkg.getPackageName().toLowerCase(Locale.ROOT).contains(query)) continue;
 
-                        mPackages.add(pkg);
+                        data.add(pkg);
                         if (progressBar.getProgress() < max) {
                             progressBar.setProgress(progressBar.getProgress() + 1);
                         } else {
@@ -186,12 +190,18 @@ public class RemovedPackagesFragment extends Fragment {
                         }
                     }
 
-                    mPackages.sort((lhs, rhs) -> String.CASE_INSENSITIVE_ORDER.compare(lhs.getPackageName(), rhs.getPackageName()));
+                    data.sort((lhs, rhs) -> String.CASE_INSENSITIVE_ORDER.compare(lhs.getPackageName(), rhs.getPackageName()));
 
                     if (Utils.getBoolean("reverse_order", false, requireActivity())) {
-                        Collections.reverse(mPackages);
+                        Collections.reverse(data);
                     }
                 } catch (NullPointerException ignored) {}
+                return data;
+            }
+
+            @Override
+            public void doInBackground() {
+                mPackages = getData();
             }
 
             @Override

@@ -67,13 +67,15 @@ import rikka.shizuku.Shizuku;
 public class ApplicationsAdapter extends RecyclerView.Adapter<ApplicationsAdapter.ViewHolder> {
 
     private final Activity activity;
+    private final int appType; // 0: Installed, 1: Disabled, 2: Removed
     private final List<PackagesEntry> data, selectedApps;
     private final MaterialButton batchOptions;
 
-    public ApplicationsAdapter(List<PackagesEntry> data, List<PackagesEntry> selectedApps, MaterialButton batchOptions, Activity activity) {
+    public ApplicationsAdapter(List<PackagesEntry> data, List<PackagesEntry> selectedApps, MaterialButton batchOptions, int appType, Activity activity) {
         this.data = data;
         this.selectedApps = selectedApps;
         this.batchOptions = batchOptions;
+        this.appType = appType;
         this.activity = activity;
     }
 
@@ -103,7 +105,7 @@ public class ApplicationsAdapter extends RecyclerView.Adapter<ApplicationsAdapte
 
             holder.appIcon.setOnClickListener(v -> {
                 int currentPosition = holder.getBindingAdapterPosition();
-                if (this.data.get(currentPosition).getRemovalRecommendation() != null && this.data.get(currentPosition).getRemovalRecommendation().equalsIgnoreCase("unsafe") && Utils.getBoolean("unsafeAppRemovalProtection", true, v.getContext())) {
+                if (this.appType == 0 && this.data.get(currentPosition).getRemovalRecommendation() != null && this.data.get(currentPosition).getRemovalRecommendation().equalsIgnoreCase("unsafe") && Utils.getBoolean("unsafeAppRemovalProtection", true, v.getContext())) {
                     if (!Utils.getBoolean("unsafe_appsWarning_viewed", false, v.getContext())) {
                         new UnsafeAppDialog(this.data.get(currentPosition), v.getContext());
                     }
@@ -132,12 +134,14 @@ public class ApplicationsAdapter extends RecyclerView.Adapter<ApplicationsAdapte
         if (selectedApps.isEmpty()) {
             batchOptions.setVisibility(GONE);
         } else {
-            batchOptions.setText(batchOptions.getContext().getString(R.string.remove_selected, selectedApps.size()));
+            batchOptions.setText(batchOptions.getContext().getString(this.appType == 2 ? R.string.restore_selected : this.appType == 1 ? R.string.re_enable_selected : R.string.remove_selected, selectedApps.size()));
             batchOptions.setVisibility(VISIBLE);
         }
     }
 
-    public void updateData(@NonNull List<PackagesEntry> newData) {
+    public void updateData(@NonNull List<PackagesEntry> incoming) {
+        final List<PackagesEntry> newData = new ArrayList<>(incoming);
+
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(new DiffUtil.Callback() {
             @Override
             public int getOldListSize() {
@@ -151,12 +155,17 @@ public class ApplicationsAdapter extends RecyclerView.Adapter<ApplicationsAdapte
 
             @Override
             public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-                return Objects.equals(data.get(oldItemPosition).getPackageName(), newData.get(newItemPosition).getPackageName());
+                return Objects.equals(data.get(oldItemPosition).getPackageName(),
+                        newData.get(newItemPosition).getPackageName());
             }
 
             @Override
             public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-                return Objects.equals(data.get(oldItemPosition).getPackageName(), newData.get(newItemPosition).getPackageName());
+                PackagesEntry oldItem = data.get(oldItemPosition);
+                PackagesEntry newItem = newData.get(newItemPosition);
+
+                return Objects.equals(oldItem.getPackageName(), newItem.getPackageName())
+                        && oldItem.getAppType() == newItem.getAppType();
             }
         });
 
@@ -194,7 +203,7 @@ public class ApplicationsAdapter extends RecyclerView.Adapter<ApplicationsAdapte
             view.setOnClickListener(v -> {
                 PackagesEntry packageItems = data.get(getBindingAdapterPosition());
                 if (!Settings.isShizukuIgnored(v.getContext()) && Shizuku.pingBinder() && Shizuku.getVersion() >= 11 && Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED && !selectedApps.isEmpty()) {
-                    if (packageItems.getRemovalRecommendation() != null && packageItems.getRemovalRecommendation().equalsIgnoreCase("unsafe") && Utils.getBoolean("unsafeAppRemovalProtection", true, v.getContext())) {
+                    if (appType == 0 && packageItems.getRemovalRecommendation() != null && packageItems.getRemovalRecommendation().equalsIgnoreCase("unsafe") && Utils.getBoolean("unsafeAppRemovalProtection", true, v.getContext())) {
                         if (!Utils.getBoolean("unsafe_appsWarning_viewed", false, v.getContext())) {
                             new UnsafeAppDialog(packageItems, v.getContext());
                         }
@@ -210,25 +219,29 @@ public class ApplicationsAdapter extends RecyclerView.Adapter<ApplicationsAdapte
 
                 menuItems.add(new MenuEntry(R.string.app_info, R.drawable.ic_info, 9));
 
-                if (packageItems.launchIntent(v.getContext()) != null) {
+                if (appType == 0 && packageItems.launchIntent(v.getContext()) != null) {
                     menuItems.add(new MenuEntry(R.string.open_app, R.drawable.ic_open, 0));
                 }
 
-                if (packageItems.isAppDisabled()) {
-                    menuItems.add(new MenuEntry(R.string.enable_app, R.drawable.ic_enable, 1));
+                if (appType == 2) {
+                    menuItems.add(new MenuEntry(R.string.restore, R.drawable.ic_reset, 10));
                 } else {
-                    menuItems.add(new MenuEntry(R.string.disable_app, R.drawable.ic_cancel, 1));
+                    if (packageItems.isAppDisabled()) {
+                        menuItems.add(new MenuEntry(R.string.enable_app, R.drawable.ic_enable, 1));
+                    } else {
+                        menuItems.add(new MenuEntry(R.string.disable_app, R.drawable.ic_cancel, 1));
+                    }
+                    if (!Settings.isShizukuIgnored(v.getContext()) && Shizuku.pingBinder() && Shizuku.getVersion() >= 11 &&
+                            Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED) {
+                        menuItems.add(new MenuEntry(R.string.app_ops_manage, R.drawable.ic_appops, 8));
+                    }
+                    menuItems.add(new MenuEntry(R.string.force_close, R.drawable.ic_close, 3));
+                    menuItems.add(new MenuEntry(R.string.clear_data, R.drawable.ic_reset, 2));
                 }
-                if (!Settings.isShizukuIgnored(v.getContext()) && Shizuku.pingBinder() && Shizuku.getVersion() >= 11 &&
-                        Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED) {
-                    menuItems.add(new MenuEntry(R.string.app_ops_manage, R.drawable.ic_appops, 8));
-                }
-                menuItems.add(new MenuEntry(R.string.force_close, R.drawable.ic_close, 3));
-                menuItems.add(new MenuEntry(R.string.clear_data, R.drawable.ic_reset, 2));
                 menuItems.add(new MenuEntry(R.string.save_apks, R.drawable.ic_download, 4));
                 menuItems.add(new MenuEntry(R.string.save_icon, R.drawable.ic_save, 5));
                 menuItems.add(new MenuEntry(R.string.settings, R.drawable.ic_settings, 6));
-                if (packageItems.getRemovalRecommendation() != null && !packageItems.getRemovalRecommendation().equalsIgnoreCase("unsafe") || !Utils.getBoolean("unsafeAppRemovalProtection", true, v.getContext())) {
+                if (appType < 2 && packageItems.getRemovalRecommendation() != null && !packageItems.getRemovalRecommendation().equalsIgnoreCase("unsafe") || !Utils.getBoolean("unsafeAppRemovalProtection", true, v.getContext())) {
                     menuItems.add(new MenuEntry(R.string.uninstall, R.drawable.ic_delete, 7));
                 }
 
@@ -289,20 +302,21 @@ public class ApplicationsAdapter extends RecyclerView.Adapter<ApplicationsAdapte
                                             }
                                             if (result.trim().contains("new state: enabled")) {
                                                 updatedEntry = new PackagesEntry(packageItems.getPackageName(), packageItems.getAPKPath(), packageItems.getRemovalRecommendation(), packageItems.getUADDescription(), setEnabled(), true);
+                                                Packages.getDisabledPackages().remove(packageItems);
+                                                Packages.getPackages().add(updatedEntry);
                                             } else {
                                                 updatedEntry = new PackagesEntry(packageItems.getPackageName(), packageItems.getAPKPath(), packageItems.getRemovalRecommendation(), packageItems.getUADDescription(), setDisabled(), true);
+                                                Packages.getDisabledPackages().add(updatedEntry);
+                                                Packages.getPackages().remove(packageItems);
                                             }
-                                            data.set(getBindingAdapterPosition(), updatedEntry);
-                                            int index = Packages.getPackages().indexOf(packageItems);
-                                            if (index != -1) {
-                                                Packages.getPackages().set(index, updatedEntry);
-                                            }
+
+                                            data.remove(packageItems);
                                         }
 
                                         @Override
                                         public void onPostExecute() {
                                             progressDialog.dismissDialog();
-                                            notifyItemChanged(getBindingAdapterPosition());
+                                            notifyItemRemoved(getBindingAdapterPosition());
                                         }
                                     }.execute();
                                 } else {
@@ -694,6 +708,46 @@ public class ApplicationsAdapter extends RecyclerView.Adapter<ApplicationsAdapte
                                         };
                                     }
                                 }.execute();
+                                break;
+                            case 10:
+                                if (!Settings.isShizukuIgnored(v.getContext()) && Shizuku.pingBinder() && Shizuku.getVersion() >= 11 &&
+                                        Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED) {
+                                    new Async() {
+                                        private ProgressDialog progressDialog;
+                                        private String result;
+
+                                        @Override
+                                        public void onPreExecute() {
+                                            progressDialog = new ProgressDialog(v.getContext());
+                                            progressDialog.setProgressStatus(R.string.applying);
+                                            progressDialog.startDialog();
+                                        }
+
+                                        @Override
+                                        public void doInBackground() {
+                                            result = ShizukuShell.runCommand("cmd package install-existing " + packageItems.getPackageName());
+                                            Packages.getUninstalledPackages().remove(packageItems);
+                                            Packages.getPackages().add(new PackagesEntry(packageItems.getPackageName(), packageItems.getAPKPath(), packageItems.getRemovalRecommendation(), packageItems.getUADDescription(), packageItems.getAppType(), true));
+                                        }
+
+                                        @Override
+                                        public void onPostExecute() {
+                                            progressDialog.dismissDialog();
+                                            data.remove(packageItems);
+                                            notifyItemRemoved(getBindingAdapterPosition());
+                                            if (result != null && !result.trim().isEmpty()) {
+                                                new MaterialAlertDialogBuilder(v.getContext())
+                                                        .setIcon(packageItems.getAppIcon())
+                                                        .setTitle(packageItems.getAppName())
+                                                        .setTitle(result)
+                                                        .setPositiveButton(R.string.cancel, (dialogInterface, i) -> {
+                                                        }).show();
+                                            }
+                                        }
+                                    }.execute();
+                                } else {
+                                    new ADBInstructionsDialog(packageItems, v.getContext().getString(R.string.restore_impossible_message), "cmd package install-existing " + packageItems.getPackageName(), v.getContext());
+                                }
                                 break;
                         }
                     }

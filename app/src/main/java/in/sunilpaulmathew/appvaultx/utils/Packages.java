@@ -21,7 +21,7 @@ import in.sunilpaulmathew.appvaultx.serializable.PackagesEntry;
  */
 public class Packages {
 
-    private static List<PackagesEntry> mInstalledPackageItems, mUninstalledPackageItems;
+    private static List<PackagesEntry> mDisabledPackageItems, mInstalledPackageItems, mUninstalledPackageItems;
 
     public static boolean isAppInstalled(String packageName, Context context) {
         PackageManager pm = context.getPackageManager();
@@ -67,6 +67,10 @@ public class Packages {
         return appType;
     }
 
+    public static List<PackagesEntry> getDisabledPackages() {
+        return mDisabledPackageItems;
+    }
+
     public static List<PackagesEntry> getPackages() {
         return mInstalledPackageItems;
     }
@@ -78,6 +82,7 @@ public class Packages {
     public static void loadPackages(ContentLoadingProgressBar progressBar, Context context) {
         if (isDataLoaded()) return;
         List<DebloaterEntry> debloaterEntries = getUADList(context);
+        mDisabledPackageItems = new CopyOnWriteArrayList<>();
         mInstalledPackageItems = new CopyOnWriteArrayList<>();
         mUninstalledPackageItems = new CopyOnWriteArrayList<>();
 
@@ -92,7 +97,18 @@ public class Packages {
         for (ApplicationInfo packageInfo : packages) {
             boolean installed = (packageInfo.flags & ApplicationInfo.FLAG_INSTALLED) != 0;
             int appType = getAppType(packageInfo);
-            if (installed) {
+            if (appType == 3 || appType == 4 || appType == 5 || appType == 6) {
+                mDisabledPackageItems.add(new PackagesEntry(packageInfo.packageName, packageInfo.sourceDir, debloaterEntries.stream()
+                        .filter(entry -> entry.getPackageName().equals(packageInfo.packageName))
+                        .map(DebloaterEntry::getRemovalStatus)
+                        .findFirst()
+                        .orElse(null), debloaterEntries.stream()
+                        .filter(entry -> entry.getPackageName().equals(packageInfo.packageName))
+                        .map(DebloaterEntry::getDescription)
+                        .findFirst()
+                        .orElse(null), appType, true)
+                );
+            } else if (installed) {
                 mInstalledPackageItems.add(new PackagesEntry(packageInfo.packageName, packageInfo.sourceDir, debloaterEntries.stream()
                         .filter(entry -> entry.getPackageName().equals(packageInfo.packageName))
                         .map(DebloaterEntry::getRemovalStatus)

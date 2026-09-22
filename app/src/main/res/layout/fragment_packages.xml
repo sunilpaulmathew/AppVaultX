@@ -24,11 +24,11 @@
             android:paddingHorizontal="10dp" >
 
             <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textColor="?attr/colorPrimary"
-                android:text="@string/apps_removed"
                 style="@style/AppTheme.Title" />
 
             <com.google.android.material.button.MaterialButton
