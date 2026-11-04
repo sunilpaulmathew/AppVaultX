@@ -1,20 +1,138 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
-    <!--Created by The Translator <https://play.google.com/store/apps/details?id=com.sunilpaulmathew.translator>-->
 
     <string name="app_theme">"Тема приложения"</string>
     <string name="app_theme_auto">"Авто"</string>
     <string name="app_theme_dark">"Тёмная"</string>
     <string name="app_theme_light">"Светлая"</string>
+    <string name="app_type_debuggable">"%s создан для разработки; может раскрыть отладочную информацию."</string>
+    <string name="app_type_debuggable_title">"Отладка"</string>
+    <string name="app_type_disabled">"%s сейчас выключено и неактивно на устройстве."</string>
+    <string name="app_type_system_title">"Системные"</string>
+    <string name="app_type_system">"%s — это предустановленное приложение, часть системы Android."</string>
+    <string name="app_type_system_updated">"%s — это системное приложение, обновленное до новой версии."</string>
+    <string name="app_type_system_updated_title">"Система (Обновл.)"</string>
+    <string name="app_type_user">"%s установлено пользователем вручную или из Play Store."</string>
+    <string name="app_type_user_title">"Польз."</string>
+    <string name="app_version">"AppVaultX %s"</string>
+    <string name="apps_installed">"Установленные"</string>
+    <string name="apps_removed">"Удалённые"</string>
+    <string name="applying">"Применяется…"</string>
     <string name="cancel">"Отмена"</string>
-    <string name="crash_report">"Отчет о сбое"</string>
-    <string name="crash_report_message">"Во время последнего использования данного приложения был обнаружен сбой. Чтобы помочь разработчику исправить эту проблему, пожалуйста, рассмотрите возможность отправки этого журнала сбоев на
-
-        электронную почту : smartpack.org@gmail.com"</string>
-    <string name="crash_reproduce_steps">"Действия по воспроизведению сбоя (необязательно)"</string>
-    <string name="press_back">"Нажмите ещё раз для выхода"</string>
-    <string name="report">"Отчет"</string>
+    <string name="clear_data">"Удалить данные"</string>
+    <string name="copyright_text">"Авторские права: © 2025, sunilpaulmathew"</string>
+    <string name="developer_contact">"Связаться с разработчиком"</string>
+    <string name="developer_contact_description">"Нужна помощь или хотите оставить отзыв? Свяжитесь с разработчиком"</string>
+    <string name="downgrade">"Снижение"</string>
+    <string name="force_close">"Принудительно закрыть"</string>
+    <string name="general">"Общий"</string>
+    <string name="ignore">"Игнорировать"</string>
+    <string name="install">"Установить"</string>
+    <string name="install_failed_message">"Сбой установки"</string>
+    <string name="install_success_message">"Установка завершена успешно"</string>
+    <string name="installing_message">"Установка %s…"</string>
+    <string name="loading">"Загрузка…"</string>
+    <string name="miscellaneous">"Прочее"</string>
+    <string name="never_show">"Никогда не показывать"</string>
+    <string name="open_app">"Открыть приложение"</string>
+    <string name="press_back">"Нажмите ещё раз для выхода…"</string>
+    <string name="privacy_policy">"Политика конфиденциальности"</string>
+    <string name="privacy_policy_description">"Ваша конфиденциальность важна: Узнать больше"</string>
+    <string name="reverse">"Обратный"</string>
+    <string name="remove">"Удалить"</string>
+    <string name="remove_selected">"Удалить выделенное (%s)"</string>
     <string name="request_permission">"Запросить разрешение"</string>
+    <string name="restore">"Восстановить"</string>
+    <string name="restore_selected">"Восстановить выделенное (%s)"</string>
+    <string name="save_apks">"Сохранить APK"</string>
+    <string name="save_icon">"Сохранить значок"</string>
+    <string name="save_item_message">"Выбранные элементы экспортируются в '%s'"</string>
+    <string name="search_hint">"Искать в %s элементах…"</string>
+    <string name="settings">"Настройки"</string>
+    <string name="shizuku_access_denied_description">"Доступ к сервису Shizuku запрещён для AppVaultX. Многие функции AppVaultX не будут работать без подходящей среды Shizuku."</string>
+    <string name="shizuku_access_denied_title">"Доступ к Shizuku запрещён для AppVaultX"</string>
+    <string name="shizuku_access_requirement_description">"AppVaultX интегрируется с Shizuku для выполнения безопасных действий на уровне системы без root-прав. Предоставление доступа к Shizuku обеспечивает повышенную производительность, автоматизацию и расширенные функции."</string>
+    <string name="shizuku_app_open_description">"Чтобы включить Shizuku на этом устройстве для AppVaultX:
+
+        1. Откройте приложение Shizuku.
+        2. Перейдите в раздел Авторизованные приложения.
+        3. Включите доступ для AppVaultX."</string>
+    <string name="shizuku_learn">"Изучите Shizuku"</string>
+    <string name="shizuku_learn_description">"Узнайте больше о Shizuku на сайте: shizuku.rikka.app."</string>
+    <string name="shizuku_mode">"Shizuku режим"</string>
+    <string name="shizuku_mode_disabled">"Отключён"</string>
+    <string name="shizuku_mode_enabled">"Включён"</string>
+    <string name="shizuku_mode_ignored">"Игнорируется"</string>
+    <string name="shizuku_mode_unavailable">"Недоступно"</string>
+    <string name="shizuku_open">"Открыть Shizuku"</string>
+    <string name="shizuku_unavailable_description">"Shizuku не установлен ​​или неправильно настроен на вашем устройстве. Многие функции AppVaultX не работают без подходящей среды Shizuku."</string>
+    <string name="shizuku_unavailable_title">"Поддержка Shizuku не найдена"</string>
+    <string name="source_code">"Исходный код"</string>
+    <string name="source_code_description">"Узнайте, как работает AppVaultX — с открытым исходным кодом и прозрачно"</string>
     <string name="start">"Начать"</string>
     <string name="translations">"Переводы"</string>
+    <string name="translations_description">"Помогите перевести приложение"</string>
+    <string name="uad_learn">"Изучите UAD-NG"</string>
+    <string name="uad_learn_description">"AppVaultX использует рекомендации по удалению приложений из проекта Universal Android Debloater Next Generation. Узнайте больше на: github.com/Universal-Debloater-NextGen."</string>
+    <string name="uad_status_recommended">"%s можно безопасно удалить."</string>
+    <string name="uad_status_recommended_title">"Безопасно"</string>
+    <string name="uad_status_advanced">"%s, вероятно, можно безопасно удалить."</string>
+    <string name="uad_status_advanced_title">"Вероятно безопасно"</string>
+    <string name="uad_status_expert">"Удаление %s может вызвать проблемы."</string>
+    <string name="uad_status_expert_title">"Вероятно опасно"</string>
+    <string name="uad_status_unsafe">"Удаление %s опасно и не рекомендуется."</string>
+    <string name="uad_status_unsafe_title">"Опасно"</string>
+    <string name="uninstall">"Деинсталлировать"</string>
+    <string name="update">"Обновить"</string>
+    <string name="user_interface">"Личный интерфейс"</string>
     <string name="yes">"Да"</string>
+    <string name="adb_instruction_message">"Может запустить эту команду в оболочке ADB, результат тот же."</string>
+    <string name="remove_user_app_message">"Выбрано обычное пользовательское приложение, легко удалить из панели приложений или любым стандартным менеджером приложений."</string>
+    <string name="restore_impossible_message">"AppVaultX требуется полностью рабочая среда Shizuku для восстановления ранее удаленных системных приложений."</string>
+    <string name="task_impossible_message">"Для выполнения этой задачи AppVaultX требуется полностью работающая среда Shizuku."</string>
+    <string name="unsafe_batch_add_warning">"Попытка добавить \"%s\" в список пакетов. Это приложение опознано как небезопасное или опасное для удаления, поэтому оно отключено. Если вы хотите удалить его, отключите \"Защита небезопасных приложений\" в настройках.
+
+        Предупреждение: Действуйте на свой страх и риск."</string>
+    <string name="unsafe_removal_prevention">"Защита небезопасных приложений"</string>
+    <string name="unsafe_removal_prevention_description">"По умолчанию предотвращает удаление небезопасных приложений. Отключите эту опцию, если вы хотите удалить приложения, отнесенные к категории небезопасных для удаления. Предупреждение: Действуйте на свой страх и риск."</string>
+    <string name="crash_report">"Отчет о сбое"</string>
+    <string name="crash_report_message">"При последнем использовании этого приложения был сбой. Чтобы помочь разработчику решить эту проблему, отправьте этот журнал сбоев по адресу
+
+        E-mail: smartpack.org@gmail.com"</string>
+    <string name="crash_reproduce_steps">"Действия для воспроизведения этого сбоя"</string>
+    <string name="disable_app">"Отключить приложение"</string>
+    <string name="enable_app">"Включить приложение"</string>
+    <string name="report">"Отчёт"</string>
+    <string name="app_info">"Информация о приложении"</string>
+    <string name="app_ops_allow_title">"Разрешить"</string>
+    <string name="app_ops_allow_description">"Всегда разрешать эту операцию"</string>
+    <string name="app_ops_deny_title">"Отрицать"</string>
+    <string name="app_ops_deny_description">"Явно отклонить (как игнорировать, но может вернуть ошибку)"</string>
+    <string name="app_ops_default_title">"Умолчание"</string>
+    <string name="app_ops_default_description">"Использовать умолчальное поведение системы (на основе заявленного разрешения приложения и состояния разрешения пользователя)"</string>
+    <string name="app_ops_empty_toast">"Значимые данные AppOps не найдены…"</string>
+    <string name="app_ops_failed_toast">"Не удалось изменить статус %s"</string>
+    <string name="app_ops_foreground_title">"Передний план"</string>
+    <string name="app_ops_foreground_description">"Разрешить когда приложение находится на переднем плане (для запроса разрешений на: местоположение, микрофон, камера)"</string>
+    <string name="app_ops_ignore_description">"Всегда блокировать/тихо прекращать операцию"</string>
+    <string name="app_ops_manage">"Управление AppOps"</string>
+    <string name="debuggable">"Отлаживаемое"</string>
+    <string name="downgrade_required">"Требуется даунгрейд"</string>
+    <string name="error_package_parse">"Возникла проблема при разборе пакета"</string>
+    <string name="permissions">"Разрешения"</string>
+    <string name="apks_split">"Разделённые APK"</string>
+    <string name="app_ops_duration">"Длительность: %s"</string>
+    <string name="app_ops_status_allowed">"Разрешены: %s"</string>
+    <string name="app_ops_status_current">"Текущий статус: %s"</string>
+    <string name="app_ops_status_recent">"Недавняя активность: %s"</string>
+    <string name="app_ops_status_rejected">"Отклонено: %s"</string>
+    <string name="date_installed">"Установлено"</string>
+    <string name="date_updated">"Последнее обновление"</string>
+    <string name="never">"Никогда"</string>
+    <string name="permissions_count_description">"Найдено %s (нажмите, чтобы узнать больше)"</string>
+    <string name="sdk_version_min">"Мин. SDK"</string>
+    <string name="sdk_version_target">"Целевой SDK"</string>
+    <string name="size_apk">"Размер APK"</string>
+    <string name="size_bundle">"Размер пакета"</string>
+    <string name="version">"Версия"</string>
+    <string name="version_code">"Код версии"</string>
 </resources>
