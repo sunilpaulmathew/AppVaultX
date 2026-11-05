@@ -1,0 +1,5 @@
+* Major UI improvements for tablets and landscape mode
+* New dedicated disabled apps management page
+* Swipeable tabs for installed apps
+* Performance optimizations and updated UAD database
+* Added Armenian, Dutch, Russian, and Ukrainian translations
