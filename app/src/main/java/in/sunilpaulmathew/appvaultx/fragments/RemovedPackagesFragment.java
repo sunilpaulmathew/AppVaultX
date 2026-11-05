@@ -4,6 +4,7 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,7 +20,7 @@ import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.widget.ContentLoadingProgressBar;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
@@ -56,6 +57,7 @@ public class RemovedPackagesFragment extends Fragment {
     private ContentLoadingProgressBar progressBar;
     private LinearLayoutCompat progressLayout;
     private List<PackagesEntry> mPackages;
+    private RecyclerView recyclerView;
     private NavView navigationView;
     private String mSearchText = null;
     private TextInputEditText editText;
@@ -73,14 +75,14 @@ public class RemovedPackagesFragment extends Fragment {
         MaterialCardView searchCard = mRootView.findViewById(R.id.search_card);
         MaterialTextView title = mRootView.findViewById(R.id.title);
         progressLayout = mRootView.findViewById(R.id.progress_layout);
-        RecyclerView recyclerView = mRootView.findViewById(R.id.recycler_view);
+        recyclerView = mRootView.findViewById(R.id.recycler_view);
         editText = mRootView.findViewById(R.id.search_word);
         MaterialButton searchButton = mRootView.findViewById(R.id.search);
         MaterialButton sortButton = mRootView.findViewById(R.id.sort);
 
         title.setText(R.string.apps_removed);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
+        recyclerView.setLayoutManager(new GridLayoutManager(requireActivity(), Settings.isPortraitMode(requireActivity()) ? 1 : Settings.isTablet(requireActivity()) ? 3 : 2));
         adapter = new ApplicationsAdapter(new CopyOnWriteArrayList<>(), selectedApps, batchOptions, 2, requireActivity());
         recyclerView.setAdapter(adapter);
 
@@ -165,6 +167,7 @@ public class RemovedPackagesFragment extends Fragment {
     @SuppressLint("StringFormatMatches")
     private Async loadPackages(String searchText) {
         return new Async() {
+            private final Activity activity = requireActivity();
             @Override
             public void onPreExecute() {
                 progressLayout.setVisibility(VISIBLE);
@@ -192,7 +195,7 @@ public class RemovedPackagesFragment extends Fragment {
 
                     data.sort((lhs, rhs) -> String.CASE_INSENSITIVE_ORDER.compare(lhs.getPackageName(), rhs.getPackageName()));
 
-                    if (Utils.getBoolean("reverse_order", false, requireActivity())) {
+                    if (Utils.getBoolean("reverse_order", false, activity)) {
                         Collections.reverse(data);
                     }
                 } catch (NullPointerException ignored) {}
@@ -206,7 +209,7 @@ public class RemovedPackagesFragment extends Fragment {
 
             @Override
             public void onPostExecute() {
-                if (!isAdded()) return;
+                if (!isAdded() || isDetached() || activity.isFinishing() || activity.isDestroyed()) return;
 
                 progressLayout.setVisibility(GONE);
                 navigationView.setVisibility(VISIBLE);
@@ -219,10 +222,11 @@ public class RemovedPackagesFragment extends Fragment {
 
     private Async restoreApps(List<String> apps) {
         return new Async() {
+            private final Activity activity = requireActivity();
             private ProgressDialog progressDialog;
             @Override
             public void onPreExecute() {
-                progressDialog = new ProgressDialog(requireActivity());
+                progressDialog = new ProgressDialog(activity);
                 progressDialog.setProgressStatus(R.string.applying);
                 progressDialog.startDialog();
             }
@@ -253,11 +257,16 @@ public class RemovedPackagesFragment extends Fragment {
 
             @Override
             public void onPostExecute() {
-                if (!isAdded()) return;
+                if (!isAdded() || isDetached() || activity.isFinishing() || activity.isDestroyed()) return;
                 progressDialog.dismissDialog();
                 adapter.updateData(mPackages);
             }
         };
+    }
+
+    public void handleOrientationChange() {
+        if (!isAdded() || isDetached() || requireActivity().isFinishing() || requireActivity().isDestroyed()) return;
+        Settings.updateSpanCount(recyclerView);
     }
 
 }

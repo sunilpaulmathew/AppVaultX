@@ -86,4 +86,14 @@ public class InstalledPackagesFragment extends Fragment {
         };
     }
 
+    public void handleOrientationChange() {
+        if (!isAdded() || isDetached() || requireActivity().isFinishing() || requireActivity().isDestroyed()) return;
+        Fragment fragment = requireActivity().getSupportFragmentManager().findFragmentByTag("f" + Utils.getInt("appType", 0, requireActivity()));
+        if (fragment != null) {
+            if (fragment instanceof ApplicationsFragment) {
+                ((ApplicationsFragment) fragment).handleOrientationChange();
+            }
+        }
+    }
+
 }

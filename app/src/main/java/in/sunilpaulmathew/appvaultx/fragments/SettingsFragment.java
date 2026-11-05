@@ -12,7 +12,7 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textview.MaterialTextView;
@@ -35,6 +35,7 @@ import rikka.shizuku.Shizuku;
 public class SettingsFragment extends Fragment {
 
     private final Shizuku.OnRequestPermissionResultListener REQUEST_PERMISSION_RESULT_LISTENER = this::onRequestPermissionsResult;
+    private RecyclerView recyclerView;
 
     @Nullable
     @Override
@@ -43,14 +44,27 @@ public class SettingsFragment extends Fragment {
 
         LinearLayoutCompat titleLayout = mRootView.findViewById(R.id.title_layout);
         MaterialTextView title = mRootView.findViewById(R.id.title);
-        RecyclerView recyclerView = mRootView.findViewById(R.id.recycler_view);
+        recyclerView = mRootView.findViewById(R.id.recycler_view);
 
         String titleText = getString(R.string.app_name) + " " + BuildConfig.VERSION_NAME;
         title.setText(titleText);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
+        int spanCount = Settings.isPortraitMode(requireActivity()) ? 1 : Settings.isTablet(requireActivity()) ? 3 : 2;
+        List<SettingsEntry> data = getData();
 
-        recyclerView.setAdapter(new SettingsAdapter(getData(), REQUEST_PERMISSION_RESULT_LISTENER));
+        GridLayoutManager layoutManager = new GridLayoutManager(requireActivity(), spanCount);
+        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                int currentSpanCount = layoutManager.getSpanCount();
+                int requestedSpan = (data.get(position).getPosition() == 0) ? currentSpanCount : 1;
+                return Math.min(requestedSpan, currentSpanCount);
+            }
+        });
+
+        recyclerView.setItemAnimator(null);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(new SettingsAdapter(data, REQUEST_PERMISSION_RESULT_LISTENER));
 
         titleLayout.setOnClickListener(v -> {
             Intent settings = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
@@ -87,6 +101,11 @@ public class SettingsFragment extends Fragment {
         mData.add(new SettingsEntry(8, R.drawable.ic_privacy, getString(R.string.privacy_policy), getString(R.string.privacy_policy_description)));
         mData.add(new SettingsEntry(9, R.drawable.ic_email, getString(R.string.developer_contact), getString(R.string.developer_contact_description)));
         return mData;
+    }
+
+    public void handleOrientationChange() {
+        if (!isAdded() || isDetached() || requireActivity().isFinishing() || requireActivity().isDestroyed()) return;
+        Settings.updateSpanCount(recyclerView);
     }
 
     private void onRequestPermissionsResult(int requestCode, int grantResult) {

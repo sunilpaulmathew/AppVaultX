@@ -11,6 +11,7 @@ import android.view.animation.DecelerateInterpolator;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.color.DynamicColors;
@@ -33,8 +34,17 @@ public class Settings {
         return currentNightMode == Configuration.UI_MODE_NIGHT_YES;
     }
 
+    public static boolean isPortraitMode(Context context) {
+        return context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
+    }
+
     public static boolean isShizukuIgnored(Context context) {
         return Utils.getInt("shizuku_mode", 0, context) == 1;
+    }
+
+    public static boolean isTablet(Context context) {
+        return (context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK)
+                >= Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
 
     public static int getColorAccent(Context context) {
@@ -182,6 +192,21 @@ public class Settings {
             // Reset properties to ensure recycled views are displayed correctly
             viewToAnimate.setTranslationY(0f);
             viewToAnimate.setAlpha(1f);
+        }
+    }
+
+    public static void updateSpanCount(RecyclerView recyclerView) {
+        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+        Context context = recyclerView.getContext();
+
+        if (context == null) return;
+
+        if (layoutManager instanceof GridLayoutManager) {
+            GridLayoutManager gridLayoutManager = (GridLayoutManager) layoutManager;
+
+            gridLayoutManager.setSpanCount(Settings.isPortraitMode(context) ? 1 : Settings.isTablet(context) ? 3 : 2);
+
+            gridLayoutManager.requestLayout();
         }
     }
 

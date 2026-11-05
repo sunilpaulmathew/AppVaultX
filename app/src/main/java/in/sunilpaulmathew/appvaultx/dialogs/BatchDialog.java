@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -21,6 +21,7 @@ import in.sunilpaulmathew.appvaultx.R;
 import in.sunilpaulmathew.appvaultx.adapters.BatchAdapter;
 import in.sunilpaulmathew.appvaultx.serializable.PackagesEntry;
 import in.sunilpaulmathew.appvaultx.utils.Async;
+import in.sunilpaulmathew.appvaultx.utils.Settings;
 
 /*
  * Created by sunilpaulmathew <sunil.kde@gmail.com> on October 18, 2025
@@ -37,7 +38,7 @@ public abstract class BatchDialog extends BottomSheetDialog {
         MaterialButton cancel = root.findViewById(R.id.cancel);
         RecyclerView recyclerView = root.findViewById(R.id.recycler_view);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setLayoutManager(new GridLayoutManager(context, Settings.isPortraitMode(context) ? 1 : Settings.isTablet(context) ? 3 : 2));
         recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(new BatchAdapter(selectedApps));
 

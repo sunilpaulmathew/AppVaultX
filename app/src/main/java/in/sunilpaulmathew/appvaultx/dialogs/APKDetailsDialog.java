@@ -6,11 +6,15 @@ import static android.view.View.VISIBLE;
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import androidx.appcompat.widget.AppCompatImageButton;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textview.MaterialTextView;
@@ -22,6 +26,7 @@ import in.sunilpaulmathew.appvaultx.adapters.PackageDetailsAdapter;
 import in.sunilpaulmathew.appvaultx.adapters.PackageHeaderAdapter;
 import in.sunilpaulmathew.appvaultx.serializable.PackageDetailsEntry;
 import in.sunilpaulmathew.appvaultx.serializable.PackageHeaderEntry;
+import in.sunilpaulmathew.appvaultx.utils.Settings;
 import in.sunilpaulmathew.appvaultx.utils.Utils;
 
 /*
@@ -43,11 +48,11 @@ public abstract class APKDetailsDialog extends BottomSheetDialog {
         RecyclerView recyclerView_Header = rootView.findViewById(R.id.recycler_view_header);
         RecyclerView recyclerView_Details = rootView.findViewById(R.id.recycler_view_details);
 
-        recyclerView_Header.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
+        recyclerView_Header.setLayoutManager(new LinearLayoutManager(activity, Settings.isPortraitMode(activity) ? LinearLayoutManager.HORIZONTAL : LinearLayoutManager.VERTICAL, false));
         recyclerView_Header.setAdapter(new PackageHeaderAdapter(headers));
 
-        recyclerView_Details.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
-        recyclerView_Details.setAdapter(new PackageDetailsAdapter(details));
+        recyclerView_Details.setLayoutManager(new GridLayoutManager(activity, Settings.isPortraitMode(activity) ? 1 : Settings.isTablet(activity) ? 3 : 2));
+        recyclerView_Details.setAdapter(new PackageDetailsAdapter(details,appIcon, appName, packageName));
 
         app_Name.setText(appName);
         package_Name.setText(packageName);
@@ -78,6 +83,19 @@ public abstract class APKDetailsDialog extends BottomSheetDialog {
                 if (shouldExit) {
                     activity.finish();
                 }
+            }
+        });
+
+        rootView.post(() -> {
+            if (Settings.isPortraitMode(activity)) return;
+            FrameLayout bottomSheet = findViewById(com.google.android.material.R.id.design_bottom_sheet);
+            if (bottomSheet != null) {
+                bottomSheet.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
+
+                BottomSheetBehavior<FrameLayout> behavior = BottomSheetBehavior.from(bottomSheet);
+                behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                behavior.setSkipCollapsed(true);
+                behavior.setFitToContents(true);
             }
         });
 

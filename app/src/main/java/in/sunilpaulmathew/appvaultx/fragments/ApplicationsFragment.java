@@ -4,6 +4,7 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -20,7 +21,7 @@ import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.core.widget.ContentLoadingProgressBar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
@@ -60,6 +61,7 @@ public class ApplicationsFragment extends Fragment {
     private LinearLayoutCompat progressLayout;
     private List<PackagesEntry> mPackages;
     private NavView navigationView;
+    private RecyclerView recyclerView;
     private String mSearchText = null;
     private TextInputEditText editText;
     private final List<PackagesEntry> selectedApps = new CopyOnWriteArrayList<>();
@@ -96,12 +98,12 @@ public class ApplicationsFragment extends Fragment {
         MaterialButton batchOptions = mRootView.findViewById(R.id.batch_options);
         MaterialCardView searchCard = mRootView.findViewById(R.id.search_card);
         progressLayout = mRootView.findViewById(R.id.progress_layout);
-        RecyclerView recyclerView = mRootView.findViewById(R.id.recycler_view);
+        recyclerView = mRootView.findViewById(R.id.recycler_view);
         editText = mRootView.findViewById(R.id.search_word);
 
         ApplicationsViewModel viewModel = new ViewModelProvider(requireActivity()).get(ApplicationsViewModel.class);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
+        recyclerView.setLayoutManager(new GridLayoutManager(requireActivity(), Settings.isPortraitMode(requireActivity()) ? 1 : Settings.isTablet(requireActivity()) ? 3 : 2));
         adapter = new ApplicationsAdapter(new CopyOnWriteArrayList<>(), selectedApps, batchOptions, 0, requireActivity());
         recyclerView.setAdapter(adapter);
 
@@ -176,6 +178,7 @@ public class ApplicationsFragment extends Fragment {
 
     private Async loadPackages(String searchText) {
         return new Async() {
+            private final Activity activity = requireActivity();
 
             @Override
             public void onPreExecute() {
@@ -204,11 +207,11 @@ public class ApplicationsFragment extends Fragment {
                         }
                     }
 
-                    Utils.saveInt("appType", mTabPosition, requireActivity());
+                    Utils.saveInt("appType", mTabPosition, activity);
 
                     data.sort((lhs, rhs) -> String.CASE_INSENSITIVE_ORDER.compare(lhs.getPackageName(), rhs.getPackageName()));
 
-                    if (Utils.getBoolean("reverse_order", false, requireActivity())) {
+                    if (Utils.getBoolean("reverse_order", false, activity)) {
                         Collections.reverse(data);
                     }
                 } catch (Exception ignored) {}
@@ -257,7 +260,7 @@ public class ApplicationsFragment extends Fragment {
             @SuppressLint("StringFormatMatches")
             @Override
             public void onPostExecute() {
-                if (!isAdded()) return;
+                if (!isAdded() || isDetached() || activity.isFinishing() || activity.isDestroyed()) return;
                 progressLayout.setVisibility(GONE);
                 navigationView.setVisibility(VISIBLE);
                 adapter.updateData(mPackages);
@@ -270,10 +273,11 @@ public class ApplicationsFragment extends Fragment {
     private Async removeApps(List<String> apps) {
         return new Async() {
             private  boolean failed = false;
+            private final Activity activity = requireActivity();
             private ProgressDialog progressDialog;
             @Override
             public void onPreExecute() {
-                progressDialog = new ProgressDialog(requireActivity());
+                progressDialog = new ProgressDialog(activity);
                 progressDialog.setProgressStatus(R.string.applying);
                 progressDialog.startDialog();
             }
@@ -286,7 +290,7 @@ public class ApplicationsFragment extends Fragment {
                 ShizukuShell.runCommands(cmd);
 
                 for (String packageName : apps) {
-                    if (!Packages.isAppInstalled(packageName, requireActivity())) {
+                    if (!Packages.isAppInstalled(packageName, activity)) {
                         PackagesEntry entry = Packages.getPackages().stream().filter(i -> i.getPackageName().equals(packageName)).findFirst().orElse(null);
                         int index = IntStream.range(0, mPackages.size())
                                 .filter(i -> mPackages.get(i).getPackageName().equals(packageName))
@@ -310,15 +314,20 @@ public class ApplicationsFragment extends Fragment {
 
             @Override
             public void onPostExecute() {
-                if (!isAdded()) return;
+                if (!isAdded() || isDetached() || activity.isFinishing() || activity.isDestroyed()) return;
                 progressDialog.dismissDialog();
                 adapter.updateData(mPackages);
 
                 if (failed) {
-                    Utils.toast(R.string.remove_selected_failed, requireActivity()).show();
+                    Utils.toast(R.string.remove_selected_failed, activity).show();
                 }
             }
         };
+    }
+
+    public void handleOrientationChange() {
+        if (!isAdded() || isDetached() || requireActivity().isFinishing() || requireActivity().isDestroyed()) return;
+        Settings.updateSpanCount(recyclerView);
     }
 
 }

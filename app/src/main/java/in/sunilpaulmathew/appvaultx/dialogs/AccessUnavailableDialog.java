@@ -10,9 +10,9 @@ import in.sunilpaulmathew.appvaultx.utils.Utils;
 /*
  * Created by sunilpaulmathew <sunil.kde@gmail.com> on October 18, 2025
  */
-public class AccessUnavilableDialog extends MaterialAlertDialogBuilder {
+public class AccessUnavailableDialog extends MaterialAlertDialogBuilder {
 
-    public AccessUnavilableDialog(Context context) {
+    public AccessUnavailableDialog(Context context) {
         super(context);
         setCancelable(false);
                 setIcon(R.mipmap.ic_launcher);

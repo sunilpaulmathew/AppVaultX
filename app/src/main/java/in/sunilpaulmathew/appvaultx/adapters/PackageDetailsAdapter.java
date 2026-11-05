@@ -1,20 +1,19 @@
 package in.sunilpaulmathew.appvaultx.adapters;
 
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.util.List;
 
 import in.sunilpaulmathew.appvaultx.R;
+import in.sunilpaulmathew.appvaultx.dialogs.PermissionsDialog;
 import in.sunilpaulmathew.appvaultx.serializable.PackageDetailsEntry;
 import in.sunilpaulmathew.appvaultx.serializable.PermissionsEntry;
 import in.sunilpaulmathew.appvaultx.utils.Settings;
@@ -24,10 +23,16 @@ import in.sunilpaulmathew.appvaultx.utils.Settings;
  */
 public class PackageDetailsAdapter extends RecyclerView.Adapter<PackageDetailsAdapter.ViewHolder> {
 
+    private final Drawable appIcon;
     private final List<PackageDetailsEntry> data;
+    private final String appName;
+    private final String packageName;
 
-    public PackageDetailsAdapter(List<PackageDetailsEntry> data) {
+    public PackageDetailsAdapter(List<PackageDetailsEntry> data, Drawable appIcon, String appName, String packageName) {
         this.data = data;
+        this.appIcon = appIcon;
+        this.appName = appName;
+        this.packageName = packageName;
     }
 
     @NonNull
@@ -60,19 +65,7 @@ public class PackageDetailsAdapter extends RecyclerView.Adapter<PackageDetailsAd
                 int position = getBindingAdapterPosition();
                 List<PermissionsEntry> permissions = data.get(position).getPermissions();
                 if (position != RecyclerView.NO_POSITION && permissions != null) {
-                    View rootView = View.inflate(v.getContext(), R.layout.layout_recycler_view, null);
-                    RecyclerView recyclerView = rootView.findViewById(R.id.recycler_view);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(v.getContext()));
-                    recyclerView.addItemDecoration(new DividerItemDecoration(v.getContext(), DividerItemDecoration.VERTICAL));
-                    recyclerView.setAdapter(new PermissionsAdapter(permissions));
-
-                    new MaterialAlertDialogBuilder(v.getContext())
-                            .setIcon(data.get(position).getTitle().equals(v.getContext().getString(R.string.permissions)) ?
-                                    R.drawable.ic_permissions : R.drawable.ic_apks)
-                            .setTitle(data.get(position).getTitle())
-                            .setView(rootView)
-                            .setPositiveButton(R.string.cancel, (dialogInterface, i) -> {
-                            }).show();
+                    new PermissionsDialog(appIcon, appName, packageName, permissions, view.getContext());
                 }
             });
         }

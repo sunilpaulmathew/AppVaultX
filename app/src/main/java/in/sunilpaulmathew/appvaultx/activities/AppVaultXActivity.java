@@ -5,16 +5,19 @@ import static android.view.View.VISIBLE;
 
 import android.app.Activity;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.core.widget.ContentLoadingProgressBar;
+import androidx.fragment.app.Fragment;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import in.sunilpaulmathew.appvaultx.R;
-import in.sunilpaulmathew.appvaultx.dialogs.AccessUnavilableDialog;
+import in.sunilpaulmathew.appvaultx.dialogs.AccessUnavailableDialog;
 import in.sunilpaulmathew.appvaultx.dialogs.WelcomeDialog;
 import in.sunilpaulmathew.appvaultx.fragments.DisabledPackagesFragment;
 import in.sunilpaulmathew.appvaultx.fragments.InstalledPackagesFragment;
@@ -73,7 +76,7 @@ public class AppVaultXActivity extends BaseActivity {
                     }
                 };
             } else {
-                new AccessUnavilableDialog(this).show();
+                new AccessUnavailableDialog(this).show();
             }
         }
 
@@ -139,6 +142,22 @@ public class AppVaultXActivity extends BaseActivity {
         super.onDestroy();
         Shizuku.removeRequestPermissionResultListener(REQUEST_PERMISSION_RESULT_LISTENER);
         ShizukuShell.destroy();
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration configuration) {
+        super.onConfigurationChanged(configuration);
+
+        Fragment existingFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (existingFragment instanceof InstalledPackagesFragment) {
+            ((InstalledPackagesFragment) existingFragment).handleOrientationChange();
+        } else if (existingFragment instanceof DisabledPackagesFragment) {
+            ((DisabledPackagesFragment) existingFragment).handleOrientationChange();
+        } else if (existingFragment instanceof RemovedPackagesFragment) {
+            ((RemovedPackagesFragment) existingFragment).handleOrientationChange();
+        } else if (existingFragment instanceof SettingsFragment) {
+            ((SettingsFragment) existingFragment).handleOrientationChange();
+        }
     }
 
 }

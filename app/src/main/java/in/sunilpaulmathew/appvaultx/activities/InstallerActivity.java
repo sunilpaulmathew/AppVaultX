@@ -27,7 +27,7 @@ import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import in.sunilpaulmathew.appvaultx.R;
-import in.sunilpaulmathew.appvaultx.dialogs.AccessUnavilableDialog;
+import in.sunilpaulmathew.appvaultx.dialogs.AccessUnavailableDialog;
 import in.sunilpaulmathew.appvaultx.dialogs.APKDetailsDialog;
 import in.sunilpaulmathew.appvaultx.dialogs.ProgressDialog;
 import in.sunilpaulmathew.appvaultx.serializable.PackageDetailsEntry;
@@ -74,7 +74,7 @@ public class InstallerActivity extends AppCompatActivity {
                     }
                 };
             } else {
-                new AccessUnavilableDialog(this).show();
+                new AccessUnavailableDialog(this).show();
             }
         }
 

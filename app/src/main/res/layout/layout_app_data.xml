@@ -1,10 +1,11 @@
 <androidx.appcompat.widget.LinearLayoutCompat
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="start|center_vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
-    android:layout_margin="10sp" >
+    android:layout_gravity="center"
+    android:layout_margin="10sp"
+    android:gravity="center" >
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/app_icon"
