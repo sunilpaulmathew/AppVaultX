@@ -45,7 +45,7 @@
     <string name="restore_selected">"Відновити вибране (%s)"</string>
     <string name="save_apks">"Зберегти APK's"</string>
     <string name="save_icon">"Зберегти іконку"</string>
-    <string name="save_item_message">"Вибрані елемент(и) експортовано до '%'"</string>
+    <string name="save_item_message">"Вибрані елемент(и) експортовано до '%s'"</string>
     <string name="search_hint">"Шукати серед %s елементів…"</string>
     <string name="settings">"Налаштування"</string>
     <string name="shizuku_access_denied_description">"Доступ до служби Shizuku для AppVaultX заблоковано. Без належного середовища Shizuku багато функцій AppVaultX не працюватимуть."</string>
